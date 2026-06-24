@@ -41,7 +41,10 @@ function num_time(t) {
     if (t == 0) {
         return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st-Date.now())/1000).toFixed(3)}s</span>`
     } else {
-        var u = Math.log10(t / 20000000 + 1) + 3.5
+        var u = Math.log10(t / (86400000*3) + 1) * 0.5 + 3.5
+        if (u > 4) {
+            u = u**0.5 * 2 //massive softcap... right
+        }
         return `Current ordinal: <br><span style="font-size: 150%">${num_to_lngi(u)}</span>`
     }
 }
