@@ -25,7 +25,7 @@ function ntl(m) {
             break
         }
     }
-    return ord
+    return [ord,m]
 }
 
 function num_to_lngi(m) {
@@ -45,7 +45,8 @@ function num_time(t) {
         if (u > 4) {
             u = u**0.5 * 2 //massive softcap... right
         }
-        return `Current ordinal: <br><span style="font-size: 150%">${num_to_lngi(u)}</span>`
+        var j = num_to_lngi(u)
+        return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
 }
 
