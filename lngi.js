@@ -1,21 +1,24 @@
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 10; i++){
+    for (var i = 0; i < 16; i++){
         const p = document.createElement("div")
-        p.style.height = "10%";
+        p.style.height = "6.25%";
         p.style.position = "absolute";
-        p.style.top = `${i * 10}%`
+        p.style.top = `${i * 6.25}%`
         p.id = `bar_${i}`
         p.style.textWrap = `nowrap`
         document.getElementById("scratch_bars").appendChild(p)
     }
 }
 
-function update_scratch_bars() {
-    for (var i = 0; i < 10; i++){
+function update_scratch_bars(x) {
+    for (var i = 0; i < 16; i++){
         if (i < super_list.length) {
+            var t = get_time_inv(x + super_list[i][2] / (2 ** super_list[i][1] /2))
             document.getElementById(`bar_${i}`).style.visibility = "visible"
-            document.getElementById(`bar_${i}`).innerHTML = `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}%)</small>`
+            document.getElementById(`bar_${i}`).innerHTML =
+                `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / at 
+                ${new Date(t+st).toLocaleString()})</small>`
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
         } else {
@@ -67,15 +70,23 @@ function num_to_lngi(m) {
 }
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = 1782316800000+23*3600000
+const st = (1782316800000+23*3600000)
 let BMS_LNGI, OCF_LNGI;
+
+function get_time(t) {
+    return Math.log10(1 + t / 864000)/2 + 2
+}
+
+function get_time_inv(n) {
+    return (10**((n-2)*2) - 1)*864000
+}
 
 function num_time(t) {
     var t = Math.max(0, t - st)
     if (t == 0) {
         return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st - Date.now()) / 1000).toFixed(3)}s</span>`
     } else {
-        var u = Math.log2(1+t/86400000)+2
+        var u = get_time(t)
         var j = num_to_lngi(u)
 
         if (Y_Sequence.cmp(j[0], '1,2,4,8,16,32,64,128,256,512,1024') == -1) BMS_LNGI = Conv_Y_sequence(j[0]); else BMS_LNGI = "" //max 10 rows to ensure the program doesn't freak out ig
@@ -84,7 +95,8 @@ function num_time(t) {
 
         if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
         //     ^^^^^^ this is essential because when we end BMS, BMS_LNGI = '' is a string, but we still treat it as a array so there must be a block right here
-        document.getElementById("main_lngi_bar").style.width = `${j[1]*75}%`
+        document.getElementById("main_lngi_bar").style.width = `${j[1] * 75}%`
+        update_scratch_bars(u)
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
 }
@@ -98,7 +110,7 @@ function update() {
     document.getElementById("BMS_lngi").innerHTML = BMS_LNGI==""?">1,3 / (0)(1<sup>&omega;</sup>)":`<i>BMS conversion may be inaccurate due to upgrade displacement</i><br>&approx;${BMS_LNGI}`
     document.getElementById("OCF_lngi").innerHTML = OCF_LNGI==""?">SSO":`OCF/OCN (Same as BMS):<br>${OCF_LNGI}`
     document.getElementById("tps").innerHTML = `Running at ${tps.toFixed(1)} tps`
-    update_scratch_bars()
+    document.getElementById("time").innerHTML = `Time elapsed: ${((Date.now()-st)/1000).toFixed(1)}s`
     requestAnimationFrame(update); // this is better than setinterval. (Thanks!)
     // explain : setinterval uses client clock which sometime desync which cause lagging on some devices. requestAnimationFrame synchronizes with the browser's rendering.
 }
