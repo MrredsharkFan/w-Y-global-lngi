@@ -35,6 +35,7 @@ function num_to_lngi(m) {
 
 //Start time: 25/6 2026 utc+8
 const st = 1782316800000
+let BMS_LNGI, OCF_LNGI;
 
 function num_time(t) {
     var t = Math.max(0, t - st)
@@ -46,12 +47,17 @@ function num_time(t) {
             u = u**0.5 * 2 //massive softcap... right
         }
         var j = num_to_lngi(u)
+        BMS_LNGI = Conv_Y_sequence(String(j[0]))
+        OCF_LNGI = Conv_OCF(BMS_LNGI)
+        BMS_LNGI = BMS_LNGI.map(p => `(${p[0]},${p[1]})`).join(''); // convert to string for display
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
 }
 
 function update() {
     dg("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
+    dg("BMS_lngi").innerHTML = `<i>BMS<br><span style="font-size: 150%">${BMS_LNGI}</span></i>`
+    dg("OCF_lngi").innerHTML = `<i>OCF<br><span style="font-size: 150%">${OCF_LNGI}</span></i>`
 }
 
 setInterval(update,1,1)
