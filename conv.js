@@ -1,4 +1,13 @@
-// dont care
+/*
+BMS and Y_Sequence class Usage
+BMS.[Functions] will call a function belong to BMS, and the same for Y_Sequence
+
+- BMS.cmp will return -1,0,1
+- BMS.fs(array,n) where array in the format [[collum1],[collum2],[collum3],...]
+- BMS.isSuccessor return a boolean
+
+the same for Y_Sequence, but importantly Y_Sequence output is string (except hInv,gInv,isSuccessor and cmp)
+*/
 class BMS {
 
     static cmp(m1, m2) {
@@ -227,6 +236,7 @@ class BMS {
         return x;
     }
 }
+
 class Y_Sequence {
 
     static fs(s, n, legBasedAscension, stringify) {
