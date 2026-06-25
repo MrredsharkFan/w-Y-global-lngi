@@ -47,8 +47,8 @@ function num_time(t) {
             u = u**0.5 * 2 //massive softcap... right
         }
         var j = num_to_lngi(u)
-        if (Y_sequence.cmp(j[0],'1,3') == -1) BMS_LNGI = Conv_Y_sequence(String(j[0])); //Lim(BMS)
-        if (Y_sequence.cmp(j[0],'1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI)  //SSO
+        if (Y_Sequence.cmp(j[0],'1,3') == -1) BMS_LNGI = Conv_Y_sequence(String(j[0])); //Lim(BMS)
+        if (Y_Sequence.cmp(j[0],'1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI)  //SSO
         BMS_LNGI = BMS_LNGI.map(p => `(${p[0]},${p[1]})`).join(''); // convert to string for display
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
