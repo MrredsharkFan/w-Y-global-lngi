@@ -1,23 +1,56 @@
+function scratch_bar_init() {
+    //scratch bars!!!
+    for (var i = 0; i < 10; i++){
+        const p = document.createElement("div")
+        p.style.height = "10%";
+        p.style.position = "absolute";
+        p.style.top = `${i * 10}%`
+        p.id = `bar_${i}`
+        p.style.textWrap = `nowrap`
+        document.getElementById("scratch_bars").appendChild(p)
+    }
+}
+
+function update_scratch_bars() {
+    for (var i = 0; i < 10; i++){
+        if (i < super_list.length) {
+            document.getElementById(`bar_${i}`).style.visibility = "visible"
+            document.getElementById(`bar_${i}`).innerHTML = `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}%)</small>`
+            document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
+            document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
+        } else {
+            document.getElementById(`bar_${i}`).style.visibility = "hidden"
+        }
+    }
+}
+
+scratch_bar_init()
+
+
+
+var super_list = []
+
+
 function ntl(m) {
+    super_list = []
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
     var m = 1 - m % 1
     while (steps < 40 && ord.length < 500 && ord.split(",").at(-1) < 1e8) {
-        var ll = ord.length
         if (m <= 1e-10) {
             break
         }
         var exp = 0
         while (m <= 1) {
+            steps = steps + 1
             m = m * 2
             exp = exp + 1
         }
         var base = Y_Sequence.fs(ord, 8).split(",")
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
-        steps = steps + 1
-        var lm = ord.length
         m = m - 1
+        super_list = super_list.concat([[ord, steps, m]])
         if (ord.split(",").at(-1) == 1) {
             ord = ord.split(",")
             ord.pop()
@@ -33,8 +66,8 @@ function num_to_lngi(m) {
     return ntl(m)
 }
 
-//Start time: 25/6 2026 utc+8
-const st = 1782316800000
+//Start time: 25/6 UTC+8 | 23:00
+const st = 1782316800000+23*3600000
 let BMS_LNGI, OCF_LNGI;
 
 function num_time(t) {
@@ -42,28 +75,31 @@ function num_time(t) {
     if (t == 0) {
         return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st - Date.now()) / 1000).toFixed(3)}s</span>`
     } else {
-        var u = Math.log10(t / (86400000 * 3) + 1) * 0.5 + 3.5
-        if (u > 4) {
-            u = u ** 0.5 * 2 //massive softcap... right
-        }
+        var u = Math.log2(1+t/86400000)+2
         var j = num_to_lngi(u)
 
-        if (Y_Sequence.cmp(j[0], '1,3') == -1) BMS_LNGI = Conv_Y_sequence(j[0]); else BMS_LNGI = ""//Lim(BMS)
+        if (Y_Sequence.cmp(j[0], '1,2,4,8,16,32,64,128,256,512,1024') == -1) BMS_LNGI = Conv_Y_sequence(j[0]); else BMS_LNGI = "" //max 10 rows to ensure the program doesn't freak out ig
 
         if (Y_Sequence.cmp(j[0], '1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI); else OCF_LNGI = ""  //SSO
 
         if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
-      //     ^^^^^^ this is essential because when we end BMS, BMS_LNGI = '' is a string, but we still treat it as a array so there must be a block right here
-
+        //     ^^^^^^ this is essential because when we end BMS, BMS_LNGI = '' is a string, but we still treat it as a array so there must be a block right here
+        document.getElementById("main_lngi_bar").style.width = `${j[1]*75}%`
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
 }
 
+var tps = 0
+var last_tick = 0
 function update() {
+    tps = 1000/(Date.now()-last_tick)
+    last_tick = Date.now()
     document.getElementById("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
-    document.getElementById("BMS_lngi").innerHTML = `<i>BMS<br><span style="font-size: 150%">${BMS_LNGI}</span></i>`
-    document.getElementById("OCF_lngi").innerHTML = `<i>OCF<br><span style="font-size: 150%">${OCF_LNGI}</span></i>`
-    requestAnimationFrame(update); // this is better than setinterval.
+    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI==""?">1,3 / (0)(1<sup>&omega;</sup>)":`<i>BMS conversion may be inaccurate due to upgrade displacement</i><br>&approx;${BMS_LNGI}`
+    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI==""?">SSO":`OCF/OCN (Same as BMS):<br>${OCF_LNGI}`
+    document.getElementById("tps").innerHTML = `Running at ${tps.toFixed(1)} tps`
+    update_scratch_bars()
+    requestAnimationFrame(update); // this is better than setinterval. (Thanks!)
     // explain : setinterval uses client clock which sometime desync which cause lagging on some devices. requestAnimationFrame synchronizes with the browser's rendering.
 }
 
