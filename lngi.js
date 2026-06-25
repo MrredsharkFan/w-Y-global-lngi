@@ -12,7 +12,9 @@ function ntl(m) {
             m = m * 2
             exp = exp+1
         }
-        var base = expand(ord, 8).split(",")
+        //optimization : there already a Y_Sequence module in conv.js ,so expand.js is excluded
+        //for usage, open conv.js and read the comment
+        var base = Y_Sequence.fs(ord, 8).split(",")
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
         steps = steps + 1
@@ -47,6 +49,7 @@ function num_time(t) {
             u = u**0.5 * 2 //massive softcap... right
         }
         var j = num_to_lngi(u)
+
         if (Y_Sequence.cmp(j[0],'1,3') == -1) BMS_LNGI = Conv_Y_sequence(String(j[0])); //Lim(BMS)
         if (Y_Sequence.cmp(j[0],'1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI)  //SSO
         BMS_LNGI = BMS_LNGI.map(p => `(${p[0]},${p[1]})`).join(''); // convert to string for display
@@ -55,9 +58,10 @@ function num_time(t) {
 }
 
 function update() {
-    dg("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
-    dg("BMS_lngi").innerHTML = `<i>BMS<br><span style="font-size: 150%">${BMS_LNGI}</span></i>`
-    dg("OCF_lngi").innerHTML = `<i>OCF<br><span style="font-size: 150%">${OCF_LNGI}</span></i>`
+    //optimization : if we put <script> under <body>,then the div element will load before the script. so we dont need dg call
+    document.getElementById("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
+    document.getElementById("BMS_lngi").innerHTML = `<i>BMS<br><span style="font-size: 150%">${BMS_LNGI}</span></i>`
+    document.getElementById("OCF_lngi").innerHTML = `<i>OCF<br><span style="font-size: 150%">${OCF_LNGI}</span></i>`
 }
 
 setInterval(update,1,1)
