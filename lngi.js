@@ -1,33 +1,24 @@
 // convert second to day,hour,minutes
-function formatSeconds(totalSeconds,short=false) {
-    if (totalSeconds <= 0) return short?"0 s":"0 seconds";
+function formatSeconds(totalSeconds) {
+    if (totalSeconds <= 0) return "0 second";
 
     // 1. Calculate the values and update the remainder using %=
     let s = totalSeconds;
-    const days    = Math.floor(s / 86400);    s %= 86400; //holy!
+    const days    = Math.floor(s / 86400);    s %= 86400;
     const hours   = Math.floor(s / 3600);     s %= 3600;
     const minutes = Math.floor(s / 60);       s %= 60;
     const seconds = s;
 
     // 2. Helper function to handle plurals and skip zeros
-    const p = (val, unit,s=0) => val > 0 ? `${val}${s==0?" ":""}${unit}${val > 1 && s==0 ? 's' : ''}` : null;
+    const p = (val, unit) => val > 0 ? `${val} ${unit}${val > 1 ? 's' : ''}` : null;
 
     // 3. Build the array and filter out the nulls (zeros)
-    if (short==false) {
-        var parts = [
-            p(days, 'day'),
-            p(hours, 'hour'),
-            p(minutes, 'minute'),
-            p(seconds.toFixed(2), 'second')
-        ]
-    } else {
-        var parts = [
-            p(days, 'd',1),
-            p(hours, 'h',1),
-            p(minutes, 'min',1),
-            p(seconds.toFixed(2), 's',1)
-        ]
-    }
+    const parts = [
+        p(days,    'day'),
+        p(hours,   'hour'),
+        p(minutes, 'minute'),
+        p(seconds.toFixed(2), 'second')
+    ];
 
     return parts.filter(Boolean).join(' ');
 }
@@ -56,7 +47,7 @@ function update_scratch_bars(x) {
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
                 `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${formatSeconds(secondsLeft,true)} left)</small>`
+                ${secondsLeft.toFixed(2)} second left)</small>`
                 
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
@@ -134,7 +125,7 @@ function num_time(t) {
 
         if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
     
-        document.getElementById("main_lngi_bar").style.width = `${j[1] * 75}%`
+        document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
         update_scratch_bars(u)
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }

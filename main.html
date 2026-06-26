@@ -77,41 +77,58 @@
             transition: width 0.1s ease;
         }
 
+        /* Main LNGI panel */
         #main_lngi {
             background-color: #ffccdd;
             font-weight: bold;
+            resize: vertical;
+            overflow: auto;
+            min-height: 80px;
+            height: 80px;
         }
 
+        /* Two side panels */
         .mid-row {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+            align-items: stretch;
+        }
+
+        #BMS_lngi,
+        #OCF_lngi {
+            flex: 1;
+            min-width: 280px;
+
+            resize: vertical;
+            overflow: auto;
+
+            min-height: 80px;
+            height: 80px;
         }
 
         #BMS_lngi {
             background-color: #aaaaff;
-            flex: 1;
-            min-width: 280px;
         }
 
         #OCF_lngi {
             background-color: #8dff8d;
-            flex: 1;
-            min-width: 280px;
         }
 
         #scratch_bars {
             background-color: #cfffff;
+            resize: vertical;
             position: relative;
-            height: 450px;
+            height: 180px;
+            min-height: 180px;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 5px;
         }
 
         #scratch_bars>div {
-            position: relative !important; 
-            top: auto !important; /*well css overwrite this*/
+            position: relative !important;
+            top: auto !important;
             width: 100%;
             min-height: 24px;
             margin-bottom: 4px;
@@ -146,9 +163,8 @@
     </div>
 
     <div class="card" id="scratch_bars"></div>
-
-    <script src="conv.js"></script>
-    <script src="lngi.js"></script>
 </body>
-
+<script src="ui.js"></script>
+<script src="conv.js"></script>
+<script src="lngi.js"></script>
 </html>
