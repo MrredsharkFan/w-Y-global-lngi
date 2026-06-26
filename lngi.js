@@ -1,6 +1,31 @@
+// convert second to day,hour,minutes
+function formatSeconds(totalSeconds) {
+    if (totalSeconds <= 0) return "0 second";
+
+    // 1. Calculate the values and update the remainder using %=
+    let s = totalSeconds;
+    const days    = Math.floor(s / 86400);    s %= 86400;
+    const hours   = Math.floor(s / 3600);     s %= 3600;
+    const minutes = Math.floor(s / 60);       s %= 60;
+    const seconds = s;
+
+    // 2. Helper function to handle plurals and skip zeros
+    const p = (val, unit) => val > 0 ? `${val} ${unit}${val > 1 ? 's' : ''}` : null;
+
+    // 3. Build the array and filter out the nulls (zeros)
+    const parts = [
+        p(days,    'day'),
+        p(hours,   'hour'),
+        p(minutes, 'minute'),
+        p(seconds.toFixed(2), 'second')
+    ];
+
+    return parts.filter(Boolean).join(' ');
+}
+// reason for 40 : because at line 72 you stop if steps >= 40
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 16; i++){
+    for (var i = 0; i < 40; i++){
         const p = document.createElement("div")
         p.style.height = "6.25%";
         p.style.position = "absolute";
@@ -12,13 +37,18 @@ function scratch_bar_init() {
 }
 
 function update_scratch_bars(x) {
-    for (var i = 0; i < 16; i++){
+    for (var i = 0; i < 40; i++){
         if (i < super_list.length) {
-            var t = get_time_inv(x + super_list[i][2] / (2 ** super_list[i][1] /2))
+            var t = get_time_inv(x + super_list[i][2] / (2 ** super_list[i][1] / 2))
+            
+            // Calculate seconds remaining from now until the target time (t + st)
+            const secondsLeft = Math.max(0, ((t + st) - Date.now()) / 1000);
+
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
-                `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / at 
-                ${new Date(t+st).toLocaleString()})</small>`
+                `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                ${secondsLeft.toFixed(2)} second left)</small>`
+                
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
         } else {
@@ -94,7 +124,7 @@ function num_time(t) {
         if (Y_Sequence.cmp(j[0], '1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI); else OCF_LNGI = ""  //SSO
 
         if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
-        //     ^^^^^^ this is essential because when we end BMS, BMS_LNGI = '' is a string, but we still treat it as a array so there must be a block right here
+    
         document.getElementById("main_lngi_bar").style.width = `${j[1] * 75}%`
         update_scratch_bars(u)
         return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
@@ -104,15 +134,18 @@ function num_time(t) {
 var tps = 0
 var last_tick = 0
 function update() {
-    tps = 1000/(Date.now()-last_tick)
+    tps = 1000 / (Date.now() - last_tick)
     last_tick = Date.now()
     document.getElementById("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
-    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI==""?">1,3 / (0)(1<sup>&omega;</sup>)":`<i>BMS conversion may be inaccurate due to upgrade displacement</i><br>&approx;${BMS_LNGI}`
-    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI==""?">SSO":`OCF/OCN (Same as BMS):<br>${OCF_LNGI}`
+    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<i>BMS conversion may be inaccurate due to upgrade displacement</i><br>&approx;${BMS_LNGI}`
+    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO" : `OCF/OCN (Same as BMS):<br>${OCF_LNGI}`
     document.getElementById("tps").innerHTML = `Running at ${tps.toFixed(1)} tps`
-    document.getElementById("time").innerHTML = `Time elapsed: ${((Date.now()-st)/1000).toFixed(1)}s`
-    requestAnimationFrame(update); // this is better than setinterval. (Thanks!)
-    // explain : setinterval uses client clock which sometime desync which cause lagging on some devices. requestAnimationFrame synchronizes with the browser's rendering.
+    
+    // Calculate total elapsed seconds and run it through formatSeconds
+    const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
+    document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
+    
+    requestAnimationFrame(update);
 }
 
 requestAnimationFrame(update);
