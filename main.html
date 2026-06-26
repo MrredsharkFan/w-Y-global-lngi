@@ -1,30 +1,154 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Termiunsfinity's Y LNGI</title>
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Termiunsfinity's Y LNGI</title>
     <style>
-        html {
-            font-family: Arial;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 5px 0 0 0;
+            font-size: 2rem;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .top-row {
+            display: flex;
+            gap: 15px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            padding: 12px;
+            border-radius: 5px;
+            overflow-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        #time {
+            background-color: #ffff8d;
+            flex: 4;
+            min-width: 280px;
+        }
+
+        #tps {
+            background-color: #dddddd;
+            flex: 1;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bar-container {
+            width: 100%;
+            background-color: #eee;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        #main_lngi_bar {
+            background-color: #aa4488;
+            height: 100%;
+            width: 50%;
+            transition: width 0.1s ease;
+        }
+
+        #main_lngi {
+            background-color: #ffccdd;
+            font-weight: bold;
+        }
+
+        .mid-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        #BMS_lngi {
+            background-color: #aaaaff;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        #OCF_lngi {
+            background-color: #8dff8d;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        #scratch_bars {
+            background-color: #cfffff;
+            position: relative;
+            height: 450px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 5px;
+        }
+
+        #scratch_bars>div {
+            position: relative !important; 
+            top: auto !important; /*well css overwrite this*/
+            width: 100%;
+            min-height: 24px;
+            margin-bottom: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
         }
     </style>
-    <body>
-        Welcome to...
-        <h1>Termiunsfinity's Y LNGI!</h1><h2>With contributions from RNGDelak</h2>
-        <div style="background-color: #dddddd;position: absolute;height: 5%;left: 80%;top: 15%; width:15%; border-radius: 5px;" id="tps"></div>
-        <div style="background-color: #aa4488;position: absolute;height: 1%;left: 5%;top: 19%; width:50%"
-            id="main_lngi_bar"></div>
-        <div style="background-color: #ffccdd;position: absolute;height: 15%;left: 5%;top: 20%; width:90%; border-radius: 5px;" id="main_lngi"></div>
-        <div style="background-color: #aaaaff;position: absolute;height: 10%;left: 5%;top: 35%; width:45%; border-radius: 5px;" id="BMS_lngi"></div>
-        <div style="background-color: #8dff8d;position: absolute;height: 10%;left: 50%;top: 35%; width:45%; border-radius: 5px;" id="OCF_lngi"></div>
-        <div style="background-color: #ffff8d;position: absolute;height: 4%;left: 5%;top: 15%; width:75%; border-radius: 5px;"
-            id="time"></div>
+</head>
 
-        <div style="background-color: #cfffff;position: absolute;height: 50%;left: 5%;top: 45%; width:90%; border-radius: 5px;"
-            id="scratch_bars"></div>
-    </body>
+<body>
+    <div>
+        Welcome to...
+        <h1>Termiunsfinity's Y LNGI!</h1>
+        <h2>With contributions from RNGDelak</h2>
+    </div>
+
+    <div class="top-row">
+        <div class="card" id="time">Time elapsed: Loading...</div>
+        <div class="card" id="tps">Running at 0 tps</div>
+    </div>
+
+    <div class="bar-container">
+        <div id="main_lngi_bar"></div>
+    </div>
+
+    <div class="card" id="main_lngi">Loading main sequence...</div>
+
+    <div class="mid-row">
+        <div class="card" id="BMS_lngi">Loading BMS...</div>
+        <div class="card" id="OCF_lngi">Loading OCF...</div>
+    </div>
+
+    <div class="card" id="scratch_bars"></div>
+
     <script src="conv.js"></script>
     <script src="lngi.js"></script>
+</body>
+
 </html>
