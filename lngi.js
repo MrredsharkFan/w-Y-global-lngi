@@ -47,7 +47,7 @@ function update_scratch_bars(x) {
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
                 `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${secondsLeft.toFixed(2)} second left)</small>`
+                ${formatSeconds(secondsLeft)} left)</small>`
                 
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
