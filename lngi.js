@@ -1,6 +1,6 @@
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
-    if (totalSeconds <= 0) return "0 second";
+    if (totalSeconds <= 0) return "0 seconds";
 
     // 1. Calculate the values and update the remainder using %=
     let s = totalSeconds;
@@ -36,6 +36,7 @@ function scratch_bar_init() {
     }
 }
 
+var lt = 0
 function update_scratch_bars(x) {
     for (var i = 0; i < 40; i++){
         if (i < super_list.length) {
@@ -51,6 +52,9 @@ function update_scratch_bars(x) {
                 
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
+            if (i+1 == super_list.length) {
+                lt = secondsLeft
+            }
         } else {
             document.getElementById(`bar_${i}`).style.visibility = "hidden"
         }
@@ -79,7 +83,7 @@ function ntl(m) {
             m = m * 2
             exp = exp + 1
         }
-        var base = Y_Sequence.fs(ord, 8).split(",")
+        var base = Y_Sequence.fs(ord, Math.ceil(ord.split(",").length/exp)+1).split(",")
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
         m = m - 1
@@ -91,7 +95,7 @@ function ntl(m) {
             break
         }
     }
-    return [ord, m]
+    return [ord, m, exp]
 }
 
 function num_to_lngi(m) {
@@ -127,7 +131,7 @@ function num_time(t) {
     
         document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
         update_scratch_bars(u)
-        return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
+        return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% | ${formatSeconds(lt)} to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
     }
 }
 
@@ -144,6 +148,9 @@ function update() {
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
     document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
+
+    //idk but i took inspiration from meta omega zero layers thing
+    document.title = `ω-Y LNGI: <${super_list.slice(0,10).at(-1)[0]}`
     
     requestAnimationFrame(update);
 }
