@@ -1,4 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+// proxy : dont touch unless you understand
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js"; // connect
 import {
   getDatabase,
   ref,
@@ -6,7 +7,7 @@ import {
   onValue,
   onDisconnect,
   remove
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js"; //import essentials func
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1WnDm6XEtVNMFHFXDV9QCLVlJSo4-nrQ",
@@ -16,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "wy-sequence-lngi.firebasestorage.app",
   messagingSenderId: "171132084225",
   appId: "1:171132084225:web:44253d73a290bbf8d62000"
-};
+}; // from my proxy essentials
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
