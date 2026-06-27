@@ -165,49 +165,7 @@
 
     <div class="card" id="scratch_bars"></div>
 </body>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import {
-    getDatabase,
-    ref,
-    set,
-    onValue,
-    onDisconnect
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyC1WnDm6XEtVNMFHFXDV9QCLVlJSo4-nrQ",
-  authDomain: "wy-sequence-lngi.firebaseapp.com",
-  databaseURL: "https://wy-sequence-lngi-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "wy-sequence-lngi",
-  storageBucket: "wy-sequence-lngi.firebasestorage.app",
-  messagingSenderId: "171132084225",
-  appId: "1:171132084225:web:44253d73a290bbf8d62000"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// unique user ID per tab
-const userId = crypto.randomUUID();
-const userRef = ref(db, "online/" + userId);
-
-// mark user online
-set(userRef, true);
-
-// remove when they leave
-onDisconnect(userRef).remove();
-
-// update counter
-onValue(ref(db, "online"), (snapshot) => {
-    const count = snapshot.exists()
-        ? Object.keys(snapshot.val()).length
-        : 0;
-
-    document.getElementById("online").textContent =
-        `🟢 ${count} user${count === 1 ? "" : "s"} online`;
-});
-</script>
+<script scr="proxy.js" type="module"></script>
 <script src="ui.js"></script>
 <script src="conv.js"></script>
 <script src="lngi.js"></script>
