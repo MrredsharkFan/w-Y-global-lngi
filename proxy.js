@@ -31,10 +31,9 @@ localStorage.setItem("userId", userId);
 const userRef = ref(db, "online/" + userId);
 const connectedRef = ref(db, ".info/connected");
 
-// 🔥 presence system
 onValue(connectedRef, (snap) => {
   if (snap.val() === true) {
-    // mark online immediately
+    // Mark online immediately (just saving true saves database space)
     set(userRef, true);
 
     // auto remove when disconnected
@@ -42,7 +41,6 @@ onValue(connectedRef, (snap) => {
   }
 });
 
-// 🟢 live counter
 const onlineRef = ref(db, "online");
 
 onValue(onlineRef, (snapshot) => {
@@ -51,7 +49,6 @@ onValue(onlineRef, (snapshot) => {
 
   const onlineDiv = document.getElementById("online");
   if (onlineDiv) {
-    onlineDiv.textContent =
-      `🟢 ${count} user${count === 1 ? "" : "s"} online`;
+    onlineDiv.textContent = `🟢 ${count} user${count === 1 ? "" : "s"} online`;
   }
 });
