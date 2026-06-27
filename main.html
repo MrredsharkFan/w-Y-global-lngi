@@ -165,6 +165,11 @@
 
     <div class="card" id="scratch_bars"></div>
 </body>
+<script>
+        window._nativeSetInterval = window.setInterval;
+        window._nativeClearInterval = window.clearInterval;
+        window._nativeDateNow = Date.now;
+</script>
 <script src="proxy.js" type="module"></script>
 <script src="ui.js"></script>
 <script src="conv.js"></script>
