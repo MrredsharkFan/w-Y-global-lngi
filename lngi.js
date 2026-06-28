@@ -1,3 +1,7 @@
+var tt = 0
+
+
+
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
     if (totalSeconds <= 0) return "0 seconds";
@@ -48,7 +52,7 @@ function update_scratch_bars(x) {
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
                 `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${formatSeconds(secondsLeft)} left)</small>`
+                ${tt==0?`${formatSeconds(secondsLeft)} left`:`in ${new Date(secondsLeft*1000+Date.now()).toLocaleString()}`})</small>`
                 
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
@@ -83,7 +87,7 @@ function ntl(m) {
             m = m * 2
             exp = exp + 1
         }
-        var base = Y_Sequence.fs(ord, Math.ceil(ord.split(",").length/exp)+1).split(",")
+        var base = Y_Sequence.fs(ord, exp).split(",")
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
         m = m - 1
@@ -148,6 +152,7 @@ function update() {
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
     document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
+    document.getElementById("time_mode").innerHTML = `${tt==0?"Time remaining":"Time reached"} (Press to change)`
 
     //idk but i took inspiration from meta omega zero layers thing
     document.title = `ω-Y LNGI: <${super_list.slice(0,10).at(-1)[0]}`

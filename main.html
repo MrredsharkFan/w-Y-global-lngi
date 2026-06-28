@@ -136,6 +136,13 @@
             border-radius: 3px;
             white-space: nowrap;
         }
+
+        #time_mode {
+            position: absolute;
+            min-width: 100px;
+            right: 0%;
+            margin-right: 10px
+        }
     </style>
 </head>
 
@@ -162,13 +169,10 @@
         <div class="card" id="OCF_lngi">Loading OCF...</div>
     </div>
 
-    <div class="card" style="
-        background-color: rgb(220,220,220);
-                resize: vertical;
-                position: relative;
-                height: 30px;
-                min-height: 30px;
-                padding: 5px;">Future Milestones:</div>
+    <div class="card" style="background-color: rgb(220,220,220); resize: vertical; position: relative; height: 30px; min-height: 30px; padding: 5px;">
+            Future Milestones:
+            <button onclick="tt = (tt+1) % 2" id="time_mode">Time Remaining</button>
+    </div>
     <div class="card" id="scratch_bars"></div>
 </body>
 <script>
