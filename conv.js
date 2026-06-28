@@ -1101,7 +1101,7 @@ function Conv_Y_sequence_BMS(ord) {
 }
 
 
-function Conv_OCF(matrix) {
+function Conv_BMS_OCF(matrix) {
     function eq(a, b) {
         if (typeof (a) == 'number') { return a == b; }
         if (a.length == 2) { return eq(a[0], b[0]) && eq(a[1], b[1]); }
