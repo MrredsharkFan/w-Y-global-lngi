@@ -1092,11 +1092,11 @@ THIS IS JUST AN APPROXIMATION NOT EXACT
 AFTER BH , IT SEEMS WRONG FOR ALL
 */
 
-function Conv_BMS(ord) {
+function Conv_BMS_Y_sequence(ord) {
     return Y_Sequence.g(Y_Sequence.ZERO, Lim_BMS_in_Yseq, BMS.gInv(BMS.ZERO, "Limit", ord))
 }
 
-function Conv_Y_sequence(ord) {
+function Conv_Y_sequence_BMS(ord) {
     return BMS.g(BMS.ZERO, "Limit", Y_Sequence.gInv(Y_Sequence.ZERO, Lim_BMS_in_Yseq, ord));
 }
 
@@ -2229,7 +2229,7 @@ class cOCF {
     }
 }
 
-function Conv_cOCF(ord) {
+function Conv_cOCF_BMS(ord) {
     if (cOCF.cmp(ord , '[[c]]')==-1)
     return BMS.g(BMS.ZERO, [[0,0],[1,1]], cOCF.gInv(cOCF.ZERO, "[[c]]", ord))
     
@@ -2242,7 +2242,7 @@ function Conv_cOCF(ord) {
     return BMS.g([[0,0,0,0],[1,1,1,1]], Lim_cOCF_in_BMS , cOCF.gInv("[[[][c]c]]", 'Limit', ord))
 }
 
-function Conv_BMS(ord) {
+function Conv_BMS_cOCF(ord) {
     if (BMS.cmp(ord, [[0,0],[1,1]])==-1)
     return cOCF.g(cOCF.ZERO, "[[c]]", BMS.gInv(BMS.ZERO,[[0,0],[1,1]] , ord))
 
