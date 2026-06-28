@@ -147,8 +147,7 @@ function update() {
     last_tick = Date.now()
     var u = num_time(Date.now())
     document.getElementById("main_lngi").innerHTML = `<i>${u[2]}</i>`
-    document.getElementById("extra_box").innerHTML = u[1]
-    document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal`
+    document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
     document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
