@@ -108,7 +108,7 @@ function num_to_lngi(m) {
 }
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000+23*3600000)
+const st = (1782316800000+23*3600000) - 4e8
 let BMS_LNGI, OCF_LNGI;
 
 function get_time(t) {
@@ -135,7 +135,8 @@ function num_time(t) {
     
         document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
         update_scratch_bars(u)
-        return `Current ordinal [<small>${((1 - j[1]) * 100).toFixed(3)}% | ${formatSeconds(lt)} to next</small>]<br><span style="font-size: 150%">${j[0]}</span>`
+        document.getElementById("main_lngi_bar").style.backgroundColor = lt/j[1]<1?`hsl(100,80%,50%)`:`hsl(${(1-j[1])*100},80%,50%)`
+        return [`${((1 - j[1]) * 100).toFixed(3)}%`,formatSeconds(lt),j[0]]
     }
 }
 
@@ -144,15 +145,17 @@ var last_tick = 0
 function update() {
     tps = 1000 / (Date.now() - last_tick)
     last_tick = Date.now()
-    document.getElementById("main_lngi").innerHTML = `<i>${num_time(Date.now())}</i>`
-    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<i>BMS conversion may be inaccurate due to upgrade displacement</i><br>&approx;${BMS_LNGI}`
-    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO" : `OCF/OCN (Same as BMS):<br>${OCF_LNGI}`
-    document.getElementById("tps").innerHTML = `Running at ${tps.toFixed(1)} tps`
+    var u = num_time(Date.now())
+    document.getElementById("main_lngi").innerHTML = `<i>${u[2]}</i>`
+    document.getElementById("extra_box").innerHTML = u[1]
+    document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal`
+    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
+    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
+    document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
     
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
     document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
-    document.getElementById("current_time").innerHTML = `Current time: ${new Date(Date.now()).toLocaleString()}`
     document.getElementById("time_mode").innerHTML = `${tt==0?"Time remaining":"Time reached"} (Press to change)`
 
     //idk but i took inspiration from meta omega zero layers thing

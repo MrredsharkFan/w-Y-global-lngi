@@ -21,22 +21,8 @@
             margin: 0 auto;
         }
 
-        h1 {
-            margin: 5px 0 0 0;
-            font-size: 2rem;
-        }
-
         h2 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-            color: #555;
-            font-weight: normal;
-        }
-
-        h3 {
-            font-size: 0.9rem;
-            color: #555;
-            font-weight: normal;
+            margin-top: 2px
         }
 
         .top-row {
@@ -56,31 +42,47 @@
 
         #time {
             background-color: #ffff8d;
-            flex: 4;
+            flex: 3;
             min-width: 280px;
         }
 
         #tps {
             background-color: #dddddd;
-            flex: 1;
+            flex: 0.5;
             min-width: 120px;
             display: flex;
             align-items: center;
+            text-align: right;
+        }
+
+        .bar-flexbox {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 15px
         }
 
         .bar-container {
-            width: 100%;
             background-color: #eee;
-            height: 8px;
             border-radius: 4px;
             overflow: hidden;
+            flex: 3;
         }
 
         #main_lngi_bar {
-            background-color: #aa4488;
-            height: 100%;
-            width: 50%;
-            transition: width 0.1s ease;
+            background-color: #bcd;
+            transition: width 0.05s ease;
+            text-wrap: nowrap;
+            padding: 3px
+        }
+
+        #extra_box {
+            background-color: #aaa;
+            flex: 1;
+            border-radius: 4px;
+            text-wrap: nowrap;
+            text-align: right;
+            padding: 3px
         }
 
         /* Main LNGI panel */
@@ -89,8 +91,9 @@
             font-weight: bold;
             resize: vertical;
             overflow: auto;
-            min-height: 80px;
-            height: 80px;
+            min-height: 60px;
+            height: 60px;
+            font-size: 150%
         }
 
         /* Two side panels */
@@ -109,8 +112,8 @@
             resize: vertical;
             overflow: auto;
 
-            min-height: 80px;
-            height: 80px;
+            min-height: 75px;
+            height: 75px;
         }
 
         #BMS_lngi {
@@ -154,9 +157,7 @@
 
 <body>
     <div>
-        <h1>Termiunsfinity's &omega;-Y LNGI</h1>
-        <h2>With contributions from RNGDelak</h2>
-        <h3 id="current_time">hi</h3>
+        <h2>Termiunsfinity's &omega;-Y LNGI <small style="color: #999">With contributions from RNGDelak</small></h2>
         <div id="online">🟢 0 user online (please reload page if the counter stuck at 0)</div>
     </div>
 
@@ -165,8 +166,11 @@
         <div class="card" id="tps">Running at 0 tps</div>
     </div>
 
+    <div class="bar-flexbox">
     <div class="bar-container">
         <div id="main_lngi_bar"></div>
+    </div>
+    <div id="extra_box"></div>
     </div>
 
     <div class="card" id="main_lngi">Loading main sequence...</div>
