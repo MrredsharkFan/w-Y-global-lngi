@@ -152,6 +152,7 @@ function update() {
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
     document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
+    document.getElementById("current_time").innerHTML = `Current time: ${new Date(Date.now()).toLocaleString()}`
     document.getElementById("time_mode").innerHTML = `${tt==0?"Time remaining":"Time reached"} (Press to change)`
 
     //idk but i took inspiration from meta omega zero layers thing
