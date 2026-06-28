@@ -83,7 +83,7 @@ function ntl(m) {
             m = m * 2
             exp = exp + 1
         }
-        var base = Y_Sequence.fs(ord, Math.ceil(ord.split(",").length/exp)+1).split(",")
+        var base = Y_Sequence.fs(ord, 8).split(",")
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
         m = m - 1
