@@ -127,9 +127,9 @@ function num_time(t) {
         var u = get_time(t)
         var j = num_to_lngi(u)
 
-        if (Y_Sequence.cmp(j[0], '1,2,4,8,16,32,64,128,256,512,1024') == -1) BMS_LNGI = Conv_Y_sequence(j[0]); else BMS_LNGI = "" //max 10 rows to ensure the program doesn't freak out ig
+        if (Y_Sequence.cmp(j[0], '1,2,4,8,16,32,64,128,256,512,1024') == -1) BMS_LNGI = Conv_Y_sequence_BMS(j[0]); else BMS_LNGI = "" //max 10 rows to ensure the program doesn't freak out ig
 
-        if (Y_Sequence.cmp(j[0], '1,2,4,8,13') == -1) OCF_LNGI = Conv_OCF(BMS_LNGI); else OCF_LNGI = ""  //SSO
+        if (Y_Sequence.cmp(j[0], '1,2,4,8,13') == -1) OCF_LNGI = Conv_BMS_OCF(BMS_LNGI); else OCF_LNGI = ""  //SSO
 
         if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
     
