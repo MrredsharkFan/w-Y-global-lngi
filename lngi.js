@@ -1,6 +1,7 @@
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
-    if (totalSeconds <= 0) return "0 seconds";
+    if (totalSeconds <= 5 && totalSeconds > 1) return "soon";
+    if (totalSeconds <= 1) return "now";
 
     // 1. Calculate the values and update the remainder using %=
     let s = totalSeconds;
