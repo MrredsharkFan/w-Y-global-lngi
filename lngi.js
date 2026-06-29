@@ -135,7 +135,7 @@ function num_time(t) {
     
         document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
         update_scratch_bars(u)
-        document.getElementById("main_lngi_bar").style.backgroundColor = lt/j[1]<1?`hsl(100,80%,50%)`:`hsl(${(1-j[1])*100},80%,50%)`
+        document.getElementById("main_lngi_bar").style.backgroundColor = lt/j[1]<1?`hsl(100,90%,70%)`:`hsl(${(1-j[1])*100},90%,70%)`
         return [`${((1 - j[1]) * 100).toFixed(3)}%`,formatSeconds(lt),j[0]]
     }
 }
