@@ -38,34 +38,14 @@ let scratch_bar_display = 'wY'
 const scratch_bar_display_div = document.getElementById("scratch_bar_display_mode");
 
 scratch_bar_display_div.addEventListener("change", () => {
-    switch (scratch_bar_display_div.value) {
-        case "wY": 
-            scratch_bar_display = "wY"
-            break;
-        case "BMS":
-            scratch_bar_display = "BMS"
-            break;
-        case "OCN":
-            scratch_bar_display = "OCN"
-            break;
-        case "cOCF":
-            scratch_bar_display = "cOCF"
-            break;    
-    }
+    scratch_bar_display = scratch_bar_display_div.value
 });
 
 let analysis_bar_display = 'OCN'
 const analysis_bar_display_div = document.getElementById("Analysis_display_mode");
 
 analysis_bar_display_div.addEventListener("change", () => {
-    switch (analysis_bar_display_div.value) {
-        case "OCN":
-            analysis_bar_display = "OCN"
-            break;
-        case "cOCF":
-            analysis_bar_display = "cOCF"
-            break;    
-    }
+    analysis_bar_display = analysis_bar_display_div.value
 });
 
 let compress_BMS = document.getElementById("compress_bms")
@@ -96,4 +76,42 @@ document.querySelectorAll(".resizable").forEach(panel => {
         window.addEventListener("pointermove", move);
         window.addEventListener("pointerup", up);
     });
+});
+
+
+scratch_bar_height = document.getElementById("Scratch_bar_height");
+scratch_bar_height.addEventListener("change", () => {
+    const val = scratch_bar_height.value
+    let height = 24
+    switch (val) {
+        case 'Normal':
+            height = 24;
+            break;
+
+        case 'High':
+            height = 28;
+            break;
+
+        case 'Higher':
+            height = 36;
+            break;
+
+        case 'Extra Higher':
+            height = 44;
+            break;
+
+        case 'Extra Extra Higher':
+            height = 50;
+            break;
+
+        case 'Extra Extra Extra Higher':
+            height = 56;
+            break;
+
+
+    }
+    document.documentElement.style.setProperty(
+        "--scratch-bar-height",
+        height + "px"
+    );
 });
