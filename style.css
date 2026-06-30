@@ -187,7 +187,7 @@ h2 {
 
 .modal-content {
     background: white;
-    width: 400px;
+    width: 600px;
     max-width: 90vw;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,.25);
@@ -228,4 +228,19 @@ h2 {
     min-width: 180px;
     padding: 4px 8px;
     font-size: 0.95rem;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.checkbox-row input[type="checkbox"] {
+    margin-top: 3px; /* aligns checkbox with first line of text */
+    flex-shrink: 0;
+}
+
+.checkbox-row label {
+    cursor: pointer;
 }

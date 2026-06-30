@@ -146,7 +146,7 @@ function update() {
     document.getElementById("main_lngi").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
-    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO/>Lim(cOCF) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
+    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO/>(0,0,0,0)(1,1,1,1)(2,2) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
     
     // Calculate total elapsed seconds and run it through formatSeconds

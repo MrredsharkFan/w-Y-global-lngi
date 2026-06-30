@@ -67,3 +67,6 @@ analysis_bar_display_div.addEventListener("change", () => {
             break;    
     }
 });
+
+let compress_BMS = document.getElementById("compress_bms")
+let format_cOCF = document.getElementById("format_cOCF")
