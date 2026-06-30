@@ -142,7 +142,7 @@ h2 {
     padding: 5px;
 }
 
-#scratch_bars>div {
+#scratch_bars>div:not(.resize-handle) {
     position: relative !important;
     top: auto !important;
     width: 100%;
