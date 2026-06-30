@@ -70,3 +70,30 @@ analysis_bar_display_div.addEventListener("change", () => {
 
 let compress_BMS = document.getElementById("compress_bms")
 let format_cOCF = document.getElementById("format_cOCF")
+
+document.querySelectorAll(".resizable").forEach(panel => {
+    const handle = panel.querySelector(".resize-handle");
+
+    let startY;
+    let startHeight;
+
+    handle.addEventListener("pointerdown", e => {
+        e.preventDefault();
+
+        startY = e.clientY;
+        startHeight = panel.offsetHeight;
+
+        function move(ev) {
+            const h = Math.max(60, startHeight + ev.clientY - startY);
+            panel.style.height = h + "px";
+        }
+
+        function up() {
+            window.removeEventListener("pointermove", move);
+            window.removeEventListener("pointerup", up);
+        }
+
+        window.addEventListener("pointermove", move);
+        window.addEventListener("pointerup", up);
+    });
+});

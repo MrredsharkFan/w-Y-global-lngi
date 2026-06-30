@@ -244,3 +244,19 @@ h2 {
 .checkbox-row label {
     cursor: pointer;
 }
+
+.resizable {
+    position: relative;
+    overflow: auto;
+}
+
+.resize-handle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 16px;
+    cursor: ns-resize;
+    touch-action: none;
+}
