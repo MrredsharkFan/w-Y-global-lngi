@@ -179,7 +179,8 @@ function update() {
 
     //idk but i took inspiration from meta omega zero layers thing
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
-    document.getElementById("mile_date_real").innerHTML = get_most_important_mile_of_day()[1]
+    var nig = get_most_important_mile_of_day()
+    document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0])+st).toLocaleTimeString()}`
     
     requestAnimationFrame(update);
 }
