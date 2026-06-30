@@ -119,6 +119,29 @@ function get_time_inv(n) {
     return (10**((n-2)*2) - 1)*864000
 }
 
+function get_most_important_mile_of_day() {
+    var ct = new Date(document.getElementById("mile_date").value)
+    if (ct == "Invalid Date") {
+        return [0,"Insert date :D"]
+    }
+    if (ct < st) {
+        return [0,"Too early!"]
+    }
+    ct.setHours(0, 0, 0, 0)
+    ct = ct.getTime()
+    var ub = get_time(ct + (86400 * 1000) - st)
+    var lb = get_time(ct - st)
+    var int = 1
+    while (true) {
+        if (Math.floor(ub * int) / int != Math.floor(lb * int) / int) {
+            break
+        }
+        int *= 2
+    }
+    var x = Math.floor(ub * int) / int
+    return [x,num_to_lngi(x)[0]]
+}
+
 function num_time(t) {
     var t = Math.max(0, t - st)
     if (t == 0) {
@@ -155,7 +178,8 @@ function update() {
     document.getElementById("time_mode").innerHTML = `${tt==0?"Time remaining":"Time reached"} (Press to change)`
 
     //idk but i took inspiration from meta omega zero layers thing
-    document.title = `ω-Y LNGI: <${super_list.slice(0,10).at(-1)[0]}`
+    document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
+    document.getElementById("mile_date_real").innerHTML = get_most_important_mile_of_day()[1]
     
     requestAnimationFrame(update);
 }
