@@ -51,7 +51,7 @@ function update_scratch_bars(x) {
 
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
-                `${super_list[i][0]} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                `${convert_From_wY(super_list[i][0],scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
                 ${tt==0?`${formatSeconds(secondsLeft)} left`:`in ${new Date(secondsLeft*1000+Date.now()).toLocaleString()}`})</small>`
                 
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
@@ -127,12 +127,9 @@ function num_time(t) {
         var u = get_time(t)
         var j = num_to_lngi(u)
 
-        if (Y_Sequence.cmp(j[0], '1,2,4,8,16,32,64,128,256,512,1024') == -1) BMS_LNGI = Conv_Y_sequence_BMS(j[0]); else BMS_LNGI = "" //max 10 rows to ensure the program doesn't freak out ig
+        BMS_LNGI = convert_From_wY(j[0],'BMS')
+        OCF_LNGI = convert_From_wY(j[0],analysis_bar_display)
 
-        if (Y_Sequence.cmp(j[0], '1,2,4,8,13') == -1) OCF_LNGI = Conv_BMS_OCF(BMS_LNGI); else OCF_LNGI = ""  //SSO
-
-        if (Array.isArray(BMS_LNGI)) BMS_LNGI = BMS_LNGI.map(p => `(${p.join(',')})`).join(''); // convert to string for display
-    
         document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
         update_scratch_bars(u)
         document.getElementById("main_lngi_bar").style.backgroundColor = lt/j[1]<1?`hsl(100,90%,70%)`:`hsl(${(1-j[1])*100},90%,70%)`
@@ -149,7 +146,7 @@ function update() {
     document.getElementById("main_lngi").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
-    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
+    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO/>Lim(cOCF) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
     
     // Calculate total elapsed seconds and run it through formatSeconds

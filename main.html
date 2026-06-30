@@ -4,164 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Termiunsfinity's Y LNGI</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #fafafa;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            margin-top: 2px
-        }
-
-        .top-row {
-            display: flex;
-            gap: 15px;
-            align-items: stretch;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            padding: 12px;
-            border-radius: 5px;
-            overflow-wrap: break-word;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        #time {
-            background-color: #ffff8d;
-            flex: 3;
-            min-width: 280px;
-        }
-
-        #tps {
-            background-color: #dddddd;
-            flex: 0.5;
-            min-width: 120px;
-            display: flex;
-        }
-
-        .bar-flexbox {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: stretch;
-            gap: 15px;
-        }
-
-        .bar-container {
-            background-color: #eee;
-            border-radius: 4px;
-            overflow: hidden;
-            flex: 3;
-        }
-
-        #main_lngi_bar {
-            background-color: #bcd;
-            transition: width 0.05s ease;
-            text-wrap: nowrap;
-            padding: 3px
-        }
-
-        /* Main LNGI panel */
-        #main_lngi {
-            background-color: #ffccdd;
-            font-weight: bold;
-            resize: vertical;
-            overflow: auto;
-            min-height: 60px;
-            height: 60px;
-            font-size: 150%
-        }
-
-        /* Two side panels */
-        .mid-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: stretch;
-        }
-
-        #BMS_lngi,
-        #OCF_lngi {
-            flex: 1;
-            min-width: 280px;
-
-            resize: vertical;
-            overflow: auto;
-
-            min-height: 75px;
-            height: 75px;
-        }
-
-        #BMS_lngi {
-            background-color: #aaaaff;
-        }
-
-        #OCF_lngi {
-            background-color: #8dff8d;
-        }
-
-        #scratch_bars {
-            background-color: rgb(220, 220, 220);
-            resize: vertical;
-            position: relative;
-            height: 155px;
-            min-height: 155px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 5px;
-        }
-
-        #scratch_bars>div {
-            position: relative !important;
-            top: auto !important;
-            width: 100%;
-            min-height: 24px;
-            margin-bottom: 4px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            white-space: nowrap;
-        }
-
-        .milestone-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgb(220, 220, 220);
-            min-height: 40px;
-        }
-
-        #time_mode {
-            position: static;
-            margin: 0;
-            background-color: #000000;
-            color: #fff;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    </link>
 </head>
 
 <body>
-    <div>
-        <h2>Termiunsfinity's &omega;-Y LNGI <small style="color: #999">With contributions from RNGDelak</small></h2>
-        <div id="online">🟢 0 user online (please reload page if the counter stuck at 0)</div>
-    </div>
+    <div class="header">
+        <h2>Termiunsfinity's &omega;-Y LNGI<small style="color: #999">With contributions from RNGDelak</small></h2>
 
+        <div class="status-row">
+            <div id="online">🟢 0 user online (please reload page if the counter stuck at 0)</div>
+
+            <button id="settings_btn">Settings</button>
+        </div>
+    </div>
     <div class="top-row">
         <div class="card" id="time">Time elapsed: Loading...</div>
         <div class="card" id="tps">Running at 0 tps</div>
@@ -186,6 +42,36 @@
         <button onclick="tt = (tt+1) % 2" id="time_mode">Time Remaining</button>
     </div>
     <div class="card" id="scratch_bars"></div>
+
+
+    <div id="settings_modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button id="close_settings">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                Notation on furture milestone bar :
+                <select id="scratch_bar_display_mode">
+                    <option value="wY">&omega;-Y sequence</option>
+                    <option value="BMS">BMS</option>
+                    <option value="OCN">OCN</option>
+                    <option value="cOCF">cOCF</option>
+                </select>
+            </div>
+
+            <div class="modal-body">
+                Notation on analysis section :
+                <select id="Analysis_display_mode">
+                    <option value="OCN">OCN</option>
+                    <option value="cOCF">cOCF</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 <script>
     window._nativeSetInterval = window.setInterval;

@@ -2014,7 +2014,7 @@ class cOCF {
             return 'I';
         if (st == '[[[c][[c]c]]c]')
             return 'M';
-        
+
         let x = this.booster(st);
         let beta = this.base(st);
 
@@ -2230,28 +2230,55 @@ class cOCF {
 }
 
 function Conv_cOCF_BMS(ord) {
-    if (cOCF.cmp(ord , '[[c]]')==-1)
-    return BMS.g(BMS.ZERO, [[0,0],[1,1]], cOCF.gInv(cOCF.ZERO, "[[c]]", ord))
-    
-    if (cOCF.cmp(ord , '[[[]c]]')==-1)
-    return BMS.g([[0,0],[1,1]], [[0,0,0],[1,1,1]], cOCF.gInv("[[c]]", "[[[]c]]", ord))
+    if (cOCF.cmp(ord, '[[c]]') == -1)
+        return BMS.g(BMS.ZERO, [[0, 0], [1, 1]], cOCF.gInv(cOCF.ZERO, "[[c]]", ord))
 
-    if (cOCF.cmp(ord , '[[[][c]c]]')==-1)
-    return BMS.g([[0,0,0],[1,1,1]], [[0,0,0,0],[1,1,1,1]], cOCF.gInv("[[[]c]]", "[[[][c]c]]", ord))
+    if (cOCF.cmp(ord, '[[[]c]]') == -1)
+        return BMS.g([[0, 0], [1, 1]], [[0, 0, 0], [1, 1, 1]], cOCF.gInv("[[c]]", "[[[]c]]", ord))
 
-    return BMS.g([[0,0,0,0],[1,1,1,1]], Lim_cOCF_in_BMS , cOCF.gInv("[[[][c]c]]", 'Limit', ord))
+    if (cOCF.cmp(ord, '[[[][c]c]]') == -1)
+        return BMS.g([[0, 0, 0], [1, 1, 1]], [[0, 0, 0, 0], [1, 1, 1, 1]], cOCF.gInv("[[[]c]]", "[[[][c]c]]", ord))
+
+    return BMS.g([[0, 0, 0, 0], [1, 1, 1, 1]], Lim_cOCF_in_BMS, cOCF.gInv("[[[][c]c]]", 'Limit', ord))
 }
 
 function Conv_BMS_cOCF(ord) {
-    if (BMS.cmp(ord, [[0,0],[1,1]])==-1)
-    return cOCF.g(cOCF.ZERO, "[[c]]", BMS.gInv(BMS.ZERO,[[0,0],[1,1]] , ord))
+    if (BMS.cmp(ord, [[0, 0], [1, 1]]) == -1)
+        return cOCF.g(cOCF.ZERO, "[[c]]", BMS.gInv(BMS.ZERO, [[0, 0], [1, 1]], ord))
 
-    if (BMS.cmp(ord, [[0,0,0],[1,1,1]])==-1)
-    return cOCF.g("[[c]]", "[[[]c]]", BMS.gInv([[0,0],[1,1]],[[0,0,0],[1,1,1]] , ord))
+    if (BMS.cmp(ord, [[0, 0, 0], [1, 1, 1]]) == -1)
+        return cOCF.g("[[c]]", "[[[]c]]", BMS.gInv([[0, 0], [1, 1]], [[0, 0, 0], [1, 1, 1]], ord))
 
-    if (BMS.cmp(ord, [[0,0,0,0],[1,1,1,1]])==-1)
-    return cOCF.g("[[[]c]]", "[[[][c]c]]", BMS.gInv([[0,0,0],[1,1,1]],[[0,0,0,0],[1,1,1,1]] , ord))
+    if (BMS.cmp(ord, [[0, 0, 0, 0], [1, 1, 1, 1]]) == -1)
+        return cOCF.g("[[[]c]]", "[[[][c]c]]", BMS.gInv([[0, 0, 0], [1, 1, 1]], [[0, 0, 0, 0], [1, 1, 1, 1]], ord))
 
-    return cOCF.g("[[[][c]c]]", "Limit", BMS.gInv([[0,0,0,0],[1,1,1,1]], Lim_cOCF_in_BMS , ord))
+    return cOCF.g("[[[][c]c]]", "Limit", BMS.gInv([[0, 0, 0, 0], [1, 1, 1, 1]], Lim_cOCF_in_BMS, ord))
+}
+
+function convert_From_wY(ord, mode) {
+    if (mode == "wY") {
+        return ord;
+    }
+
+    if (mode == "BMS") {
+        if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512,1024') == -1) {
+            return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
+        }
+        return '';
+    }
+
+    if (mode == "OCN") {
+        if (Y_Sequence.cmp(ord, '1,2,4,8,13') == -1) {
+            return Conv_BMS_OCF(Conv_Y_sequence_BMS(ord));
+        }
+        return '';
+    }
+
+    if (mode == "cOCF") {
+        if (Y_Sequence.cmp(ord, '1,2,4,8,16,26') == -1) {
+            return cOCF.convert(Conv_BMS_cOCF(Conv_Y_sequence_BMS(ord)));
+        }
+        return '';
+    }
 }
 
