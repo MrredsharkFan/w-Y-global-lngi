@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Termiunsfinity's Y LNGI</title>
-    <link rel="stylesheet" href="style.css"></link>
+    <link rel="stylesheet" href="style.css">
+    </link>
 </head>
 
 <body>
@@ -14,35 +15,44 @@
         <div class="status-row">
             <div id="online">🟢 0 user online (please reload page if the counter stuck at 0)</div>
 
+            <button id="btn_lngi">Lngi & Analysis</button>
+            <button id="btn_progress">Progress</button>
+            <button id="btn_milestone">Milestone</button>
             <button id="settings_btn">Settings</button>
         </div>
     </div>
-    <div class="top-row">
+
+
+    <div class="top-row" id = "top/row">
         <div class="card" id="time">Time elapsed: Loading...</div>
         <div class="card" id="tps">Running at 0 tps</div>
     </div>
 
-    <div class="bar-flexbox">
+    <div class="bar-flexbox" id = "bar/flexbox">
         <div class="bar-container">
             <div id="main_lngi_bar"></div>
         </div>
     </div>
 
-    <div class="card resizable" id="main_lngi">Loading main sequence...<div class="resize-handle"></div></div>
-
-    <div class="mid-row">
-        <div class="card resizable" id="BMS_lngi">Loading BMS...<div class="resize-handle"></div></div>
-        <div class="card resizable" id="OCF_lngi">Loading OCF...<div class="resize-handle"></div></div>
+    <div class="card resizable" id="main_lngi">Loading main sequence...<div class="resize-handle"></div>
     </div>
 
-    <div class="card milestone-header"
-        style="background-color: rgb(220,220,220); resize: vertical; position: relative; height: 30px; min-height: 30px; padding: 5px;">
+    <div class="mid-row" id = "mid/row">
+        <div class="card resizable" id="BMS_lngi">Loading BMS...<div class="resize-handle"></div>
+        </div>
+        <div class="card resizable" id="OCF_lngi">Loading OCF...<div class="resize-handle"></div>
+        </div>
+    </div>
+ 
+    <div class="card milestone-header" id ="milestone_header">
         Future Milestones:
         <button onclick="tt = (tt+1) % 2" id="time_mode">Time Remaining</button>
     </div>
-    <div class="card resizable" id="scratch_bars"><div class="resize-handle"></div></div>
+    <div class="card resizable" id="scratch_bars" hidden>
+        <div class="resize-handle"></div>
+    </div>
 
-    <div>
+    <div id = "Future milestone" hidden>
         Select time <input type="date" id="mile_date"> <span id="mile_date_real"></span>
     </div>
 

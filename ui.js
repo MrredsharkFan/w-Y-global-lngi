@@ -115,3 +115,44 @@ scratch_bar_height.addEventListener("change", () => {
         height + "px"
     );
 });
+
+
+
+/*
+document.getElementById("top/row").hidden = false;
+document.getElementById("bar/flexbox").hidden = false;
+document.getElementById("main_lngi").hidden = false;
+*/
+
+let page = 0; // 0: main, 1: progress, 2: milestone
+//purpose : preventing updating everything at once, which can cause lagging and freezing of the page
+//only update the visible page, and update the other pages when they are visible
+const btn_lngi = document.getElementById("btn_lngi");
+
+btn_lngi.addEventListener("click", () => {
+    page = 0;
+    document.getElementById("mid/row").style.display = "flex";
+    document.getElementById("milestone_header").style.display = "none";
+    document.getElementById("scratch_bars").hidden = true;
+    document.getElementById("Future milestone").hidden = true;
+});
+
+const btn_progress = document.getElementById("btn_progress");
+
+btn_progress.addEventListener("click", () => {
+    page = 1;
+    document.getElementById("mid/row").style.display = "none";
+    document.getElementById("milestone_header").style.display = "flex";
+    document.getElementById("scratch_bars").hidden = false;
+    document.getElementById("Future milestone").hidden = true;
+});
+
+const btn_milestone = document.getElementById("btn_milestone");
+
+btn_milestone.addEventListener("click", () => {
+    page = 2;
+    document.getElementById("mid/row").style.display = "none";
+    document.getElementById("milestone_header").style.display = "none";
+    document.getElementById("scratch_bars").hidden = true;
+    document.getElementById("Future milestone").hidden = false;
+});
