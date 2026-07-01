@@ -8,9 +8,9 @@ function formatSeconds(totalSeconds) {
 
     // 1. Calculate the values and update the remainder using %=
     let s = totalSeconds;
-    const days    = Math.floor(s / 86400);    s %= 86400;
-    const hours   = Math.floor(s / 3600);     s %= 3600;
-    const minutes = Math.floor(s / 60);       s %= 60;
+    const days = Math.floor(s / 86400); s %= 86400;
+    const hours = Math.floor(s / 3600); s %= 3600;
+    const minutes = Math.floor(s / 60); s %= 60;
     const seconds = s;
 
     // 2. Helper function to handle plurals and skip zeros
@@ -18,8 +18,8 @@ function formatSeconds(totalSeconds) {
 
     // 3. Build the array and filter out the nulls (zeros)
     const parts = [
-        p(days,    'day'),
-        p(hours,   'hour'),
+        p(days, 'day'),
+        p(hours, 'hour'),
         p(minutes, 'minute'),
         p(seconds.toFixed(2), 'second')
     ];
@@ -29,7 +29,7 @@ function formatSeconds(totalSeconds) {
 // reason for 40 : because at line 72 you stop if steps >= 40
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 40; i++){
+    for (var i = 0; i < 40; i++) {
         const p = document.createElement("div")
         p.style.height = "6.25%";
         p.style.position = "absolute";
@@ -42,21 +42,21 @@ function scratch_bar_init() {
 
 var lt = 0
 function update_scratch_bars(x) {
-    for (var i = 0; i < 40; i++){
+    for (var i = 0; i < 40; i++) {
         if (i < super_list.length) {
             var t = get_time_inv(x + super_list[i][2] / (2 ** super_list[i][1] / 2))
-            
+
             // Calculate seconds remaining from now until the target time (t + st)
             const secondsLeft = Math.max(0, ((t + st) - Date.now()) / 1000);
 
             document.getElementById(`bar_${i}`).style.visibility = "visible"
             document.getElementById(`bar_${i}`).innerHTML =
-                `${convert_From_wY(super_list[i][0],scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${tt==0?`${formatSeconds(secondsLeft)} left`:`in ${new Date(secondsLeft*1000+Date.now()).toLocaleString()}`})</small>`
-                
+                `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
+
             document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
             document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
-            if (i+1 == super_list.length) {
+            if (i + 1 == super_list.length) {
                 lt = secondsLeft
             }
         } else {
@@ -108,24 +108,24 @@ function num_to_lngi(m) {
 }
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000+23*3600000)
+const st = (1782316800000 + 23 * 3600000)
 let BMS_LNGI, OCF_LNGI;
 
 function get_time(t) {
-    return Math.log10(1 + t / 864000)/2 + 2
+    return Math.log10(1 + t / 864000) / 2 + 2
 }
 
 function get_time_inv(n) {
-    return (10**((n-2)*2) - 1)*864000
+    return (10 ** ((n - 2) * 2) - 1) * 864000
 }
 
 function get_most_important_mile_of_day() {
     var ct = new Date(document.getElementById("mile_date").value)
     if (ct == "Invalid Date") {
-        return [0,"Insert date :D"]
+        return [0, "Insert date :D"]
     }
     if (ct < st) {
-        return [0,"Too early!"]
+        return [0, "Too early!"]
     }
     ct.setHours(0, 0, 0, 0)
     ct = ct.getTime()
@@ -139,7 +139,7 @@ function get_most_important_mile_of_day() {
         int *= 2
     }
     var x = Math.floor(ub * int) / int
-    return [x,num_to_lngi(x)[0]]
+    return [x, num_to_lngi(x)[0]]
 }
 
 function num_time(t) {
@@ -150,13 +150,13 @@ function num_time(t) {
         var u = get_time(t)
         var j = num_to_lngi(u)
 
-        BMS_LNGI = convert_From_wY(j[0],'BMS')
-        OCF_LNGI = convert_From_wY(j[0],analysis_bar_display)
+        BMS_LNGI = convert_From_wY(j[0], 'BMS')
+        OCF_LNGI = convert_From_wY(j[0], analysis_bar_display)
 
-        document.getElementById("main_lngi_bar").style.width = `${(1-j[1]) * 100}%`
-        update_scratch_bars(u)
-        document.getElementById("main_lngi_bar").style.backgroundColor = lt/j[1]<1?`hsl(100,90%,70%)`:`hsl(${(1-j[1])*100},90%,70%)`
-        return [`${((1 - j[1]) * 100).toFixed(3)}%`,formatSeconds(lt),j[0]]
+        document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
+        if (page == 1) update_scratch_bars(u)
+        document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
+        return [`${((1 - j[1]) * 100).toFixed(3)}%`, formatSeconds(lt), j[0]]
     }
 }
 
@@ -166,22 +166,25 @@ function update() {
     tps = 1000 / (Date.now() - last_tick)
     last_tick = Date.now()
     var u = num_time(Date.now())
-    document.getElementById("main_lngi").innerHTML = `<i>${u[2]}</i>`
+    document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
-    document.getElementById("BMS_lngi").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
-    document.getElementById("OCF_lngi").innerHTML = OCF_LNGI == "" ? ">SSO/>(0,0,0,0)(1,1,1,1)(2,2) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
+    if (page == 0) {
+        document.getElementById("BMS_lngi_Content").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
+        document.getElementById("OCF_lngi_Content").innerHTML = OCF_LNGI == "" ? ">SSO/>(0,0,0,0)(1,1,1,1)(2,2) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
+    }
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    
+
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
     document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
-    document.getElementById("time_mode").innerHTML = `${tt==0?"Time remaining":"Time reached"} (Press to change)`
+    document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
 
     //idk but i took inspiration from meta omega zero layers thing
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
-    var nig = get_most_important_mile_of_day()
-    document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0])+st).toLocaleTimeString()}`
-    
+    if (page == 2) {
+        var nig = get_most_important_mile_of_day()
+        document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
+    }
     requestAnimationFrame(update);
 }
 
