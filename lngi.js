@@ -52,14 +52,17 @@ function update_scratch_bars(x) {
 
             // Calculate seconds remaining from now until the target time (t + st)
             const secondsLeft = Math.max(0, ((t + st) - Date.now()) / 1000);
-
-            document.getElementById(`bar_${i}`).style.visibility = "visible"
-  if (page == 1){          document.getElementById(`bar_${i}`).innerHTML =
-                `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+            if (page == 1) {
+                document.getElementById(`bar_${i}`).style.visibility = "visible"
+                if (page == 1) {
+                    document.getElementById(`bar_${i}`).innerHTML =
+                    `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
                 ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
 
-            document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
-            document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`}
+                    document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
+                    document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
+                }
+            }
             if (i + 1 == super_list.length) {
                 lt = secondsLeft
             }
@@ -117,7 +120,7 @@ const st = (1782316800000 + 23 * 3600000)
 let BMS_LNGI, OCF_LNGI;
 
 function get_time(t) {
-    return Math.log10(1 + t / 864000) / 2 + 2
+    return (Math.log10(1 + t / 864000) / 2 + 2)
 }
 
 function get_time_inv(n) {
@@ -127,7 +130,7 @@ function get_time_inv(n) {
 function get_most_important_mile_of_day() {
     var ct = new Date(document.getElementById("mile_date").value)
     if (ct == "Invalid Date") {
-        return [0, "Insert date :D"]
+        return [0, "666666"]
     }
     if (ct < st) {
         return [0, "Too early!"]
@@ -161,7 +164,7 @@ function num_time(t) {
         }
 
         document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
-        if (page == 1) { update_scratch_bars(u) }
+        update_scratch_bars(u)
         document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
         return [`${((1 - j[1]) * 100).toFixed(3)}%`, formatSeconds(lt), j[0]]
     }
@@ -190,7 +193,12 @@ function update() {
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
     if (page == 2) {
         var nig = get_most_important_mile_of_day()
-        document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
+        if (nig[1] == "666666") {
+            document.getElementById("mile_date_real").innerHTML = `...`
+        }
+        else {
+            document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
+        }
     }
     requestAnimationFrame(update);
 }

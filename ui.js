@@ -104,7 +104,7 @@ btn_lngi.addEventListener("click", () => {
     document.getElementById("mid/row").style.display = "flex";
     document.getElementById("milestone_header").style.display = "none";
     document.getElementById("scratch_bars").hidden = true;
-    document.getElementById("Future milestone").hidden = true;
+    document.getElementById("future-milestone").hidden = true;
 });
 
 const btn_progress = document.getElementById("btn_progress");
@@ -114,7 +114,7 @@ btn_progress.addEventListener("click", () => {
     document.getElementById("mid/row").style.display = "none";
     document.getElementById("milestone_header").style.display = "flex";
     document.getElementById("scratch_bars").hidden = false;
-    document.getElementById("Future milestone").hidden = true;
+    document.getElementById("future-milestone").hidden = true;
 });
 
 const btn_milestone = document.getElementById("btn_milestone");
@@ -124,5 +124,5 @@ btn_milestone.addEventListener("click", () => {
     document.getElementById("mid/row").style.display = "none";
     document.getElementById("milestone_header").style.display = "none";
     document.getElementById("scratch_bars").hidden = true;
-    document.getElementById("Future milestone").hidden = false;
+    document.getElementById("future-milestone").hidden = false;
 });
