@@ -116,7 +116,7 @@ function num_to_lngi(m) {
 }
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000 + 23 * 3600000)
+const st = (1782316800000 + 23 * 3600000) + 864*1000
 let BMS_LNGI, OCF_LNGI;
 
 function get_time(t) {
