@@ -79,44 +79,14 @@ document.querySelectorAll(".resizable").forEach(panel => {
 });
 
 
-scratch_bar_height = document.getElementById("Scratch_bar_height");
-scratch_bar_height.addEventListener("change", () => {
-    const val = scratch_bar_height.value
-    let height = 24
-    switch (val) {
-        case 'Normal':
-            height = 24;
-            break;
+const Scratch_bar_height = document.getElementById("Scratch_bar_height");
 
-        case 'High':
-            height = 28;
-            break;
-
-        case 'Higher':
-            height = 36;
-            break;
-
-        case 'Extra Higher':
-            height = 44;
-            break;
-
-        case 'Extra Extra Higher':
-            height = 50;
-            break;
-
-        case 'Extra Extra Extra Higher':
-            height = 56;
-            break;
-
-
-    }
+Scratch_bar_height.addEventListener("input", function () {
     document.documentElement.style.setProperty(
         "--scratch-bar-height",
-        height + "px"
+        Scratch_bar_height.valueAsNumber + "px"
     );
 });
-
-
 
 /*
 document.getElementById("top/row").hidden = false;
