@@ -155,12 +155,13 @@ function num_time(t) {
         var u = get_time(t)
         var j = num_to_lngi(u)
 
-        BMS_LNGI = convert_From_wY(j[0], 'BMS')
-        OCF_LNGI = convert_From_wY(j[0], analysis_bar_display)
+        if (page == 0) {
+            BMS_LNGI = convert_From_wY(j[0], 'BMS')
+            OCF_LNGI = convert_From_wY(j[0], analysis_bar_display)
+        }
 
         document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
-    
- update_scratch_bars(u)
+        if (page == 1) { update_scratch_bars(u) }
         document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
         return [`${((1 - j[1]) * 100).toFixed(3)}%`, formatSeconds(lt), j[0]]
     }

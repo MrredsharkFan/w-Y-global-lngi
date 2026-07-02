@@ -2261,20 +2261,20 @@ function convert_From_wY(ord, mode) {
     }
 
     if (mode == "BMS") {
-        if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512,1024') == -1) {
+        if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
             if (compress_BMS.checked)
                 return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
             else
                 return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
         }
-        return '';
+        return ord;
     }
 
     if (mode == "OCN") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,13') == -1) {
             return Conv_BMS_OCF(Conv_Y_sequence_BMS(ord));
         }
-        return '';
+        return ord;
     }
 
     if (mode == "cOCF") {
@@ -2284,7 +2284,7 @@ function convert_From_wY(ord, mode) {
             else
                 return Conv_BMS_cOCF(Conv_Y_sequence_BMS(ord));
         }
-        return '';
+        return ord;
     }
 }
 
