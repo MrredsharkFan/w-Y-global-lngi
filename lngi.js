@@ -197,7 +197,12 @@ function update() {
             document.getElementById("mile_date_real").innerHTML = `...`
         }
         else {
-            document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
+            if (nig[1] == "Too early!") {
+                document.getElementById("mile_date_real").innerHTML = `The LNGI hasn't started at this time.`
+            }
+            else {
+                document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
+            }
         }
     }
     requestAnimationFrame(update);
