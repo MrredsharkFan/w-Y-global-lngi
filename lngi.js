@@ -44,7 +44,11 @@ var lt = 0
 function update_scratch_bars(x) {
     for (var i = 0; i < 40; i++) {
         if (i < super_list.length) {
-            var t = get_time_inv(x + super_list[i][2] / (2 ** super_list[i][1] / 2))
+            var u = x + super_list[i][2] / (2 ** super_list[i][1] / 2)
+            if (i == 0) {
+                u = Math.ceil(x)
+            }
+            var t = get_time_inv(u)
 
             // Calculate seconds remaining from now until the target time (t + st)
             const secondsLeft = Math.max(0, ((t + st) - Date.now()) / 1000);
@@ -76,8 +80,9 @@ function ntl(m) {
     super_list = []
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
-    var m = 1 - m % 1
+    var m = 1 - (m % 1)
     while (steps < 40 && ord.length < 500 && ord.split(",").at(-1) < 1e8) {
+        super_list = super_list.concat([[ord, steps, m]])
         if (m <= 1e-10) {
             break
         }
@@ -91,7 +96,6 @@ function ntl(m) {
         var ordl = ord.split(",").length
         ord = base.slice(0, ordl + exp - 1).join(",")
         m = m - 1
-        super_list = super_list.concat([[ord, steps, m]])
         if (ord.split(",").at(-1) == 1) {
             ord = ord.split(",")
             ord.pop()
@@ -99,6 +103,7 @@ function ntl(m) {
             break
         }
     }
+    super_list[0][2] += 0.5
     return [ord, m, exp]
 }
 
