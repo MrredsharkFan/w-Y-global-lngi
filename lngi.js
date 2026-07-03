@@ -103,6 +103,13 @@ function ntl(m) {
             break;
         }
     }
+    if (steps == 53) {
+        console.log("duh")
+        ord = ord.split(",");
+        ord.pop();
+        ord = ord.join(",");
+        //probably?
+    }
     return [ord, m, exp]
 }
 
