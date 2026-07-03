@@ -100,7 +100,7 @@
             <button data-day="-10" class="high_step">-10</button>
             <button data-day="-1" class="normal_step">-1</button>
 
-            <input type="date" id="mile_date">
+            <input type="date" id="mile_date" oninput="updateDay()">
 
             <button data-day="1" class="normal_step">+1</button>
             <button data-day="10" class="high_step">+10</button>
@@ -117,7 +117,7 @@
             <button data-month="-10" class="high_step">-10</button>
             <button data-month="-1" class="normal_step">-1</button>
 
-            <input type="month" id="mile_month">
+            <input type="month" id="mile_month" oninput="updateMonth()">
 
             <button data-month="1" class="normal_step">+1</button>
             <button data-month="10" class="high_step">+10</button>
@@ -134,7 +134,7 @@
             <button data-year="-10" class="high_step">-10</button>
             <button data-year="-1" class="normal_step">-1</button>
 
-            <input type="number" id="mile_year" min="2025">
+            <input type="number" id="mile_year" min="2025" oninput="updateYear()">
 
             <button data-year="1" class="normal_step">+1</button>
             <button data-year="10" class="high_step">+10</button>

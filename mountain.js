@@ -6,7 +6,6 @@ var cursorendstr = "▯";
 var lineBreakRegex = /\r?\n/g;
 var itemSeparatorRegex = /[\t ,]/g;
 window.onload = function () {
-    console.clear();
     canvas = document.getElementById("output");
     ctx = canvas.getContext("2d");
     outimg = document.getElementById("outimg");
@@ -403,6 +402,14 @@ function updateMountainString(inputc) {
         findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
     }
 }
+
+
+
+
+
+
+//HEYYYYYYYYYYYYYYYYYYYYY!!!!!!!
+//rngdelak if you're seeing this, I'm NOT allowing you to add options for those.
 var options = ["input"];
 var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
 var config = {

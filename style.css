@@ -412,23 +412,14 @@ h2 {
     border-radius:5px;
 }
 
-.analysis-header{
-
-    display:flex;
-    gap:8px;
-    align-items:center;
-
-    margin-bottom:10px;
-}
-
 .analysis-content{
-    margin-top:10px;
+    margin-top: 10px;
 }
 
-.analysis-toolbar{
-    display:flex;
-    gap:10px;
-    align-items:center;
+.analysis-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 #analysis_container {
@@ -454,15 +445,7 @@ h2 {
     padding:12px;
 
     border-radius:5px;
-}
-
-.analysis-header{
-
-    display:flex;
-    gap:8px;
-    align-items:center;
-
-    margin-bottom:10px;
+    transition: ease-out 0.2s;
 }
 
 .analysis-content{
@@ -478,4 +461,9 @@ h2 {
 
 .status-buttons>button {
     flex: 1
+}
+
+.remove {
+    font-size: 80%;
+    border-radius: 10px;
 }

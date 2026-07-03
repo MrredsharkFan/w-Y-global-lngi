@@ -130,7 +130,7 @@ function renderAnalysisPanels() {
 
     analysisContainer.innerHTML = "";
 
-    analysisPanels.forEach((panel, index) => {
+    analysisPanels.forEach((panel, index,notation) => {
 
         const card = document.createElement("div");
 
@@ -141,32 +141,16 @@ function renderAnalysisPanels() {
         card.innerHTML = `
 
 <div class="analysis-header">
+    ${panel.notation}<br><button class="remove">Remove</button>
+    Width
+    <select class="width">
+        <option value="33">33%</option>
+        <option value="50">50%</option>
+        <option value="66">66%</option>
+        <option value="100">100%</option>
+    </select>
 
-<button class="remove">Remove</button>
-
-Width
-
-<select class="width">
-
-<option value="33">33%</option>
-<option value="50">50%</option>
-<option value="66">66%</option>
-<option value="100">100%</option>
-
-</select>
-
-Notation
-
-<select class="notation">
-
-<option value="wY">ω-Y</option>
-<option value="BMS">BMS</option>
-<option value="OCN">OCN</option>
-<option value="cOCF">cOCF</option>
-
-</select>
-
-</div>
+    </div>
 
 <div class="analysis-content"></div>
 
@@ -175,7 +159,6 @@ Notation
 `;
 
         card.querySelector(".width").value = panel.width;
-        card.querySelector(".notation").value = panel.notation;
 
         panel.element = card.querySelector(".analysis-content");
 
@@ -192,12 +175,6 @@ Notation
             panel.width = Number(e.target.value);
 
             card.style.flexBasis = `calc(${panel.width}% - 15px)`;
-
-        };
-
-        card.querySelector(".notation").onchange = e => {
-
-            panel.notation = e.target.value;
 
         };
 

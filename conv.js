@@ -1089,7 +1089,7 @@ let Lim_BMS_in_Yseq = '1,3' // Lim(BMS) is 1,3 in y
 
 /*
 THIS IS JUST AN APPROXIMATION NOT EXACT
-AFTER BH , IT SEEMS WRONG FOR ALL
+AFTER BHO , IT SEEMS WRONG FOR ALL
 */
 
 function Conv_BMS_Y_sequence(ord) {
@@ -2266,11 +2266,12 @@ function convert_From_wY(ord, mode) {
     }
 
     if (mode == "BMS") {
+        if (Y_Sequence.cmp(ord, '1,2,4,7') >= 0){var u = "&approx;"} else {var u = ""}
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
             if (compress_BMS.checked)
-                return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
+                return u+Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
             else
-                return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
+                return u+Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
         }
         if (ord == '1,3') return 'Lim(BMS)'
         if (y_in(ord, '1,3', '1,3,2,5,5')) return '>(0)(1<sup>&omega;</sup>)'
