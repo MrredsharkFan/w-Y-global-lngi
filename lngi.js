@@ -25,7 +25,7 @@ function formatSeconds(totalSeconds) {
 }
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 250; i++) {
+    for (var i = 0; i < 40; i++) {
         const p = document.createElement("div")
         p.style.height = "6.25%";
         p.style.position = "absolute";
@@ -52,7 +52,7 @@ function update_scratch_bars(x) {
                 document.getElementById(`bar_${i}`).style.visibility = "visible"
                 if (page == 1) {
                     document.getElementById(`bar_${i}`).innerHTML =
-                        `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                        `${convert_From_wY(super_list[i][0] + (i == super_list.length-1 ?",1":""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
                 ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
 
                     document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
@@ -78,7 +78,7 @@ function ntl(m) {
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
     var m = 1 - (m % 1)
-    while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps<40) {
+    while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps<53) {
         super_list = super_list.concat([[ord, steps, m]])
         if (m <= 1e-10) {
             break
