@@ -104,7 +104,6 @@ function ntl(m) {
         }
     }
     if (steps == 53) {
-        console.log("duh")
         ord = ord.split(",");
         ord.pop();
         ord = ord.join(",");
