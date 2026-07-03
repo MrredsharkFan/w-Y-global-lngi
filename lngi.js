@@ -78,6 +78,7 @@ scratch_bar_init()
 
 var super_list = []
 
+//ts works.
 
 function ntl(m) {
     super_list = []
