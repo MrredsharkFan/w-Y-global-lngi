@@ -45,14 +45,16 @@ h2 {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;     /* allow wrapping */
+    flex-wrap: wrap;
+    /* allow wrapping */
     width: 100%;
 }
 
 #online {
     flex: 1;
     min-width: 0;
-    white-space: normal;  /* allow wrapping */
+    white-space: normal;
+    /* allow wrapping */
     overflow-wrap: anywhere;
 }
 
@@ -157,7 +159,12 @@ h2 {
     resize: vertical;
 }
 
-#scratch_bars>div:not(.resize-handle) {
+#scratch_content {
+    overflow-y: auto;
+    height: 100%;
+}
+
+#scratch_content>div:not(.resize-handle) {
     position: relative !important;
     top: auto !important;
 
@@ -352,7 +359,14 @@ h2 {
     resize: vertical;
     position: relative;
     height: 30px;
-    display : none;
+    display: none;
     min-height: 30px;
     padding: 5px;
+}
+
+#future-milestone {
+    background-color: blanchedalmond;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px
 }

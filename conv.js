@@ -2267,6 +2267,7 @@ function convert_From_wY(ord, mode) {
             else
                 return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
         }
+        if (ord == '1,3') return 'Lim(BMS)'
         return ord;
     }
 

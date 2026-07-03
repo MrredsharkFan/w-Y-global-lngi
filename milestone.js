@@ -1,0 +1,140 @@
+function getMostRemarkable(startTime, endTime) {
+
+    if (endTime < st)
+        return "Too early!";
+
+    const ub = get_time(endTime - st);
+    const lb = get_time(startTime - st);
+
+    let int = 1;
+
+    while (Math.floor(ub * int) / int == Math.floor(lb * int) / int)
+        int *= 2;
+
+    const x = Math.floor(ub * int) / int;
+    const ord = num_to_lngi(x)[0];
+
+    return {
+        value: x,
+        ordinal: ord,
+        time: new Date(get_time_inv(x) + st)
+    };
+}
+
+function updateDay() {
+
+    const d = new Date(document.getElementById("mile_date").value);
+
+    if (isNaN(d)) {
+        document.getElementById("day_result").innerHTML = "...";
+        return;
+    }
+
+    d.setHours(0, 0, 0, 0);
+
+    const r = getMostRemarkable(
+        d.getTime(),
+        d.getTime() + 86400000
+    );
+
+    if (typeof r == "string") {
+        document.getElementById("day_result").innerHTML = r;
+        return;
+    }
+
+    document.getElementById("day_result").innerHTML =
+        `The most remarkable ordinal in this day is
+        <b>${r.ordinal}</b><br>
+        at ${r.time.toLocaleTimeString()}`;
+}
+
+function updateMonth(){
+
+    const s=document.getElementById("mile_month").value;
+
+    if(!s){
+        document.getElementById("month_result").innerHTML="...";
+        return;
+    }
+
+    const [y,m]=s.split("-").map(Number);
+
+    const start=new Date(y,m-1,1);
+    const end=new Date(y,m,1);
+
+    const r=getMostRemarkable(start.getTime(),end.getTime());
+
+    if(typeof r=="string"){
+        document.getElementById("month_result").innerHTML=r;
+        return;
+    }
+
+    document.getElementById("month_result").innerHTML=
+        `The most remarkable ordinal in this month is
+        <b>${r.ordinal}</b><br>
+        ${r.time.toLocaleString()}`;
+}
+
+function updateYear() {
+
+    const y = Number(document.getElementById("mile_year").value);
+
+    if (!y) {
+        document.getElementById("year_result").innerHTML = "...";
+        return;
+    }
+
+    const start = new Date(y, 0, 1);
+    const end = new Date(y + 1, 0, 1);
+
+    const r = getMostRemarkable(start.getTime(), end.getTime());
+
+    if (typeof r == "string") {
+        document.getElementById("year_result").innerHTML = r;
+        return;
+    }
+
+    document.getElementById("year_result").innerHTML =
+        `The most remarkable ordinal in ${y} is
+        <b>${r.ordinal}</b><br>
+        ${r.time.toLocaleString()}`;
+}
+
+function changeDay(n) {
+
+    const e = document.getElementById("mile_date");
+
+    const d = new Date(e.value);
+
+    d.setDate(d.getDate() + n);
+
+    e.valueAsDate = d;
+
+    updateDay();
+}
+
+function changeMonth(n) {
+
+    const e = document.getElementById("mile_month");
+
+    const d = new Date(e.value + "-01");
+
+    d.setMonth(d.getMonth() + n);
+
+    e.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+
+    updateMonth();
+}
+
+function changeYear(n) {
+
+    const e = document.getElementById("mile_year");
+
+    e.value = Number(e.value) + n;
+
+    updateYear();
+}
+
+mile_date.addEventListener("change", updateDay);
+mile_month.addEventListener("change", updateMonth);
+mile_year.addEventListener("change", updateYear);

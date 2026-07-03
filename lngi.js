@@ -1,7 +1,4 @@
 var tt = 0
-
-
-
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
     if (totalSeconds <= 0) return "0 seconds";
@@ -26,17 +23,16 @@ function formatSeconds(totalSeconds) {
 
     return parts.filter(Boolean).join(' ');
 }
-// reason for 40 : because at line 72 you stop if steps >= 40
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 250; i++) {
         const p = document.createElement("div")
         p.style.height = "6.25%";
         p.style.position = "absolute";
         p.style.top = `${i * 6.25}%`
         p.id = `bar_${i}`
         p.style.textWrap = `nowrap`
-        document.getElementById("scratch_bars").appendChild(p)
+        document.getElementById("scratch_content").appendChild(p)
     }
 }
 
@@ -56,7 +52,7 @@ function update_scratch_bars(x) {
                 document.getElementById(`bar_${i}`).style.visibility = "visible"
                 if (page == 1) {
                     document.getElementById(`bar_${i}`).innerHTML =
-                    `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                        `${convert_From_wY(super_list[i][0], scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
                 ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
 
                     document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
@@ -74,18 +70,15 @@ function update_scratch_bars(x) {
 
 scratch_bar_init()
 
-
-
 var super_list = []
 
-//ts works.
 
 function ntl(m) {
     super_list = []
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
     var m = 1 - (m % 1)
-    while (steps < 40 && ord.length < 500 && ord.split(",").at(-1) < 1e8) {
+    while (ord.length < 100 && ord.split(",").at(-1) < 1e8) {
         super_list = super_list.concat([[ord, steps, m]])
         if (m <= 1e-10) {
             break
@@ -101,13 +94,15 @@ function ntl(m) {
         ord = base.slice(0, ordl + exp - 1).join(",")
         m = m - 1
         if (ord.split(",").at(-1) == 1) {
-            ord = ord.split(",")
-            ord.pop()
-            ord = ord.join(",")
-            break
+            ord = ord.split(",");
+            ord.pop();
+            ord = ord.join(",");
+
+            super_list.push([ord, steps, m]);
+
+            break;
         }
     }
-    super_list[0][2] += 0.5
     return [ord, m, exp]
 }
 
@@ -117,7 +112,7 @@ function num_to_lngi(m) {
 }
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000 + 23 * 3600000) + 864*1000
+const st = (1782316800000 + 23 * 3600000) + 864 * 1000
 let BMS_LNGI, OCF_LNGI;
 
 function get_time(t) {
@@ -126,29 +121,6 @@ function get_time(t) {
 
 function get_time_inv(n) {
     return (10 ** ((n - 2) * 2) - 1) * 864000
-}
-
-function get_most_important_mile_of_day() {
-    var ct = new Date(document.getElementById("mile_date").value)
-    if (ct == "Invalid Date") {
-        return [0, "666666"]
-    }
-    if (ct < st) {
-        return [0, "Too early!"]
-    }
-    ct.setHours(0, 0, 0, 0)
-    ct = ct.getTime()
-    var ub = get_time(ct + (86400 * 1000) - st)
-    var lb = get_time(ct - st)
-    var int = 1
-    while (true) {
-        if (Math.floor(ub * int) / int != Math.floor(lb * int) / int) {
-            break
-        }
-        int *= 2
-    }
-    var x = Math.floor(ub * int) / int
-    return [x, num_to_lngi(x)[0]]
 }
 
 function num_time(t) {
@@ -192,20 +164,6 @@ function update() {
 
     //idk but i took inspiration from meta omega zero layers thing
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
-    if (page == 2) {
-        var nig = get_most_important_mile_of_day()
-        if (nig[1] == "666666") {
-            document.getElementById("mile_date_real").innerHTML = `...`
-        }
-        else {
-            if (nig[1] == "Too early!") {
-                document.getElementById("mile_date_real").innerHTML = `The LNGI hasn't started at this time.`
-            }
-            else {
-                document.getElementById("mile_date_real").innerHTML = `${nig[1]} at ${new Date(get_time_inv(nig[0]) + st).toLocaleTimeString()}`
-            }
-        }
-    }
     requestAnimationFrame(update);
 }
 
