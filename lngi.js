@@ -78,7 +78,7 @@ function ntl(m) {
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
     var m = 1 - (m % 1)
-    while (ord.length < 100 && ord.split(",").at(-1) < 1e8) {
+    while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps<40) {
         super_list = super_list.concat([[ord, steps, m]])
         if (m <= 1e-10) {
             break
