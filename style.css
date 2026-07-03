@@ -304,6 +304,15 @@ h2 {
     white-space: nowrap;
 }
 
+#mountain_btn {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #ffbb99;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
 
 #future-milestone {
     background-color: blanchedalmond;
@@ -460,3 +469,13 @@ h2 {
     margin-top:10px;
 }
 
+
+.status-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 50%
+}
+
+.status-buttons>button {
+    flex: 1
+}

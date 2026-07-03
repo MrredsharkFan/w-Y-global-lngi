@@ -2255,6 +2255,11 @@ function Conv_BMS_cOCF(ord) {
     return cOCF.g("[[[][c]c]]", "Limit", BMS.gInv([[0, 0, 0, 0], [1, 1, 1, 1]], Lim_cOCF_in_BMS, ord))
 }
 
+function y_in(a, b, c) { //a is inside of b and c?
+    if (Y_Sequence.cmp(b,c)==1){return y_in(a,c,b)}
+    return (Y_Sequence.cmp(a,b)==1 & Y_Sequence.cmp(a,c)==-1)
+}
+
 function convert_From_wY(ord, mode) {
     if (mode == "wY") {
         return ord;
@@ -2268,6 +2273,17 @@ function convert_From_wY(ord, mode) {
                 return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
         }
         if (ord == '1,3') return 'Lim(BMS)'
+        if (y_in(ord, '1,3', '1,3,2,5,5')) return '>(0)(1<sup>&omega;</sup>)'
+        if (y_in(ord, '1,3,2,5,5', '1,3,2,5,6')) return '>(0)(1<sup>&omega;</sup>)(1<sup>&omega;</sup>)'
+        if (y_in(ord, '1,3,2,5,6', '1,3,2,5,6,4,9,10,9')) return '>(0)(1<sup>&omega;</sup>)(2)'
+        if (y_in(ord, '1,3,2,5,6,4,9,10,9', '1,3,2,5,6,4,9,11')) return '>(0)(1<sup>&omega;</sup>)(2)(1<sup>&omega;</sup>)'
+        if (y_in(ord, '1,3,2,5,6,4,9,11', '1,3,2,5,6,4,9,13')) return '>(0)(1<sup>&omega;</sup>)(2,1)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13', '1,3,2,5,6,4,9,13,9')) return '>(0)(1<sup>&omega;</sup>)(2,1,1)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,9', '1,3,2,5,6,4,9,13,18')) return '>(0)(1<sup>&omega;</sup>)(2,1<sup>&omega;</sup>)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,18', '1,3,2,5,6,4,9,13,18,25')) return '>(0)(1<sup>&omega;</sup>)(2,2)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,18,25', '1,3,2,5,6,4,9,13,18,26')) return '>(0)(1<sup>&omega;+1</sup>)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,18,26', '1,3,2,5,6,4,9,13,19')) return '>(0)(1<sup>&omega;2</sup>)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,19', '1,3,2,5,6,4,9,13,19,21')) return '>(0)(1<sup>&omega;<sup>2</sup></sup>)'
         return ord;
     }
 
