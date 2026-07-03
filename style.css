@@ -5,7 +5,6 @@
 body {
     margin: 0 auto;
     padding: 20px;
-    max-width: 1400px;
 
     font-family: Arial, sans-serif;
     background-color: #fafafa;
@@ -152,7 +151,7 @@ h2 {
     height: 255px;
     min-height: 155px;
 
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
 
     padding: 5px;
@@ -176,30 +175,6 @@ h2 {
 
     border-radius: 3px;
     white-space: nowrap;
-}
-
-/* Header */
-.milestone-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background: #dcdcdc;
-    min-height: 40px;
-}
-
-/* Mode button */
-#time_mode {
-    position: static;
-    margin: 0;
-
-    background: #000;
-    color: #fff;
-
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
 }
 
 /* Modal */
@@ -230,7 +205,7 @@ h2 {
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
 
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .modal-header {
@@ -354,19 +329,72 @@ h2 {
     white-space: nowrap;
 }
 
-#milestone_header {
-    background-color: rgb(220, 220, 220);
-    resize: vertical;
-    position: relative;
-    height: 30px;
-    display: none;
-    min-height: 30px;
-    padding: 5px;
-}
 
 #future-milestone {
     background-color: blanchedalmond;
     padding: 10px;
     text-align: center;
     border-radius: 10px
+}
+
+.extreme_step {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #ffae00;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.high_step {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #ffee00;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.normal_step {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #c8ff00;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#milestone_header {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+
+    background: #dcdcdc;
+    padding: 10px;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-row label {
+    white-space: nowrap;
+}
+
+#Scratch_bar_height {
+    width: 70px;
+}
+
+#time_mode {
+    margin-left: auto;
+
+    padding: 5px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+
+    background: #000;
+    color: white;
+    cursor: pointer;
 }

@@ -135,6 +135,65 @@ function changeYear(n) {
     updateYear();
 }
 
-mile_date.addEventListener("change", updateDay);
-mile_month.addEventListener("change", updateMonth);
-mile_year.addEventListener("change", updateYear);
+function enableHold(button, callback) {
+    let timeout, interval;
+
+    function start(e) {
+        e.preventDefault();
+
+        callback(); // first press immediately
+
+        timeout = setTimeout(() => {
+            interval = setInterval(callback, 1);
+        }, 400);
+    }
+
+    function stop() {
+        clearTimeout(timeout);
+        clearInterval(interval);
+    }
+
+    button.addEventListener("mousedown", start);
+    button.addEventListener("touchstart", start, { passive: false });
+
+    button.addEventListener("mouseup", stop);
+    button.addEventListener("mouseleave", stop);
+    button.addEventListener("touchend", stop);
+    button.addEventListener("touchcancel", stop);
+}
+
+function initializeMilestoneInputs() {
+    const now = new Date();
+
+    // Day
+    mile_date.valueAsDate = now;
+
+    // Month
+    mile_month.value =
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+    // Year
+    mile_year.value = now.getFullYear();
+
+    // Calculate the results immediately
+    updateDay();
+    updateMonth();
+    updateYear();
+}
+
+window.addEventListener("DOMContentLoaded", initializeMilestoneInputs);
+
+document.querySelectorAll("[data-day]").forEach(btn => {
+    const step = Number(btn.dataset.day);
+    enableHold(btn, () => changeDay(step));
+});
+
+document.querySelectorAll("[data-month]").forEach(btn => {
+    const step = Number(btn.dataset.month);
+    enableHold(btn, () => changeMonth(step));
+});
+
+document.querySelectorAll("[data-year]").forEach(btn => {
+    const step = Number(btn.dataset.year);
+    enableHold(btn, () => changeYear(step));
+});

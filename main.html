@@ -10,7 +10,8 @@
 
 <body>
     <div class="header">
-        <h2>Termiunsfinity's &omega;-Y LNGI<small style="color: #999"> With contributions from <a href = "https://github.com/RNGDelak" target="_blank">RNGDelak</a></small></h2>
+        <h2>Termiunsfinity's &omega;-Y LNGI<small style="color: #999"> With contributions from <a
+                    href="https://github.com/RNGDelak" target="_blank">RNGDelak</a></small></h2>
 
         <div class="status-row">
             <div id="online">🟢 0 user online (please reload page if the counter stuck at 0)</div>
@@ -52,66 +53,92 @@
     </div>
 
     <div class="card milestone-header" id="milestone_header">
-        Future Milestones:
-        <button onclick="tt = (tt+1) % 2" id="time_mode">Time Remaining</button>
+
+        <div class="header-row">
+            <label for="Scratch_bar_height">
+                Milestone bar height :
+            </label>
+
+            <input type="number" id="Scratch_bar_height" value="24" min="1" max="100">
+
+            <span>px</span>
+
+            <button id="time_mode" onclick="tt = (tt+1)%2">
+                Time Remaining
+            </button>
+        </div>
+
+        <div class="header-row">
+            <label for="scratch_bar_display_mode">
+                Notation on milestone bar :
+            </label>
+
+            <select id="scratch_bar_display_mode">
+                <option value="wY">&omega;-Y sequence</option>
+                <option value="BMS">BMS</option>
+                <option value="OCN">OCN</option>
+                <option value="cOCF">cOCF</option>
+            </select>
+        </div>
+
     </div>
     <div class="card resizable" id="scratch_bars" hidden>
-            <div id="scratch_content"></div>
+        <div id="scratch_content"></div>
         <div class="resize-handle"></div>
     </div>
 
-<div id="future-milestone" hidden>
+    <div id="future-milestone" hidden>
 
-    <h3>Day</h3>
-    <div>
-        <button onclick="changeDay(-100)">-100</button>
-        <button onclick="changeDay(-10)">-10</button>
-        <button onclick="changeDay(-1)">-1</button>
+        <h3>Day</h3>
+        <div>
+            <button data-day="-100" class="extreme_step">-100</button>
+            <button data-day="-10" class="high_step">-10</button>
+            <button data-day="-1" class="normal_step">-1</button>
 
-        <input type="date" id="mile_date">
+            <input type="date" id="mile_date">
 
-        <button onclick="changeDay(1)">+1</button>
-        <button onclick="changeDay(10)">+10</button>
-        <button onclick="changeDay(100)">+100</button>
+            <button data-day="1" class="normal_step">+1</button>
+            <button data-day="10" class="high_step">+10</button>
+            <button data-day="100" class="extreme_step">+100</button>
+        </div>
+
+        <div id="day_result"></div>
+
+        <hr>
+
+        <h3>Month</h3>
+        <div>
+            <button data-month="-100" class="extreme_step">-100</button>
+            <button data-month="-10" class="high_step">-10</button>
+            <button data-month="-1" class="normal_step">-1</button>
+
+            <input type="month" id="mile_month">
+
+            <button data-month="1" class="normal_step">+1</button>
+            <button data-month="10" class="high_step">+10</button>
+            <button data-month="100" class="extreme_step">+100</button>
+        </div>
+
+        <div id="month_result"></div>
+
+        <hr>
+
+        <h3>Year</h3>
+        <div>
+            <button data-year="-100" class="extreme_step">-100</button>
+            <button data-year="-10" class="high_step">-10</button>
+            <button data-year="-1" class="normal_step">-1</button>
+
+            <input type="number" id="mile_year" min="2025">
+
+            <button data-year="1" class="normal_step">+1</button>
+            <button data-year="10" class="high_step">+10</button>
+            <button data-year="100" class="extreme_step">+100</button>
+        </div>
+
+        <div id="year_result"></div>
+
     </div>
-
-    <div id="day_result"></div>
-
-    <hr>
-
-    <h3>Month</h3>
-    <div>
-        <button onclick="changeMonth(-100)">-100</button>
-        <button onclick="changeMonth(-10)">-10</button>
-        <button onclick="changeMonth(-1)">-1</button>
-
-        <input type="month" id="mile_month">
-
-        <button onclick="changeMonth(1)">+1</button>
-        <button onclick="changeMonth(10)">+10</button>
-        <button onclick="changeMonth(100)">+100</button>
-    </div>
-
-    <div id="month_result"></div>
-
-    <hr>
-
-    <h3>Year</h3>
-    <div>
-        <button onclick="changeYear(-100)">-100</button>
-        <button onclick="changeYear(-10)">-10</button>
-        <button onclick="changeYear(-1)">-1</button>
-
-        <input type="number" id="mile_year" min="2025">
-
-        <button onclick="changeYear(1)">+1</button>
-        <button onclick="changeYear(10)">+10</button>
-        <button onclick="changeYear(100)">+100</button>
-    </div>
-
-    <div id="year_result"></div>
-
-</div>
 
 
     <div id="settings_modal" class="modal">
@@ -119,16 +146,6 @@
             <div class="modal-header">
                 <h3>Notation Settings</h3>
                 <button id="close_settings">&times;</button>
-            </div>
-
-            <div class="modal-body">
-                Notation on furture milestone bar :
-                <select id="scratch_bar_display_mode">
-                    <option value="wY">&omega;-Y sequence</option>
-                    <option value="BMS">BMS</option>
-                    <option value="OCN">OCN</option>
-                    <option value="cOCF">cOCF</option>
-                </select>
             </div>
 
             <div class="modal-body">
@@ -151,14 +168,6 @@
                 <label for="format_cOCF">
                     Format cOCF (aka [][[][[[c][[c]c]]c]] into &omega;<sup>M+1</sup>+1)
                 </label>
-            </div>
-
-            <div class="modal-header">
-                <h3>Display Settings</h3>
-            </div>
-
-            <div class="modal-body">
-                Milestones Bar height : <input type="number" id="Scratch_bar_height" value="24" min="1" max="100"> px
             </div>
         </div>
     </div>

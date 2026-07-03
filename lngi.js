@@ -25,7 +25,7 @@ function formatSeconds(totalSeconds) {
 }
 function scratch_bar_init() {
     //scratch bars!!!
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 53; i++) {
         const p = document.createElement("div")
         p.style.height = "6.25%";
         p.style.position = "absolute";
@@ -38,7 +38,7 @@ function scratch_bar_init() {
 
 var lt = 0
 function update_scratch_bars(x) {
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 53; i++) {
         if (i < super_list.length) {
             var u = x + super_list[i][2] / (2 ** super_list[i][1] / 2)
             if (i == 0) {
