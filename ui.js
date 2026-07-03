@@ -92,7 +92,8 @@ const btn_lngi = document.getElementById("btn_lngi");
 
 btn_lngi.addEventListener("click", () => {
     page = 0;
-    document.getElementById("mid/row").style.display = "flex";
+    document.getElementById("analysis_toolbar").style.display = "flex";
+    document.getElementById("analysis_container").style.display = "flex";
     document.getElementById("milestone_header").style.display = "none";
     document.getElementById("scratch_bars").hidden = true;
     document.getElementById("future-milestone").hidden = true;
@@ -102,7 +103,8 @@ const btn_progress = document.getElementById("btn_progress");
 
 btn_progress.addEventListener("click", () => {
     page = 1;
-    document.getElementById("mid/row").style.display = "none";
+    document.getElementById("analysis_container").style.display = "none";
+    document.getElementById("analysis_toolbar").style.display = "none";
     document.getElementById("milestone_header").style.display = "flex";
     document.getElementById("scratch_bars").hidden = false;
     document.getElementById("future-milestone").hidden = true;
@@ -112,7 +114,8 @@ const btn_milestone = document.getElementById("btn_milestone");
 
 btn_milestone.addEventListener("click", () => {
     page = 2;
-    document.getElementById("mid/row").style.display = "none";
+    document.getElementById("analysis_container").style.display = "none";
+    document.getElementById("analysis_toolbar").style.display = "none";
     document.getElementById("milestone_header").style.display = "none";
     document.getElementById("scratch_bars").hidden = true;
     document.getElementById("future-milestone").hidden = false;
