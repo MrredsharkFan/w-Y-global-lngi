@@ -10,16 +10,13 @@ window.onload = function () {
     canvas = document.getElementById("output");
     ctx = canvas.getContext("2d");
     outimg = document.getElementById("outimg");
-    document.getElementById('input').onkeydown = handlekey;
-    document.getElementById('input').onfocus = handlekey;
-    document.getElementById('input').onmousedown = handlekey;
     load();
     requestDraw(true);
     drawIntervalLoopFunc();
     setInterval(function () { if (hasRequestedDraw) processDrawRequest(); }, 0);
 }
 function drawIntervalLoopFunc() {
-    if (document.activeElement == document.getElementById("input")) requestDraw();
+    requestDraw(true);
     setTimeout(drawIntervalLoopFunc, 0);
 }
 var hasRequestedDraw = false;
@@ -406,19 +403,19 @@ function updateMountainString(inputc) {
         findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
     }
 }
-var options = ["input", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE", "NUMBERTHICKNESS", "LINEPLACE", "MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "DYNAMICWIDTH", "EXTRADIVIDER"];
+var options = ["input"];
 var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
 var config = {
     "input": "",
     "inputc": "",
-    "ROWHEIGHT": 0,
-    "COLUMNWIDTH": 0,
-    "LINETHICKNESS": 0,
-    "NUMBERSIZE": 0,
-    "NUMBERTHICKNESS": 0,
-    "LINEPLACE": 0,
-    "MAXDIMENSIONS": 0,
-    "STACKMODE": false,
+    "ROWHEIGHT": 32,
+    "COLUMNWIDTH": 32,
+    "LINETHICKNESS": 1,
+    "NUMBERSIZE": 10,
+    "NUMBERTHICKNESS": 1,
+    "LINEPLACE": 1,
+    "MAXDIMENSIONS": 6,
+    "STACKMODE": true,
     "HIGHLIGHT": false,
     "DYNAMICWIDTH": false,
     "EXTRADIVIDER": false,
@@ -657,7 +654,7 @@ function draw(recalculate) {
             }
         }
     }
-    waitAndMakeDownloadableIfInactive(++timesDrawn);
+
     Object.assign(config, newConfig);
 }
 function get2DmountainRenderedSize(m, config) {
@@ -717,92 +714,13 @@ function render1Dmountain(m, mm, rowpos, colpos, config) {
         }
     }
 }
-function waitAndMakeDownloadableIfInactive(timesDrawnThis) {
-    swapImageToCanvas();
-    var d = document.getElementById("drawStatus");
-    d.textContent = "Downloadable conversion interrupted";
-    setTimeout(function () {
-        if (timesDrawnThis != timesDrawn) return;
-        //enable save
-        if (canvas.toBlob && Promise && URL && URL.createObjectURL) {
-            d.style.display = "";
-            d.textContent = "Making the image downloadable"
-            new Promise(function (resolve, reject) {
-                canvas.toBlob(resolve, "image/png");
-            }).then(function (blob) {
-                if (timesDrawnThis != timesDrawn) return;
-                if (blob) {
-                    URL.revokeObjectURL(outimg.src);
-                    outimg.src = URL.createObjectURL(blob);
-                    swapImageToImg();
-                }
-                d.style.display = "none";
-            });
-        } else {
-            d.style.display = "";
-            d.textContent = "Making the image downloadable";
-            setTimeout(function () {
-                outimg.width = canvas.width;
-                outimg.height = canvas.height;
-                outimg.src = canvas.toDataURL("image/png");
-                swapImageToImg();
-                d.style.display = "none";
-            }, 0);
-        }
-    }, 1000);
-}
-function swapImageToCanvas() {
-    var savedScrollX = window.scrollX;
-    var savedScrollY = window.scrollY;
-    canvas.style.display = "";
-    outimg.style.display = "none";
-    window.scroll(savedScrollX, savedScrollY);
-}
-function swapImageToImg() {
-    var savedScrollX = window.scrollX;
-    var savedScrollY = window.scrollY;
-    canvas.style.display = "none";
-    outimg.style.display = "";
-    window.scroll(savedScrollX, savedScrollY);
-}
+
+
 
 
 window.onpopstate = function (e) {
     load();
     requestDraw(true);
-}
-function saveSimple(clipboard) {
-    var lines = config["input"].split(lineBreakRegex);
-    var encodedInput = "";
-    for (var i = 0; i < lines.length; i++) {
-        var parsed = parseSequenceString(lines[i]);
-        for (var j = 0; j < parsed.length; j++) {
-            encodedInput += parsed[j].forcedParent ? parsed[j].value + "v" + parsed[j].parentIndex : parsed[j].value;
-            if (j < parsed.length - 1) encodedInput += ",";
-        }
-        if (i < lines.length - 1) encodedInput += ";";
-    }
-    history.pushState(null, "", location.origin + location.pathname + "#" + encodedInput);
-    if (clipboard) copyLocationToClipboard();
-}
-function saveDetailed(clipboard) {
-    var state = {};
-    for (var i = 0; i < options.length; i++) {
-        var optionName = options[i];
-        state[optionName] = config[optionName];
-    }
-    var encodedState = btoa(JSON.stringify(state)).replace(/\+/g, "-").replace(/\//g, "_").replace(/\=/g, "");
-    history.pushState(null, "", location.origin + location.pathname + "#" + encodedState);
-    if (clipboard) copyLocationToClipboard();
-}
-function copyLocationToClipboard() {
-    var copyarea = document.getElementById("copyarea");
-    copyarea.value = location.href;
-    copyarea.style.display = "";
-    copyarea.select();
-    copyarea.setSelectionRange(0, location.href.length);
-    document.execCommand("copy");
-    copyarea.style.display = "none";
 }
 function load() {
     if (location.search) location.replace(location.origin + location.pathname + "#" + (location.hash || location.search).substring(1));
