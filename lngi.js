@@ -80,7 +80,7 @@ function ntl(m) {
     var m = 1 - (m % 1)
     while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps<53) {
         super_list = super_list.concat([[ord, steps, m]])
-        if (m <= 1e-10) {
+        if (m <= 1e-14) {
             break
         }
         var exp = 0
@@ -100,6 +100,7 @@ function ntl(m) {
 
             super_list.push([ord, steps, m]);
 
+            steps = 69
             break;
         }
     }
@@ -117,10 +118,6 @@ function num_to_lngi(m) {
     return ntl(m)
 }
 
-//Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000 + 23 * 3600000) + 864 * 1000
-let BMS_LNGI, OCF_LNGI;
-
 function get_time(t) {
     return (Math.log10(1 + t / 864000) / 2 + 2)
 }
@@ -128,6 +125,11 @@ function get_time(t) {
 function get_time_inv(n) {
     return (10 ** ((n - 2) * 2) - 1) * 864000
 }
+
+//Start time: 25/6 UTC+8 | 23:00
+const st = (1782316800000 + 23 * 3600000) + 864 * 1000
+//const st = Date.now() - get_time_inv(6)
+let BMS_LNGI, OCF_LNGI;
 
 function num_time(t) {
     var t = Math.max(0, t - st)
