@@ -160,6 +160,8 @@ h2 {
 
 #scratch_content {
     overflow-y: auto;
+    overflow-x: hidden;
+
     height: 100%;
 }
 
