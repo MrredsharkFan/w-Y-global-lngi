@@ -52,7 +52,7 @@ function update_scratch_bars(x) {
                 document.getElementById(`bar_${i}`).style.visibility = "visible"
                 if (page == 1) {
                     document.getElementById(`bar_${i}`).innerHTML =
-                        `${convert_From_wY(super_list[i][0] + (i == super_list.length-1 ?",1":""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                        `${convert_From_wY(super_list[i][0] + (i == super_list.length - 1 ? ",1" : ""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
                 ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
 
                     document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
@@ -78,7 +78,7 @@ function ntl(m) {
     var ord = `1,${Math.max(1, Math.floor(m))}`
     var steps = 0
     var m = 1 - (m % 1)
-    while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps<53) {
+    while (ord.length < 100 && ord.split(",").at(-1) < 1e8 && steps < 53) {
         super_list = super_list.concat([[ord, steps, m]])
         if (m <= 1e-14) {
             break
@@ -126,10 +126,108 @@ function get_time_inv(n) {
     return (10 ** ((n - 2) * 2) - 1) * 864000
 }
 
+function renderAnalysisPanels() {
+
+    analysisContainer.innerHTML = "";
+
+    analysisPanels.forEach((panel, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "card resizable analysis-panel";
+        card.style.flexBasis = `calc(${panel.width}% - 15px)`;
+        card.style.backgroundColor = `hsl(${panel.hue}, 85%, 82%)`;
+
+        card.innerHTML = `
+
+<div class="analysis-header">
+
+<button class="remove">Remove</button>
+
+Width
+
+<select class="width">
+
+<option value="33">33%</option>
+<option value="50">50%</option>
+<option value="66">66%</option>
+<option value="100">100%</option>
+
+</select>
+
+Notation
+
+<select class="notation">
+
+<option value="wY">ω-Y</option>
+<option value="BMS">BMS</option>
+<option value="OCN">OCN</option>
+<option value="cOCF">cOCF</option>
+
+</select>
+
+</div>
+
+<div class="analysis-content"></div>
+
+<div class="resize-handle"></div>
+
+`;
+
+        card.querySelector(".width").value = panel.width;
+        card.querySelector(".notation").value = panel.notation;
+
+        panel.element = card.querySelector(".analysis-content");
+
+        card.querySelector(".remove").onclick = () => {
+
+            analysisPanels.splice(index, 1);
+
+            renderAnalysisPanels();
+
+        };
+
+        card.querySelector(".width").onchange = e => {
+
+            panel.width = Number(e.target.value);
+
+            card.style.flexBasis = `calc(${panel.width}% - 15px)`;
+
+        };
+
+        card.querySelector(".notation").onchange = e => {
+
+            panel.notation = e.target.value;
+
+        };
+
+        analysisContainer.appendChild(card);
+
+        makeResizable(card);
+
+    });
+
+}
+
+document.getElementById("analysis_add").onclick = () => {
+
+    analysisPanels.push({
+
+        notation: document.getElementById("analysis_add_type").value,
+        width: 50,
+        hue: Math.floor(Math.random() * 360)
+
+    });
+
+    renderAnalysisPanels();
+
+};
+
+renderAnalysisPanels();
+
 //Start time: 25/6 UTC+8 | 23:00
 const st = (1782316800000 + 23 * 3600000) + 864 * 1000
 //const st = Date.now() - get_time_inv(6)
-let BMS_LNGI, OCF_LNGI;
 
 function num_time(t) {
     var t = Math.max(0, t - st)
@@ -138,11 +236,6 @@ function num_time(t) {
     } else {
         var u = get_time(t)
         var j = num_to_lngi(u)
-
-        if (page == 0) {
-            BMS_LNGI = convert_From_wY(j[0], 'BMS')
-            OCF_LNGI = convert_From_wY(j[0], analysis_bar_display)
-        }
 
         document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
         update_scratch_bars(u)
@@ -159,11 +252,34 @@ function update() {
     var u = num_time(Date.now())
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
-    if (page == 0) {
-        document.getElementById("BMS_lngi_Content").innerHTML = BMS_LNGI == "" ? ">1,3 / (0)(1<sup>&omega;</sup>)" : `<small>May be inaccurate due to upgrade displacement</small><br>&approx;${BMS_LNGI}`
-        document.getElementById("OCF_lngi_Content").innerHTML = OCF_LNGI == "" ? ">SSO/>(0,0,0,0)(1,1,1,1)(2,2) if you're using cOCF mode" : `<small>Based on result of BMS conversion</small><br>${OCF_LNGI}`
-    }
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
+    analysisPanels.forEach(panel => {
+
+        let txt = "";
+
+        switch (panel.notation) {
+
+            case "wY":
+                txt = "<i>" + u[2] + "</i>";
+                break;
+
+            case "BMS":
+                txt = convert_From_wY(u[2], "BMS");
+                break;
+
+            case "OCN":
+                txt = convert_From_wY(u[2], "OCN");
+                break;
+
+            case "cOCF":
+                txt = convert_From_wY(u[2], "cOCF");
+                break;
+
+        }
+
+        panel.element.innerHTML = txt;
+
+    });
 
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);

@@ -41,16 +41,20 @@
         <div class="resize-handle"></div>
     </div>
 
-    <div class="mid-row" id="mid/row">
-        <div class="card resizable" id="BMS_lngi">
-            <div id="BMS_lngi_Content">Loading BMS...</div>
-            <div class="resize-handle"></div>
-        </div>
-        <div class="card resizable" id="OCF_lngi">
-            <div id="OCF_lngi_Content">Loading OCF...</div>
-            <div class="resize-handle"></div>
-        </div>
+    <div class="analysis-toolbar" id="analysis_toolbar">
+
+        <button id="analysis_add">Add</button>
+
+        <select id="analysis_add_type">
+            <option value="wY">ω-Y</option>
+            <option value="BMS">BMS</option>
+            <option value="OCN">OCN</option>
+            <option value="cOCF">cOCF</option>
+        </select>
+
     </div>
+
+    <div id="analysis_container"></div>
 
     <div class="card milestone-header" id="milestone_header">
 
@@ -146,14 +150,6 @@
             <div class="modal-header">
                 <h3>Notation Settings</h3>
                 <button id="close_settings">&times;</button>
-            </div>
-
-            <div class="modal-body">
-                Notation on analysis section :
-                <select id="Analysis_display_mode">
-                    <option value="OCN">OCN</option>
-                    <option value="cOCF">cOCF</option>
-                </select>
             </div>
 
             <div class="modal-body checkbox-row">

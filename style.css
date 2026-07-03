@@ -116,33 +116,6 @@ h2 {
     height: 60px;
 }
 
-.mid-row {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-items: stretch;
-}
-
-#BMS_lngi,
-#OCF_lngi {
-    flex: 1;
-    min-width: 280px;
-
-    resize: vertical;
-    overflow: auto;
-
-    min-height: 150px;
-    height: 150px;
-}
-
-#BMS_lngi {
-    background: #aaaaff;
-}
-
-#OCF_lngi {
-    background: #8dff8d;
-}
-
 /* Scratch area */
 #scratch_bars {
     background: #dcdcdc;
@@ -400,3 +373,90 @@ h2 {
     color: white;
     cursor: pointer;
 }
+
+.analysis-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+#analysis_container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.analysis-panel{
+
+    background:#ddd;
+
+    resize:vertical;
+    overflow:auto;
+
+    min-height:150px;
+    min-width:280px;
+
+    position:relative;
+
+    padding:12px;
+
+    border-radius:5px;
+}
+
+.analysis-header{
+
+    display:flex;
+    gap:8px;
+    align-items:center;
+
+    margin-bottom:10px;
+}
+
+.analysis-content{
+    margin-top:10px;
+}
+
+.analysis-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+#analysis_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.analysis-panel{
+
+    background:#ddd;
+
+    resize:vertical;
+    overflow:auto;
+
+    min-height:150px;
+    min-width:280px;
+
+    position:relative;
+    flex: 0 0 auto;
+
+    padding:12px;
+
+    border-radius:5px;
+}
+
+.analysis-header{
+
+    display:flex;
+    gap:8px;
+    align-items:center;
+
+    margin-bottom:10px;
+}
+
+.analysis-content{
+    margin-top:10px;
+}
+

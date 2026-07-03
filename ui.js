@@ -1,15 +1,3 @@
-// use to sync height between BMS_lngi and OCF_lngi
-const bms = document.getElementById("BMS_lngi");
-const ocf = document.getElementById("OCF_lngi");
-
-function syncHeight(source, target) {
-    const h = source.offsetHeight;
-    target.style.height = h + "px";
-}
-
-new ResizeObserver(() => syncHeight(bms, ocf)).observe(bms);
-new ResizeObserver(() => syncHeight(ocf, bms)).observe(ocf);
-
 const modal = document.getElementById("settings_modal");
 
 document.getElementById("settings_btn").onclick = () => {
@@ -41,43 +29,46 @@ scratch_bar_display_div.addEventListener("change", () => {
     scratch_bar_display = scratch_bar_display_div.value
 });
 
-let analysis_bar_display = 'OCN'
-const analysis_bar_display_div = document.getElementById("Analysis_display_mode");
-
-analysis_bar_display_div.addEventListener("change", () => {
-    analysis_bar_display = analysis_bar_display_div.value
-});
 
 let compress_BMS = document.getElementById("compress_bms")
 let format_cOCF = document.getElementById("format_cOCF")
 
-document.querySelectorAll(".resizable").forEach(panel => {
-    const handle = panel.querySelector(".resize-handle");
+function makeResizable(panel){
+
+    const handle=panel.querySelector(".resize-handle");
 
     let startY;
     let startHeight;
 
-    handle.addEventListener("pointerdown", e => {
+    handle.addEventListener("pointerdown",e=>{
+
         e.preventDefault();
 
-        startY = e.clientY;
-        startHeight = panel.offsetHeight;
+        startY=e.clientY;
+        startHeight=panel.offsetHeight;
 
-        function move(ev) {
-            const h = Math.max(60, startHeight + ev.clientY - startY);
-            panel.style.height = h + "px";
+        function move(ev){
+
+            panel.style.height=
+                Math.max(60,startHeight+ev.clientY-startY)+"px";
+
         }
 
-        function up() {
-            window.removeEventListener("pointermove", move);
-            window.removeEventListener("pointerup", up);
+        function up(){
+
+            window.removeEventListener("pointermove",move);
+            window.removeEventListener("pointerup",up);
+
         }
 
-        window.addEventListener("pointermove", move);
-        window.addEventListener("pointerup", up);
+        window.addEventListener("pointermove",move);
+        window.addEventListener("pointerup",up);
+
     });
-});
 
+}
+
+document.querySelectorAll(".resizable").forEach(makeResizable);
 
 const Scratch_bar_height = document.getElementById("Scratch_bar_height");
 
@@ -126,3 +117,22 @@ btn_milestone.addEventListener("click", () => {
     document.getElementById("scratch_bars").hidden = true;
     document.getElementById("future-milestone").hidden = false;
 });
+
+const analysisContainer =
+    document.getElementById("analysis_container");
+
+const analysisPanels = [
+
+    {
+        notation: "BMS",
+        width: 50,
+        hue: 220
+    },
+
+    {
+        notation: "OCN",
+        width: 50,
+        hue: 120
+    }
+
+];
