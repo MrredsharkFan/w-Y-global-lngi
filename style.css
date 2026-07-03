@@ -150,6 +150,8 @@ h2 {
 
     border-radius: 3px;
     white-space: nowrap;
+
+    transition-duration: 0.1s;
 }
 
 /* Modal */
