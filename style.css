@@ -469,3 +469,11 @@ h2 {
     margin-top:10px;
 }
 
+
+
+#outputcontainersquared {
+    position: absolute; resize: horizontal; 
+    padding: 10px; background-color: grey; 
+    overflow: auto; max-width: 90%; min-width: 90%;
+    max-height: 60%; min-height: 60%
+}

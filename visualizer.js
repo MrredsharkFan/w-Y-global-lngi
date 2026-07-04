@@ -405,20 +405,21 @@ function updateMountainString(inputc) {
 }
 var options = ["input"];
 var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
+//rngdelak, DO NOT CHANGE THIS
 var config = {
     "input": "",
     "inputc": "",
-    "ROWHEIGHT": 75,
+    "ROWHEIGHT": 45,
     "COLUMNWIDTH": 45,
     "LINETHICKNESS": 1,
-    "NUMBERSIZE": 30,
+    "NUMBERSIZE": 15,
     "NUMBERTHICKNESS": 1,
     "LINEPLACE": 1,
     "MAXDIMENSIONS": 6,
-    "STACKMODE": false,
-    "HIGHLIGHT": true,
+    "STACKMODE": true, //rngdelak what the fuck
+    "HIGHLIGHT": false,
     "DYNAMICWIDTH": true,
-    "EXTRADIVIDER": true,
+    "EXTRADIVIDER": false,
 };
 var displayedConfig = Object.assign({}, config);
 var inputFocused = false;
@@ -524,8 +525,7 @@ function draw(recalculate) {
                         var totalheight = (rowpos["c"] + 1) * newConfig["ROWHEIGHT"];
                         document.getElementById("outputcontainer").style.width = totalwidth + "px";
                         document.getElementById("outputcontainer").style.height = totalheight + "px";
-                        canvas.width = totalwidth;
-                        canvas.height = totalheight;
+                        canvas.width = window.innerWidth-50 //hmm
                         ctx.fillStyle = "white"; //clear
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         if (newConfig["HIGHLIGHT"] && highlightindex != -1) {

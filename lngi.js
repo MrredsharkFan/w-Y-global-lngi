@@ -227,12 +227,12 @@ document.getElementById("analysis_add").onclick = () => {
 renderAnalysisPanels();
 
 //Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000 + 23 * 3600000) + 864 * 1000
+var st = (1782316800000 + 23 * 3600000) + 864 * 1000
 
-/*
+//checking
 var d = 4.0056
-const st = Date.now() - get_time_inv(d) //for the uhm, testing (d = start num)
-*/
+var st = Date.now() - get_time_inv(d) //for the uhm, testing (d = start num)
+
 
 function num_time(t) {
     var t = Math.max(0, t - st)
