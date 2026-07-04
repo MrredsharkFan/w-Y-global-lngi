@@ -1,3 +1,6 @@
+//IIEF warppers
+//maybe there some shared varibles so it breaks the proxy.js?
+
 (() => {
     var canvas;
     var ctx;
