@@ -27,7 +27,7 @@ function requestDraw(recalculate) {
     hasRequestedDraw = true;
 }
 function processDrawRequest() {
-    if (Date.now() - lastDrawTime < 10) return;
+    if (Date.now() - lastDrawTime < 10 || page!=3) return;
     try {
         lastDrawTime = Date.now();
         draw(hasRequestedRecalculation);
