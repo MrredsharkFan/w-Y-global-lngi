@@ -217,7 +217,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
-    alert("If you see this then the the online counter works");
 
     // Function to handle sign-in with automatic retries
     function loginWithRetry(auth, delay = 2000) {
