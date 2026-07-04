@@ -16,6 +16,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
+signInAnonymously(auth)
+  .then((userCredential) => {
+    alert("Connected! User ID: " + userCredential.user.uid);
+  })
+  .catch((error) => {
+    // This will pop up on your phone screen and show the exact blocker
+    alert("ERROR:\nCode: " + error.code + "\nMessage: " + error.message);
+  });
+
 // Function to handle sign-in with automatic retries
 function loginWithRetry(auth, delay = 2000) {
   signInAnonymously(auth)
