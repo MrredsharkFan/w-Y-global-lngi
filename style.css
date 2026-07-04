@@ -447,3 +447,12 @@ h2 {
     max-width: 100%;
     height: auto;   
 }
+
+#actualcontainer>label {
+    flex: 1;
+    min-width: 50%;
+}
+
+#secondcontainer>label {
+    flex: 1;
+}
