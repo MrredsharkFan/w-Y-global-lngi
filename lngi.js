@@ -258,7 +258,7 @@ function update() {
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    if (page == 3) document.getElementById("input").value = u[2]
+    if (page == 3) {document.getElementById("input").value = u[2]}
     analysisPanels.forEach(panel => {
 
         let txt = "";

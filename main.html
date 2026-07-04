@@ -156,9 +156,13 @@
     <div id="mountain" hidden>
         <input id="input" value="1,3,4,3" type='text' hidden>
         <div id="optioncontainer"> <!--yukito uhm okay?-->
-            <label>Stack Mode <input id="STACKMODE" type="checkbox" checked oninput="requestDraw(true)"></label>
-            <label>High Light <input id="HIGHLIGHT" type="checkbox" checked oninput="requestDraw(true)"></label>
-            <label>Extra Divider <input id="EXTRADIVIDER" type="checkbox" oninput="requestDraw(true)"></label>
+            <label>ROWHEIGHT <input id="ROWHEIGHT" style="width:150px" type="range" min=15 max=150 value=45 oninput="requestDraw()"> <span id="ROWHEIGHT_value" class="optionvalue">45</span></label>
+            <label>COLUMNWIDTH <input id="COLUMNWIDTH" style="width:150px" type="range" min=15 max=150 value=45 oninput="requestDraw()"> <span id="COLUMNWIDTH_value" class="optionvalue">45</span></label>
+            <label>LINETHICKNESS <input id="LINETHICKNESS" style="width:100px" type="range" min=1 max=15 value=1 oninput="requestDraw()"> <span id="LINETHICKNESS_value" class="optionvalue">1</span></label>
+            <label>NUMBERSIZE <input id="NUMBERSIZE" style="width:120px" type="range" min=4 max=96 value=15 oninput="requestDraw()"> <span id="NUMBERSIZE_value" class="optionvalue">15</span></label><br>
+            <label><input id="STACKMODE" type="checkbox" checked oninput="requestDraw(true)"> Stack Mode</label>
+            <label><input id="HIGHLIGHT" type="checkbox" checked oninput="requestDraw(true)"> Highlight</label>
+            <label><input id="EXTRADIVIDER" type="checkbox" oninput="requestDraw(true)"> Extra Divider</label><br><br><b>WhY mountain (Visualize the ω-Y sequence structure)
         </div>
         <div id="outputcontainersquared">
             <div id="outputcontainer" style="background-color: white;">

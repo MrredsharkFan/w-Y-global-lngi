@@ -401,7 +401,7 @@ h2 {
 
     overflow:auto;
 
-    min-height:75px;
+    min-height:150px;
 
     position:relative;
 
@@ -426,6 +426,7 @@ h2 {
 }
 
 #mountain {
+    min-height: 500px;
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 5px;
