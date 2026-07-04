@@ -1,3 +1,4 @@
+const analysisContainer = document.getElementById("analysis_container");
 var tt = 0
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
