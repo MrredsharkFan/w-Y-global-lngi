@@ -230,8 +230,8 @@ renderAnalysisPanels();
 var st = (1782316800000 + 23 * 3600000) + 864 * 1000
 
 //checking
-var d = 4.0056
-var st = Date.now() - get_time_inv(d) //for the uhm, testing (d = start num)
+//var d = 4.0056
+//var st = Date.now() - get_time_inv(d) //for the uhm, testing (d = start num)
 
 
 function num_time(t) {
