@@ -7,7 +7,7 @@ body {
     padding: 20px;
 
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #fafafa;
 
     display: flex;
     flex-direction: column;
@@ -304,15 +304,6 @@ h2 {
     white-space: nowrap;
 }
 
-#mountain_btn {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #ff8484;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
 
 #future-milestone {
     background-color: blanchedalmond;
@@ -469,11 +460,3 @@ h2 {
     margin-top:10px;
 }
 
-
-
-#outputcontainersquared {
-    position: absolute; resize: horizontal; 
-    padding: 10px; background-color: grey; 
-    overflow: auto; max-width: 90%; min-width: 90%;
-    max-height: 60%; min-height: 60%
-}

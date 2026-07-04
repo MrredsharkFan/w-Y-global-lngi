@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Loading...</title>
+    <title>Termiunsfinity's Y LNGI</title>
     <link rel="stylesheet" href="style.css">
     </link>
 </head>
@@ -18,7 +18,6 @@
             <div class="status-buttons">
                 <button id="btn_lngi">Lngi & Analysis</button>
                 <button id="btn_progress">Progress</button>
-                <button id="mountain_btn">Visualizer</button>
                 <button id="btn_milestone">Milestone</button>
                 <button id="settings_btn">Settings</button>
             </div>
@@ -161,27 +160,10 @@
             </div>
 
             <div class="modal-body checkbox-row">
-                <input type="checkbox" id="transfinite_BMS" checked>
-                <label for="transfinite_BMS">
-                    Use Transfinite BMS analysis after Lim(BMS) (up to (0)(1<sup>&omega;<sup>2</sup></sup>))
-                </label>
-            </div>
-
-            <div class="modal-body checkbox-row">
                 <input type="checkbox" id="format_cOCF" checked>
                 <label for="format_cOCF">
                     Format cOCF (aka [][[][[[c][[c]c]]c]] into &omega;<sup>M+1</sup>+1)
                 </label>
-            </div>
-        </div>
-    </div>
-
-    <div id="mountain" hidden>
-        <input id="input" value="1,3,4,3" type = 'text' hidden>
-        <div id="outputcontainersquared">
-            <div id="outputcontainer" style="background-color: white;">
-                <canvas id="output" width="1" height="1000"></canvas>
-                <img id="outimg" style="display:none">
             </div>
         </div>
     </div>
@@ -198,6 +180,5 @@
 <script src="conv.js"></script>
 <script src="lngi.js"></script>
 <script src="milestone.js"></script>
-<script src="visualizer.js"></script>
 
 </html>
