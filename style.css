@@ -7,7 +7,8 @@ body {
     padding: 20px;
 
     font-family: Arial, sans-serif;
-    background-color: #fafafa;
+    background-color: #ffffff;
+    overflow-x: scroll;
 
     display: flex;
     flex-direction: column;
@@ -109,7 +110,6 @@ h2 {
     font-weight: bold;
     font-size: 150%;
 
-    resize: vertical;
     overflow: auto;
 
     min-height: 60px;
@@ -128,7 +128,6 @@ h2 {
     overflow-x: hidden;
 
     padding: 5px;
-    resize: vertical;
 }
 
 #scratch_content {
@@ -295,6 +294,15 @@ h2 {
     white-space: nowrap;
 }
 
+#mountain_btn {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #ff8484;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
 #settings_btn {
     padding: 4px 10px;
     border: 1px solid #bbb;
@@ -382,6 +390,7 @@ h2 {
 
 #analysis_container{
     display:flex;
+    box-sizing: border-box;
     flex-wrap:wrap;
     gap:15px;
 }
@@ -390,73 +399,50 @@ h2 {
 
     background:#ddd;
 
-    resize:vertical;
     overflow:auto;
 
     min-height:150px;
-    min-width:280px;
 
     position:relative;
-
-    padding:12px;
 
     border-radius:5px;
 }
 
-.analysis-header{
-
-    display:flex;
-    gap:8px;
-    align-items:center;
-
-    margin-bottom:10px;
-}
-
-.analysis-content{
-    margin-top:10px;
-}
-
-.analysis-toolbar{
-    display:flex;
-    gap:10px;
-    align-items:center;
-}
-
-#analysis_container {
+.analysis-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-start;
+    flex-wrap: wrap;      
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
-.analysis-panel{
-
-    background:#ddd;
-
-    resize:vertical;
-    overflow:auto;
-
-    min-height:150px;
-    min-width:280px;
-
-    position:relative;
-    flex: 0 0 auto;
-
-    padding:12px;
-
-    border-radius:5px;
+.analysis-header button,
+.analysis-header select {
+    flex: 0 1 auto;
+    min-width: 0;
 }
-
-.analysis-header{
-
-    display:flex;
-    gap:8px;
-    align-items:center;
-
-    margin-bottom:10px;
-}
-
 .analysis-content{
     margin-top:10px;
 }
 
+#mountain {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background: #fff;
+}
+
+#outputcontainersquared {
+    width: 100%;
+}
+
+#outputcontainer {
+    max-width: 100%; 
+}
+
+#output {
+    display: block;
+    max-width: 100%;
+    height: auto;   
+}

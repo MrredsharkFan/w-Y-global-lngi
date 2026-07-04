@@ -5,6 +5,11 @@ var cursorstr = "▮";
 var cursorendstr = "▯";
 var lineBreakRegex = /\r?\n/g;
 var itemSeparatorRegex = /[\t ,]/g;
+
+let _STACKMODE = document.getElementById("STACKMODE")
+let _HIGHLIGHT = document.getElementById("HIGHLIGHT")
+let _EXTRADIVIDER = document.getElementById("EXTRADIVIDER")
+
 window.onload = function () {
     //console.clear();
     canvas = document.getElementById("output");
@@ -21,15 +26,13 @@ function drawIntervalLoopFunc() {
 }
 var hasRequestedDraw = false;
 var hasRequestedRecalculation = false;
-var lastDrawTime = -1;
 function requestDraw(recalculate) {
     hasRequestedRecalculation = hasRequestedRecalculation || recalculate;
     hasRequestedDraw = true;
 }
 function processDrawRequest() {
-    if (Date.now() - lastDrawTime < 10 || page!=3) return;
+    if (page != 3) return;
     try {
-        lastDrawTime = Date.now();
         draw(hasRequestedRecalculation);
     } catch (e) {
         throw e;
@@ -403,7 +406,7 @@ function updateMountainString(inputc) {
         findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
     }
 }
-var options = ["input"];
+var options = ["input", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER"];
 var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
 //rngdelak, DO NOT CHANGE THIS
 var config = {
@@ -420,6 +423,7 @@ var config = {
     "HIGHLIGHT": false,
     "DYNAMICWIDTH": true,
     "EXTRADIVIDER": false,
+    "MAXWIDTH": window.innerWidth
 };
 var displayedConfig = Object.assign({}, config);
 var inputFocused = false;
@@ -452,8 +456,8 @@ function draw(recalculate) {
     var highlightindex;
     var highlightendindex;
     if (!inputFocused) {
-        highlightindex = -1;
-        highlightendindex = -1;
+        highlightindex = 0;
+        highlightendindex = 0;
         newConfig["inputc"] = newConfig["input"];
     } else {
         highlightindex = (newConfig["input"].substring(0, cursorPos).match(itemSeparatorRegex) || []).length;
@@ -512,25 +516,44 @@ function draw(recalculate) {
                 }
                 if (d >= calculatedMountain.dim) {
                     if (!cycles) {
-                        //resize
+                        //resize with wrapping support
                         var bottomrow = calculatedMountain;
                         while (bottomrow.dim > 1) bottomrow = bottomrow.arr[0];
                         ctx.font = newConfig["NUMBERTHICKNESS"] + " " + newConfig["NUMBERSIZE"] + "px Arial";
-                        var totalwidth = 0;
+
+                        var currentLineWidth = 0;
+                        var lineNumber = 0;
+                        var maxLineWidth = 0;
+                        var rowsPerLine = rowpos["c"] + 1;
+                        var baseHeight = rowsPerLine * newConfig["ROWHEIGHT"];
+
                         for (var i = 0; i < bottomrow.arr.length; i++) {
                             var width = newConfig["DYNAMICWIDTH"] ? ctx.measureText(bottomrow.arr[i].value).width + newConfig["COLUMNWIDTH"] - 15 : newConfig["COLUMNWIDTH"];
-                            colpos.push([width, totalwidth]);
-                            totalwidth += width;
+                            if (currentLineWidth + width > newConfig["MAXWIDTH"] && currentLineWidth > 0) {
+                                currentLineWidth = 0;
+                                lineNumber++;
+                            }
+                            colpos.push([width, currentLineWidth, lineNumber]);
+                            currentLineWidth += width;
+                            if (currentLineWidth > maxLineWidth) maxLineWidth = currentLineWidth;
                         }
-                        var totalheight = (rowpos["c"] + 1) * newConfig["ROWHEIGHT"];
-                        document.getElementById("outputcontainer").style.width = totalwidth + "px";
+                        var totalLines = lineNumber + 1;
+                        var finalWidth = totalLines > 1 ? newConfig["MAXWIDTH"] : maxLineWidth;
+                        var totalheight = baseHeight * totalLines;
+                        const dpr = window.devicePixelRatio || 1;
+
+                        document.getElementById("outputcontainer").style.width = finalWidth + "px";
                         document.getElementById("outputcontainer").style.height = totalheight + "px";
-                        canvas.width = window.innerWidth-50 //hmm
+                        canvas.width = finalWidth * dpr;
+                        canvas.height = totalheight * dpr;
+                        ctx.scale(dpr, dpr);
+
                         ctx.fillStyle = "white"; //clear
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillRect(0, 0, finalWidth, totalheight); // Use unscaled values for rendering bounds now
+
                         if (newConfig["HIGHLIGHT"] && highlightindex != -1) {
                             ctx.fillStyle = "#ffaaaa";
-                            ctx.fillRect(colpos[highlightindex][1], 0, colpos[highlightendindex][0] + colpos[highlightendindex][1] - colpos[highlightindex][1], canvas.height);
+                            ctx.fillRect(colpos[highlightindex][1], colpos[highlightindex][2] * baseHeight, colpos[highlightendindex][0] + colpos[highlightendindex][1] - colpos[highlightindex][1], baseHeight);
                         }
                         ctx.fillStyle = "black";
                         ctx.strokeStyle = "black";
@@ -693,6 +716,7 @@ function render2Dmountain(m, x, y, config) {
     }
 }
 function render1Dmountain(m, mm, rowpos, colpos, config) {
+    config.MAXWIDTH = window.innerWidth
     while (mm.dim < 1) {
         mm = {
             dim: mm.dim + 1,
@@ -700,21 +724,37 @@ function render1Dmountain(m, mm, rowpos, colpos, config) {
         };
     }
     var rowid = rowpos["c" + mm.coord.slice(1).join(",")];
+    var baseHeight = (rowpos["c"] + 1) * config["ROWHEIGHT"];
+
     for (var k = 0; k < mm.arr.length; k++) {
         var point = mm.arr[k];
-        ctx.fillText(point.strexp || point.value, colpos[point.position][1] + colpos[point.position][0] / 2, (rowid + 1) * config["ROWHEIGHT"] - 3);
+        var colInfo = colpos[point.position];
+        var colWidth = colInfo[0];
+        var colX = colInfo[1];
+        var colLine = colInfo[2];
+        var yOffset = colLine * baseHeight;
+
+        // Render text relative to wrapped line
+        ctx.fillText(point.strexp || point.value, colX + colWidth / 2, yOffset + (rowid + 1) * config["ROWHEIGHT"] - 3);
+
         if (point.leftLegCoord) {
-            ctx.beginPath();
-            ctx.moveTo(colpos[point.position][1] + colpos[point.position][0] / 2, (rowpos["c" + point.rightLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
-            ctx.lineTo(colpos[point.position][1] + colpos[point.position][0] / 2, (rowid + 1) * config["ROWHEIGHT"]);
             var parentPosition = findByCoord(m, point.leftLegCoord).position;
-            ctx.lineTo(colpos[parentPosition][1] + colpos[parentPosition][0] / 2, (rowid + 2) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
-            ctx.lineTo(colpos[parentPosition][1] + colpos[parentPosition][0] / 2, (rowpos["c" + point.leftLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
+            var parentInfo = colpos[parentPosition];
+            var parentX = parentInfo[1];
+            var parentLine = parentInfo[2];
+            var parentYOffset = parentLine * baseHeight;
+
+            ctx.beginPath();
+            ctx.moveTo(colX + colWidth / 2, yOffset + (rowpos["c" + point.rightLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
+            ctx.lineTo(colX + colWidth / 2, yOffset + (rowid + 1) * config["ROWHEIGHT"]);
+
+            // Draw line to the parent context position
+            ctx.lineTo(parentX + parentInfo[0] / 2, yOffset + (rowid + 2) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
+            ctx.lineTo(parentX + parentInfo[0] / 2, parentYOffset + (rowpos["c" + point.leftLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
             ctx.stroke();
         }
     }
 }
-
 
 
 

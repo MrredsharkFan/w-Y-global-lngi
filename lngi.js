@@ -1,5 +1,5 @@
-const analysisContainer = document.getElementById("analysis_container");
 var tt = 0
+const analysisContainer = document.getElementById("analysis_container");
 // convert second to day,hour,minutes
 function formatSeconds(totalSeconds) {
     if (totalSeconds <= 0) return "0 seconds";
@@ -136,7 +136,7 @@ function renderAnalysisPanels() {
         const card = document.createElement("div");
 
         card.className = "card resizable analysis-panel";
-        card.style.flexBasis = `calc(${panel.width}% - 15px)`;
+        card.style.flexBasis = `calc(${panel.width}% - ${(100 - panel.width) / 100 * 15}px)`;
         card.style.backgroundColor = `hsl(${panel.hue}, 85%, 82%)`;
 
         card.innerHTML = `
@@ -164,6 +164,10 @@ Notation
 <option value="BMS">BMS</option>
 <option value="OCN">OCN</option>
 <option value="cOCF">cOCF</option>
+<option value="PMS">PMS</option>
+<option value="AMS">AMS</option>
+<option value="0Y">0-Y</option>
+<option value="Vulcaniz">Vulcaniz</option>
 
 </select>
 
@@ -192,7 +196,7 @@ Notation
 
             panel.width = Number(e.target.value);
 
-            card.style.flexBasis = `calc(${panel.width}% - 15px)`;
+            card.style.flexBasis = `calc(${panel.width}% - ${(100 - panel.width) / 100 * 15}px)`;
 
         };
 
@@ -254,6 +258,7 @@ function update() {
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
+    if (page == 3) document.getElementById("input").value = u[2]
     analysisPanels.forEach(panel => {
 
         let txt = "";
@@ -264,16 +269,8 @@ function update() {
                 txt = "<i>" + u[2] + "</i>";
                 break;
 
-            case "BMS":
-                txt = convert_From_wY(u[2], "BMS");
-                break;
-
-            case "OCN":
-                txt = convert_From_wY(u[2], "OCN");
-                break;
-
-            case "cOCF":
-                txt = convert_From_wY(u[2], "cOCF");
+            default:
+                txt = convert_From_wY(u[2], panel.notation);
                 break;
 
         }
