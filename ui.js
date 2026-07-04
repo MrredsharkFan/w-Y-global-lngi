@@ -121,9 +121,6 @@ btn_milestone.addEventListener("click", () => {
     document.getElementById("future-milestone").hidden = false;
 });
 
-const analysisContainer =
-    document.getElementById("analysis_container");
-
 const analysisPanels = [
 
     {
