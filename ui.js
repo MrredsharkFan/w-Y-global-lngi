@@ -29,10 +29,6 @@ scratch_bar_display_div.addEventListener("change", () => {
     scratch_bar_display = scratch_bar_display_div.value
 });
 
-
-let compress_BMS = document.getElementById("compress_bms")
-let format_cOCF = document.getElementById("format_cOCF")
-
 function makeResizable(panel){
 
     const handle=panel.querySelector(".resize-handle");

@@ -8,6 +8,14 @@ BMS.[Functions] will call a function belong to BMS, and the same for Y_Sequence
 
 the same for Y_Sequence, but importantly Y_Sequence output is string (except hInv,gInv,isSuccessor and cmp)
 */
+
+//checkboxes
+
+let compress_BMS = document.getElementById("compress_bms")
+let transfinite_BMS = document.getElementById("transfinite_BMS")
+let format_cOCF = document.getElementById("format_cOCF")
+
+
 class BMS {
 
     static cmp(m1, m2) {
@@ -1089,7 +1097,7 @@ let Lim_BMS_in_Yseq = '1,3' // Lim(BMS) is 1,3 in y
 
 /*
 THIS IS JUST AN APPROXIMATION NOT EXACT
-AFTER BHO , IT SEEMS WRONG FOR ALL
+AFTER BH , IT SEEMS WRONG FOR ALL
 */
 
 function Conv_BMS_Y_sequence(ord) {
@@ -2256,8 +2264,8 @@ function Conv_BMS_cOCF(ord) {
 }
 
 function y_in(a, b, c) { //a is inside of b and c?
-    if (Y_Sequence.cmp(b,c)==1){return y_in(a,c,b)}
-    return (Y_Sequence.cmp(a,b)==1 & Y_Sequence.cmp(a,c)==-1)
+    if (Y_Sequence.cmp(b, c) == 1) { return y_in(a, c, b) }
+    return (Y_Sequence.cmp(a, b) == 1 & Y_Sequence.cmp(a, c) == -1)
 }
 
 function convert_From_wY(ord, mode) {
@@ -2266,14 +2274,16 @@ function convert_From_wY(ord, mode) {
     }
 
     if (mode == "BMS") {
-        if (Y_Sequence.cmp(ord, '1,2,4,7') >= 0){var u = "&approx;"} else {var u = ""}
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
+            var u = '';
+            if (Y_Sequence.cmp(ord, '1,2,4,7') >= 0){u = "&approx;"} else {u = ""}
             if (compress_BMS.checked)
                 return u+Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
             else
                 return u+Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
         }
         if (ord == '1,3') return 'Lim(BMS)'
+        if (transfinite_BMS.checked){
         if (y_in(ord, '1,3', '1,3,2,5,5')) return '>(0)(1<sup>&omega;</sup>)'
         if (y_in(ord, '1,3,2,5,5', '1,3,2,5,6')) return '>(0)(1<sup>&omega;</sup>)(1<sup>&omega;</sup>)'
         if (y_in(ord, '1,3,2,5,6', '1,3,2,5,6,4,9,10,9')) return '>(0)(1<sup>&omega;</sup>)(2)'
@@ -2284,7 +2294,7 @@ function convert_From_wY(ord, mode) {
         if (y_in(ord, '1,3,2,5,6,4,9,13,18', '1,3,2,5,6,4,9,13,18,25')) return '>(0)(1<sup>&omega;</sup>)(2,2)'
         if (y_in(ord, '1,3,2,5,6,4,9,13,18,25', '1,3,2,5,6,4,9,13,18,26')) return '>(0)(1<sup>&omega;+1</sup>)'
         if (y_in(ord, '1,3,2,5,6,4,9,13,18,26', '1,3,2,5,6,4,9,13,19')) return '>(0)(1<sup>&omega;2</sup>)'
-        if (y_in(ord, '1,3,2,5,6,4,9,13,19', '1,3,2,5,6,4,9,13,19,21')) return '>(0)(1<sup>&omega;<sup>2</sup></sup>)'
+        if (y_in(ord, '1,3,2,5,6,4,9,13,19', '1,3,2,5,6,4,9,13,19,21')) return '>(0)(1<sup>&omega;<sup>2</sup></sup>)'}
         return ord;
     }
 

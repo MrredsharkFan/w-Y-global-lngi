@@ -130,7 +130,7 @@ function renderAnalysisPanels() {
 
     analysisContainer.innerHTML = "";
 
-    analysisPanels.forEach((panel, index,notation) => {
+    analysisPanels.forEach((panel, index) => {
 
         const card = document.createElement("div");
 
@@ -141,16 +141,32 @@ function renderAnalysisPanels() {
         card.innerHTML = `
 
 <div class="analysis-header">
-    ${panel.notation}<br><button class="remove">Remove</button>
-    Width
-    <select class="width">
-        <option value="33">33%</option>
-        <option value="50">50%</option>
-        <option value="66">66%</option>
-        <option value="100">100%</option>
-    </select>
 
-    </div>
+<button class="remove">Remove</button>
+
+Width
+
+<select class="width">
+
+<option value="33">33%</option>
+<option value="50">50%</option>
+<option value="66">66%</option>
+<option value="100">100%</option>
+
+</select>
+
+Notation
+
+<select class="notation">
+
+<option value="wY">ω-Y</option>
+<option value="BMS">BMS</option>
+<option value="OCN">OCN</option>
+<option value="cOCF">cOCF</option>
+
+</select>
+
+</div>
 
 <div class="analysis-content"></div>
 
@@ -159,6 +175,7 @@ function renderAnalysisPanels() {
 `;
 
         card.querySelector(".width").value = panel.width;
+        card.querySelector(".notation").value = panel.notation;
 
         panel.element = card.querySelector(".analysis-content");
 
@@ -171,10 +188,17 @@ function renderAnalysisPanels() {
         };
 
         card.querySelector(".width").onchange = e => {
-
             panel.width = Number(e.target.value);
+            if (e.target.value == 100)
+                card.style.flexBasis = `calc(${panel.width}%)`;
+            else
+                card.style.flexBasis = `calc(${panel.width}% - 15px)`;
 
-            card.style.flexBasis = `calc(${panel.width}% - 15px)`;
+        };
+
+        card.querySelector(".notation").onchange = e => {
+
+            panel.notation = e.target.value;
 
         };
 
@@ -234,7 +258,7 @@ function update() {
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    document.getElementById("input").value = u[2]
+    if (page == 3) document.getElementById("input").value = u[2]
     analysisPanels.forEach(panel => {
 
         let txt = "";
