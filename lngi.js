@@ -251,6 +251,7 @@ function num_time(t) {
 
 var tps = 0
 var last_tick = 0
+let sync_mountain = document.getElementById("_UPDATEMODE")
 function update() {
     tps = 1000 / (Date.now() - last_tick)
     last_tick = Date.now()
@@ -258,7 +259,7 @@ function update() {
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    if (page == 3) {document.getElementById("input").value = u[2]}
+    if (page == 3 && sync_mountain.checked) {document.getElementById("input").value = u[2]}
     analysisPanels.forEach(panel => {
 
         let txt = "";
