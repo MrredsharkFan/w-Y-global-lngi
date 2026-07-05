@@ -1,3 +1,5 @@
+// expose the requestrender func
+
 const renderer = (() => {
     var canvas;
     var ctx;
