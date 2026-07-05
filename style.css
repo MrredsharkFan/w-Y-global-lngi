@@ -102,6 +102,7 @@ h2 {
     padding: 3px;
     white-space: nowrap;
     transition: width 0.05s ease;
+    font-size: calc(var(--font-size)*1.2)
 }
 
 /* Panels */
