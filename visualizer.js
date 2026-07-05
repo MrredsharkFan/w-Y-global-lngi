@@ -1,7 +1,4 @@
-//IIEF warppers
-//maybe there some shared varibles so it breaks the proxy.js?
-
-(() => {
+const renderer = (() => {
     var canvas;
     var ctx;
     var outimg;
@@ -413,7 +410,7 @@
             findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
         }
     }
-    var options = ["input", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
+    var options = ["input","MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
     var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
     //rngdelak, DO NOT CHANGE THIS
     var config = {
@@ -433,7 +430,7 @@
         "MAXWIDTH": window.innerWidth
     };
     var displayedConfig = Object.assign({}, config);
-    var inputFocused = false;
+    var inputFocused = true;
     var timesDrawn = 0;
     function draw(recalculate) {
         var inputChanged = false;
@@ -800,7 +797,6 @@
                     ctx.moveTo(currentX, textTopY);
                     ctx.lineTo(leftLegX, leftLegY);
                     ctx.lineTo(parentX, textTopY);
-                    ctx.lineTo(parentX, currentY + 3);
                     ctx.stroke();
                 }
             }
@@ -895,4 +891,8 @@
     var handlekey = function (e) {
         setTimeout(requestDraw, 0, true);
     }
+
+    return {
+        requestDraw,
+    };
 })();
