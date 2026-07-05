@@ -116,6 +116,7 @@ function update_page() {
     document.getElementById("milestone_header").style.display = page == 1 ? "flex" : "none"
     document.getElementById("scratch_bars").hidden = (page != 1)
     document.getElementById("future-milestone").hidden = (page != 2)
+    document.getElementById("future-milestone").style.display = page == 2 ? "flex" : "none"
     document.getElementById("mountain").hidden = (page != 3)
 }
 

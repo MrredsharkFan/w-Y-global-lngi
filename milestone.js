@@ -197,3 +197,38 @@ document.querySelectorAll("[data-year]").forEach(btn => {
     const step = Number(btn.dataset.year);
     enableHold(btn, () => changeYear(step));
 });
+
+
+
+
+//search time goes here right :3
+function search_time() {
+    var t = document.getElementById("search_input").value
+    var r = ""
+    if (t[0] != 1) {
+        r = "Please insert valid ordinal starting with 1!"
+        document.getElementById("search_result").innerHTML = r
+        return
+    }
+    else {
+        //i hate i have to do this
+        var l = t.split(",")
+        var guess = Number(l[1])+1
+        var interval = 0.5
+        while (interval > 1e-10) {
+            var p = num_to_lngi(guess+interval)[0]
+            console.log(p)
+            if (Y_Sequence.cmp(p, t) == -1) {
+                guess += interval
+            } else if (p == t) {
+                guess += interval
+                break
+            }
+            interval /= 2
+        }
+        console.log(get_time_inv(guess) + st)
+        r = `(If standard) Achieved in ${new Date(get_time_inv(guess)+st).toLocaleString()}`
+        document.getElementById("search_result").innerHTML = r
+        return
+    }
+}
