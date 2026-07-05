@@ -135,3 +135,8 @@ const analysisPanels = [
     }
 
 ];
+
+function updatefontsize() {
+    const font_size = document.getElementById("font_size").value;
+    document.documentElement.style.setProperty("--font-size", font_size + "px");
+}

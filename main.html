@@ -103,54 +103,54 @@
     <div id="future-milestone" hidden>
         <div class="fmilestone-box">
 
-        <h3>Day</h3>
-        <div>
-            <button data-day="-100" class="extreme_step">-100</button>
-            <button data-day="-10" class="high_step">-10</button>
-            <button data-day="-1" class="normal_step">-1</button>
+            <h3>Day</h3>
+            <div>
+                <button data-day="-100" class="extreme_step">-100</button>
+                <button data-day="-10" class="high_step">-10</button>
+                <button data-day="-1" class="normal_step">-1</button>
 
-            <input type="date" id="mile_date">
+                <input type="date" id="mile_date">
 
-            <button data-day="1" class="normal_step">+1</button>
-            <button data-day="10" class="high_step">+10</button>
-            <button data-day="100" class="extreme_step">+100</button>
-        </div>
+                <button data-day="1" class="normal_step">+1</button>
+                <button data-day="10" class="high_step">+10</button>
+                <button data-day="100" class="extreme_step">+100</button>
+            </div>
 
-        <div id="day_result"></div>
+            <div id="day_result"></div>
 
-        <hr>
+            <hr>
 
-        <h3>Month</h3>
-        <div>
-            <button data-month="-100" class="extreme_step">-100</button>
-            <button data-month="-10" class="high_step">-10</button>
-            <button data-month="-1" class="normal_step">-1</button>
+            <h3>Month</h3>
+            <div>
+                <button data-month="-100" class="extreme_step">-100</button>
+                <button data-month="-10" class="high_step">-10</button>
+                <button data-month="-1" class="normal_step">-1</button>
 
-            <input type="month" id="mile_month">
+                <input type="month" id="mile_month">
 
-            <button data-month="1" class="normal_step">+1</button>
-            <button data-month="10" class="high_step">+10</button>
-            <button data-month="100" class="extreme_step">+100</button>
-        </div>
+                <button data-month="1" class="normal_step">+1</button>
+                <button data-month="10" class="high_step">+10</button>
+                <button data-month="100" class="extreme_step">+100</button>
+            </div>
 
-        <div id="month_result"></div>
+            <div id="month_result"></div>
 
-        <hr>
+            <hr>
 
-        <h3>Year</h3>
-        <div>
-            <button data-year="-100" class="extreme_step">-100</button>
-            <button data-year="-10" class="high_step">-10</button>
-            <button data-year="-1" class="normal_step">-1</button>
+            <h3>Year</h3>
+            <div>
+                <button data-year="-100" class="extreme_step">-100</button>
+                <button data-year="-10" class="high_step">-10</button>
+                <button data-year="-1" class="normal_step">-1</button>
 
-            <input type="number" id="mile_year" min="2025">
+                <input type="number" id="mile_year" min="2025">
 
-            <button data-year="1" class="normal_step">+1</button>
-            <button data-year="10" class="high_step">+10</button>
-            <button data-year="100" class="extreme_step">+100</button>
-        </div>
+                <button data-year="1" class="normal_step">+1</button>
+                <button data-year="10" class="high_step">+10</button>
+                <button data-year="100" class="extreme_step">+100</button>
+            </div>
 
-        <div id="year_result"></div>
+            <div id="year_result"></div>
 
         </div>
         <div class="fmilestone-box">
@@ -162,7 +162,8 @@
 
     <div id="mountain" hidden>
         <div style="display: none; align-items: center; gap: 8px; width: 100%; margin-bottom: 10px;">
-            <input id="input" hidden> <!--You were NEVER meant to see this... I added this to adjust with the yukito script-->
+            <input id="input" hidden>
+            <!--You were NEVER meant to see this... I added this to adjust with the yukito script-->
         </div>
         <div style="display: flex; flex-wrap: wrap;" id="actualcontainer">
             <label>Row Height <input id="ROWHEIGHT" type="range" min=15 max=150 value=45
@@ -189,7 +190,8 @@
             <label><input id="_UPDATEMODE" type="checkbox" checked> Sync</label>
         </div>
         <br><br>
-        <b>WhY mountain (Visualize the ω-Y sequence structure)</b><hr>
+        <b>WhY mountain (Visualize the ω-Y sequence structure)</b>
+        <hr>
         <div id="outputcontainersquared">
             <div id="outputcontainer" style="background-color: white;">
                 <canvas id="output"></canvas>
@@ -202,8 +204,16 @@
     <div id="settings_modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Notation Settings</h3>
+                <h3>Display Settings</h3>
                 <button id="close_settings">&times;</button>
+            </div>
+
+            <div class="modal-body checkbox-row">
+                <label>Font Size : <input id="font_size"  type="number" min=5 value=16 oninput="updatefontsize()"></label>
+            </div>
+
+            <div class="modal-header">
+                <h3>Notation Settings</h3>
             </div>
 
             <div class="modal-body checkbox-row">
@@ -219,8 +229,19 @@
                     Format cOCF (aka [][[][[[c][[c]c]]c]] into &omega;<sup>M+1</sup>+1)
                 </label>
             </div>
+
+            <div class="modal-header">
+                <h3>Performance Settings</h3>
+            </div>
+
+            <div class="modal-body checkbox-row">
+                <label>Number of converted Y-sequence terms (put zero for all terms) <input id="Y_Terms" type="number" min=0 value=0 step=1></label>
+            </div>
+
+            <div class="modal-body checkbox-row">
+                <label>Number of converted BMS terms (put zero for all terms) <input id="BMS_Terms" type="number" min=0 value=0 step=1></label>
+            </div>
         </div>
-    </div>
 
 
 </body>

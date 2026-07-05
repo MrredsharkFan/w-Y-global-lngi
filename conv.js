@@ -2406,14 +2406,29 @@ function PMStoVZ(matrix) {
     return sequence.join(",");
 }
 
+function trimStringList(str, n) {
+  if (n === 0) return str;
 
+  return str
+    .split(",")
+    .slice(0, n)
+    .join(",");
+}
 
+function trimArrayList(arr, n) {
+  if (n === 0) return arr;
+
+  return arr.slice(0, n)
+}
 /*
 Pipeline : BMS <-> PMS <-> AMS -> 0Y
                         -> Vulcaniz
 */
-
+let Y_Terms = document.getElementById("Y_Terms");
+let BMS_Terms = document.getElementById("BMS_Terms");
 function convert_From_wY(ord, mode) {
+    ord = trimStringList(ord, Y_Terms.valueAsNumber);
+
     if (mode == "wY") {
         return ord;
     }
@@ -2431,7 +2446,7 @@ function convert_From_wY(ord, mode) {
 
     if (mode == "OCN") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,13') == -1) {
-            return Conv_BMS_OCF(Conv_Y_sequence_BMS(ord));
+            return Conv_BMS_OCF(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber));
         }
         return ord;
     }
@@ -2439,9 +2454,9 @@ function convert_From_wY(ord, mode) {
     if (mode == "cOCF") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,26') == -1) {
             if (format_cOCF.checked)
-                return cOCF.convert(Conv_BMS_cOCF(Conv_Y_sequence_BMS(ord)));
+                return cOCF.convert(Conv_BMS_cOCF(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber)));
             else
-                return Conv_BMS_cOCF(Conv_Y_sequence_BMS(ord));
+                return Conv_BMS_cOCF(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber));
         }
         return ord;
     }
@@ -2449,9 +2464,9 @@ function convert_From_wY(ord, mode) {
     if (mode == "PMS") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
             if (compress_BMS.checked)
-                return BMStoPMS(Conv_Y_sequence_BMS(ord)).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
+                return BMStoPMS(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber)).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
             else
-                return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
+                return trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber).map(p => `(${p.join(',')})`).join('');
         }
         if (ord == '1,3') return 'Lim(PMS) / Lim(BMS)'
         return ord;
@@ -2460,9 +2475,9 @@ function convert_From_wY(ord, mode) {
     if (mode == "AMS") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
             if (compress_BMS.checked)
-                return PMStoAMS(BMStoPMS(Conv_Y_sequence_BMS(ord))).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
+                return PMStoAMS(BMStoPMS(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber))).map(p => `(${p.join(',').replace(/(,?0)*$/, '')})`).join('')
             else
-                return Conv_Y_sequence_BMS(ord).map(p => `(${p.join(',')})`).join('');
+                return trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber).map(p => `(${p.join(',')})`).join('');
         }
         if (ord == '1,3') return 'Lim(AMS) / Lim(BMS)'
         return ord;
@@ -2470,7 +2485,7 @@ function convert_From_wY(ord, mode) {
 
     if (mode == "0Y") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
-            return AMSto0Y(PMStoAMS(BMStoPMS(Conv_Y_sequence_BMS(ord)))).join(',')
+            return AMSto0Y(PMStoAMS(BMStoPMS(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber)))).join(',')
         }
         if (ord == '1,3') return 'Lim(0Y) / Lim(BMS)'
         return ord;
@@ -2478,7 +2493,7 @@ function convert_From_wY(ord, mode) {
 
     if (mode == "Vulcaniz") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
-            return PMStoVZ(BMStoPMS(Conv_Y_sequence_BMS(ord)))
+            return PMStoVZ(BMStoPMS(trimArrayList(Conv_Y_sequence_BMS(ord),BMS_Terms.valueAsNumber)))
         }
         if (ord == '1,3') return 'Lim(Vulcaniz) / Lim(BMS)'
         return ord;
