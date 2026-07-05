@@ -1,5 +1,5 @@
 const modal = document.getElementById("settings_modal");
-
+//small fixes
 document.getElementById("settings_btn").onclick = () => {
     modal.classList.add("show");
 };
