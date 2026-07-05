@@ -259,26 +259,28 @@ function update() {
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    if (page == 3 && sync_mountain.checked) {document.getElementById("input").value = u[2]}
-    analysisPanels.forEach(panel => {
+    if (page == 3 && sync_mountain.checked) { document.getElementById("input").value = u[2] }
+    if (page == 0) {
+        analysisPanels.forEach(panel => {
 
-        let txt = "";
+            let txt = "";
 
-        switch (panel.notation) {
+            switch (panel.notation) {
 
-            case "wY":
-                txt = "<i>" + u[2] + "</i>";
-                break;
+                case "wY":
+                    txt = "<i>" + u[2] + "</i>";
+                    break;
 
-            default:
-                txt = convert_From_wY(u[2], panel.notation);
-                break;
+                default:
+                    txt = convert_From_wY(u[2], panel.notation);
+                    break;
 
-        }
+            }
 
-        panel.element.innerHTML = txt;
+            panel.element.innerHTML = txt;
 
-    });
+        })
+    };
 
     // Calculate total elapsed seconds and run it through formatSeconds
     const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
