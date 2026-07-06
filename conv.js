@@ -2508,6 +2508,7 @@ function calcMountain(s) {
 }
 
 function Y_to_DBMS(s) {
+    if (typeof s == "string") s = s.split(",");
     var mountain;
     mountain = calcMountain(s);
     var matrix = [];
@@ -2561,7 +2562,7 @@ function convert_From_wY(ord, mode) {
 
     if (mode == "OCN") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,13') == -1) {
-            return Conv_BMS_OCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber));
+            return Conv_BMS_OCF(trimArrayList(Y_to_DBMS(ord), BMS_Terms.valueAsNumber));
         }
         return ord;
     }

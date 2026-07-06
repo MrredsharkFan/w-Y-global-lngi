@@ -121,17 +121,10 @@ function update_page() {
 }
 
 const analysisPanels = [
-
     {
-        notation: "BMS",
-        width: 100,
-        hue: 120
-    },
-
-        {
         notation: "DBMS",
         width: 100,
-        hue: 60
+        hue: 120
     },
 
     {
