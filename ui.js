@@ -124,13 +124,13 @@ const analysisPanels = [
 
     {
         notation: "BMS",
-        width: 50,
+        width: 100,
         hue: 220
     },
 
     {
         notation: "OCN",
-        width: 50,
+        width: 100,
         hue: 120
     }
 
@@ -140,3 +140,9 @@ function updatefontsize() {
     const font_size = document.getElementById("font_size").value;
     document.documentElement.style.setProperty("--font-size", font_size + "px");
 }
+
+function updatefontfamily() {
+    const font_family = document.getElementById("font_family").value;
+    document.documentElement.style.setProperty("--font-family", font_family);
+}
+

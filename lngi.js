@@ -149,9 +149,9 @@ Width
 
 <select class="width">
 
-<option value="33">33%</option>
+<option value="33.33333333333">33%</option>
 <option value="50">50%</option>
-<option value="66">66%</option>
+<option value="66.66666666666">66%</option>
 <option value="100">100%</option>
 
 </select>
