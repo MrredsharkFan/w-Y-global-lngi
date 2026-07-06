@@ -477,6 +477,9 @@ h2 {
     flex: 1;
     background-color: #ffff8d;
     border-radius: 10px;
+    white-space: normal;   
+    overflow-wrap: anywhere;  
+    word-break: break-word;   
 }
 
 .fmilestone-box2 {
@@ -485,4 +488,8 @@ h2 {
     background-color: #b6e8ff;
     border-radius: 10px;
     min-height: 100px;
+    white-space: normal;   
+    overflow-wrap: anywhere;  
+    word-break: break-word;   
+    
 }
