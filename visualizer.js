@@ -412,7 +412,7 @@ const renderer = (() => {
             findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
         }
     }
-    var options = ["input","NUMBERTHICKNESS","MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
+    var options = ["input", "NUMBERTHICKNESS", "MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
     var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
     //rngdelak, DO NOT CHANGE THIS
     var config = {
@@ -478,6 +478,7 @@ const renderer = (() => {
         if (!optionChanged) return;
         if (recalculate && inputChanged) calculatedMountain = calcMountain(newConfig["inputc"], newConfig["MAXDIMENSIONS"]);
         else updateMountainString(newConfig["inputc"]);
+        Object.assign(config, newConfig);
         if (newConfig["STACKMODE"]) {
             var colpos = [];
             var rowpos = {};
@@ -743,27 +744,25 @@ const renderer = (() => {
         return "none";
     }
 
-    function setColorByRelationship(rel) {
-        if (config["HIGHLIGHT"] && rel === "ancestor") {
+    function setColorByRelationship(rel, currentConfig) { // Pass config here
+        if (currentConfig["HIGHLIGHT"] && rel === "ancestor") {
             ctx.fillStyle = "#00aa00";   // Green for Ancestors
             ctx.strokeStyle = "#00aa00";
-            ctx.lineWidth = config["LINETHICKNESS"] * 2;
-        } else if (config["HIGHLIGHT"] && rel === "child") {
+            ctx.lineWidth = currentConfig["LINETHICKNESS"] * 2;
+        } else if (currentConfig["HIGHLIGHT"] && rel === "child") {
             ctx.fillStyle = "#ff0000";   // Red for Children
             ctx.strokeStyle = "#ff0000";
-            ctx.lineWidth = config["LINETHICKNESS"] * 2;
-        } else if (config["HIGHLIGHT"] && rel === "active") {
+            ctx.lineWidth = currentConfig["LINETHICKNESS"] * 2;
+        } else if (currentConfig["HIGHLIGHT"] && rel === "active") {
             ctx.fillStyle = "#0000ff";   // Blue for Active Node
             ctx.strokeStyle = "#0000ff";
-            ctx.lineWidth = config["LINETHICKNESS"] * 2;
+            ctx.lineWidth = currentConfig["LINETHICKNESS"] * 2;
         } else {
-            // Fallback or when HIGHLIGHT is disabled
             ctx.fillStyle = "black";
             ctx.strokeStyle = "black";
-            ctx.lineWidth = config["LINETHICKNESS"];
+            ctx.lineWidth = currentConfig["LINETHICKNESS"];
         }
     }
-    // --- Updated Render Functions ---
 
     function render2Dmountain(m, x, y, config) {
         while (m.dim < 2) {
@@ -785,7 +784,7 @@ const renderer = (() => {
                 var currentY = y + config["ROWHEIGHT"] * (m.arr.length - j) - 3;
 
                 let rel = getNodeRelationship(point, highlightindex, calculatedMountain);
-                setColorByRelationship(rel);
+                setColorByRelationship(rel, config);
 
                 ctx.fillText(point.strexp || point.value, currentX, currentY);
 
@@ -832,7 +831,7 @@ const renderer = (() => {
             var yOffset = colLine * baseHeight;
 
             let rel = getNodeRelationship(point, highlightindex, m);
-            setColorByRelationship(rel);
+            setColorByRelationship(rel, config);
 
             ctx.fillText(point.strexp || point.value, colX + colWidth / 2, yOffset + (rowid + 1) * config["ROWHEIGHT"] - 3);
 
@@ -846,7 +845,7 @@ const renderer = (() => {
                 ctx.beginPath();
                 ctx.moveTo(colX + colWidth / 2, yOffset + (rowpos["c" + point.rightLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
                 ctx.lineTo(colX + colWidth / 2, yOffset + (rowid + 1) * config["ROWHEIGHT"]);
-                ctx.lineTo(parentX + parentInfo[0] / 2, yOffset + (rowid + 2) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
+                ctx.lineTo(parentX + parentInfo[0] / 2, parentYOffset + (rowid + 2) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
                 ctx.lineTo(parentX + parentInfo[0] / 2, parentYOffset + (rowpos["c" + point.leftLegCoord.slice(1).join(",")] + 1) * config["ROWHEIGHT"] - config["NUMBERSIZE"] * Math.min(config["LINEPLACE"], 1) - (config["ROWHEIGHT"] - config["NUMBERSIZE"]) * Math.max(config["LINEPLACE"] - 1, 0) - 3);
                 ctx.stroke();
             }
