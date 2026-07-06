@@ -412,7 +412,7 @@ const renderer = (() => {
             findByCoord(calculatedMountain, [j]).strexp = getstrexp(nums[j]);
         }
     }
-    var options = ["input","MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
+    var options = ["input","NUMBERTHICKNESS","MAXDIMENSIONS", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE"];
     var optionsWhichAffectMountain = ["input", "MAXDIMENSIONS"];
     //rngdelak, DO NOT CHANGE THIS
     var config = {

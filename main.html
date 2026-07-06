@@ -178,7 +178,10 @@
                     class="optionvalue">1</span></label>
             <label>Number Size <input id="NUMBERSIZE" type="range" min=4 max=96 value=15
                     oninput="renderer.requestDraw(true)"> <span id="NUMBERSIZE_value"
-                    class="optionvalue">15</span></label><br>
+                    class="optionvalue">15</span></label>
+            <label>Number Thickness <input id="NUMBERTHICKNESS" style="width:80px" type="range" min=100 max=900 value=400
+                    step=25 oninput="requestDraw()"> <span id="NUMBERTHICKNESS_value"
+                    class="optionvalue">?</span></label><br>
             <label>Max Dimensions <input id="MAXDIMENSIONS" type="number" min=0 value=10 step=1
                     oninput="renderer.requestDraw(true)"></label><br>
         </div>
