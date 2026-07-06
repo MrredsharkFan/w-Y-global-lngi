@@ -125,13 +125,19 @@ const analysisPanels = [
     {
         notation: "BMS",
         width: 100,
-        hue: 220
+        hue: 120
+    },
+
+        {
+        notation: "DBMS",
+        width: 100,
+        hue: 60
     },
 
     {
         notation: "OCN",
         width: 100,
-        hue: 120
+        hue: 220
     }
 
 ];
