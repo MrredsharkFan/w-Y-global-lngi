@@ -167,20 +167,20 @@
             <!--this is for anyone want to learn y-sequence. i updated the highlight that depend on your cursor on the input, the highlight will point its descendants and priority. also user not only watch but also learn. btw thats not as bad as you think-->
         </div>
         <div style="display: flex; flex-wrap: wrap;" id="actualcontainer">
-            <label>Row Height <input id="ROWHEIGHT" type="range" min=15 max=150 value=45
+            <label>Row Height <input id="ROWHEIGHT" type="range" min=1 max=200 value=45
                     oninput="renderer.requestDraw(true)"> <span id="ROWHEIGHT_value"
                     class="optionvalue">45</span></label>
-            <label>Column width <input id="COLUMNWIDTH" type="range" min=15 max=150 value=45
+            <label>Column width <input id="COLUMNWIDTH" type="range" min=1 max=200 value=45
                     oninput="renderer.requestDraw(true)"> <span id="COLUMNWIDTH_value"
                     class="optionvalue">45</span></label>
-            <label>Line Thickness <input id="LINETHICKNESS" type="range" min=1 max=15 value=1
+            <label>Line Thickness <input id="LINETHICKNESS" type="range" min=1 max=15 value=1 step=0.1
                     oninput="renderer.requestDraw(true)"> <span id="LINETHICKNESS_value"
                     class="optionvalue">1</span></label>
             <label>Number Size <input id="NUMBERSIZE" type="range" min=4 max=96 value=15
                     oninput="renderer.requestDraw(true)"> <span id="NUMBERSIZE_value"
                     class="optionvalue">15</span></label>
             <label>Number Thickness <input id="NUMBERTHICKNESS" style="width:80px" type="range" min=100 max=900 value=400
-                    step=25 oninput="requestDraw()"> <span id="NUMBERTHICKNESS_value"
+                     oninput="requestDraw()"> <span id="NUMBERTHICKNESS_value"
                     class="optionvalue">?</span></label><br>
             <label>Max Dimensions <input id="MAXDIMENSIONS" type="number" min=0 value=10 step=1
                     oninput="renderer.requestDraw(true)"></label><br>
