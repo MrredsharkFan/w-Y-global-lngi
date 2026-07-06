@@ -7,3 +7,5 @@
 - a much more organized and long living lngi
 
 - a high effort lngi
+
+- a supremely lngi
