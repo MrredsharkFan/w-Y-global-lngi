@@ -403,17 +403,16 @@ h2 {
     gap:15px;
 }
 
-.analysis-panel{
+.analysis-panel {
+    background: #ddd;
+    overflow-y: auto;
+    scrollbar-gutter: stable;   /* <- add this */
 
-    background:#ddd;
+    min-height: 30px;
+    height: 150px;
 
-    overflow:auto;
-
-    min-height:150px;
-
-    position:relative;
-
-    border-radius:5px;
+    position: relative;
+    border-radius: 5px;
 }
 
 .analysis-header {

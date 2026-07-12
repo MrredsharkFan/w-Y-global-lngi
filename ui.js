@@ -50,7 +50,7 @@ function makeResizable(panel){
         function move(ev){
 
             panel.style.height=
-                Math.max(60,startHeight+ev.clientY-startY)+"px";
+                Math.max(30,startHeight+ev.clientY-startY)+"px";
 
         }
 
