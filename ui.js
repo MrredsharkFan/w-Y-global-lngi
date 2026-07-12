@@ -128,7 +128,7 @@ const analysisPanels = [
     },
 
     {
-        notation: "OCN",
+        notation: "2-shifted OCF",
         width: 100,
         hue: 220
     }
