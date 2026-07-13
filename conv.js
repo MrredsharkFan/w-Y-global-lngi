@@ -8492,7 +8492,7 @@ const EcOCF = (() => {
    return{fs,cmp,isSuccessor,displayform,g,h,gInv,hInv,ZERO,Limit,f,sugar}
 })();
 
-let Lim_EcOCF_in_BMS = [[0,0,0,0],[1,1,1,1],[2,2,2,2]] // Lim(cOCF) is (0,0,0,0)(1,1,1,1)(2,2,2,2) in BMS
+let Lim_EcOCF_in_BMS = 'Limit' // Lim(cOCF) is (0,0,0,0)(1,1,1,1)(2,2,2,2) in BMS
 
 /*
 this is conversion is special : cOCF is symetrical to BMS except their bound ordinal
