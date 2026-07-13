@@ -1,5 +1,5 @@
 const modal = document.getElementById("settings_modal");
-
+//small fixes
 document.getElementById("settings_btn").onclick = () => {
     modal.classList.add("show");
 };
@@ -8,14 +8,14 @@ document.getElementById("close_settings").onclick = () => {
     modal.classList.remove("show");
 };
 
-
+// Close when clicking outside the dialog
 modal.onclick = (e) => {
     if (e.target === modal) {
         modal.classList.remove("show");
     }
 };
 
-
+// Optional: Close with Escape
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         modal.classList.remove("show");
@@ -79,9 +79,9 @@ Scratch_bar_height.addEventListener("input", function () {
     );
 });
 
-let page = 0; 
-
-
+let page = 0; // 0: main, 1: progress, 2: milestone (and 3: some cool mountain)
+//did u even do that
+//just compress it into a SINGLE FUNCTION thats so good :3
 const btn_lngi = document.getElementById("btn_lngi");
 
 btn_lngi.addEventListener("click", () => {
@@ -172,36 +172,36 @@ function updatefontfamily() {
 
 }
 
-
+// Function to save all settings on the page to localStorage
 function saveAllSettings() {
     const settings = {
-        
+        // Display Settings
         font_family: document.getElementById("font_family").value,
         font_size: Number(document.getElementById("font_size").value),
 
-        
+        // Notation Settings
         compress_bms: document.getElementById("compress_bms").checked,
         format_cOCF: document.getElementById("format_cOCF").checked,
 
-        
+        // Performance Settings
         Y_Terms: Number(document.getElementById("Y_Terms").value),
         BMS_Terms: Number(document.getElementById("BMS_Terms").value),
 
-        
+        // Milestone Settings
         Scratch_bar_height: Number(document.getElementById("Scratch_bar_height").value),
 
-        
+        // Visualizer (Mountain) Settings - Sizing
         ROWHEIGHT: Number(document.getElementById("ROWHEIGHT").value),
         COLUMNWIDTH: Number(document.getElementById("COLUMNWIDTH").value),
         LINETHICKNESS: Number(document.getElementById("LINETHICKNESS").value),
         NUMBERSIZE: Number(document.getElementById("NUMBERSIZE").value),
         NUMBERTHICKNESS: Number(document.getElementById("NUMBERTHICKNESS").value),
 
-        
+        // Visualizer Settings - Dimensions
         MAXDIMENSIONS: Number(document.getElementById("MAXDIMENSIONS").value),
         MaxTerms: Number(document.getElementById("MaxTerms").value),
 
-        
+        // Visualizer Settings - Toggles
         STACKMODE: document.getElementById("STACKMODE").checked,
         HIGHLIGHT: document.getElementById("HIGHLIGHT").checked,
         EXTRADIVIDER: document.getElementById("EXTRADIVIDER").checked,
@@ -211,7 +211,7 @@ function saveAllSettings() {
     localStorage.setItem("lngi_app_settings", JSON.stringify(settings));
 }
 
-
+// Function to load all settings back from localStorage
 function loadAllSettings() {
     const savedData = localStorage.getItem("lngi_app_settings");
     if (!savedData) return;
@@ -219,11 +219,11 @@ function loadAllSettings() {
     try {
         const settings = JSON.parse(savedData);
 
-        
+        // Helper function to safely apply values if they exist in storage
         const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
         const setCheck = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.checked = val; };
 
-        
+        // Apply values
         setVal("font_family", settings.font_family);
         setVal("font_size", settings.font_size);
         setCheck("compress_bms", settings.compress_bms);
@@ -243,7 +243,7 @@ function loadAllSettings() {
         setCheck("EXTRADIVIDER", settings.EXTRADIVIDER);
         setCheck("_UPDATEMODE", settings._UPDATEMODE);
 
-        
+        // Trigger existing CSS rule updates
         if (typeof updatefontfamily === "function") updatefontfamily();
         if (typeof updatefontsize === "function") updatefontsize();
         if (document.getElementById("Scratch_bar_height")) {
@@ -253,3 +253,27 @@ function loadAllSettings() {
         console.error("Failed to parse settings from localStorage:", e);
     }
 }
+
+// Automatically attach event listeners to save settings instantly whenever a change occurs
+function attachAutoSaveListeners() {
+    const selectorIds = [
+        "font_family", "font_size", "compress_bms", "format_cOCF",
+        "Y_Terms", "BMS_Terms", "Scratch_bar_height", 
+        "ROWHEIGHT", "COLUMNWIDTH", "LINETHICKNESS", "NUMBERSIZE", "NUMBERTHICKNESS",
+        "MAXDIMENSIONS", "MaxTerms", "STACKMODE", "HIGHLIGHT", "EXTRADIVIDER", "_UPDATEMODE"
+    ];
+
+    selectorIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            // Using 'input' captures slider movements, checkboxes, and typing in real-time
+            el.addEventListener("input", saveAllSettings);
+        }
+    });
+}
+
+// Initialize on page setup
+document.addEventListener("DOMContentLoaded", () => {
+    loadAllSettings();
+    attachAutoSaveListeners();
+});
