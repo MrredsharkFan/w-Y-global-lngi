@@ -181,7 +181,8 @@ Notation
 <option value="DBMS">DBMS</option>
 <option value="2-shifted OCF">2-shifted OCF</option>
 <option value="cOCF">cOCF</option>
-<option value="EcOCF">EcOCF</option>
+<option value="EcOCF">Extended cOCF</option>
+<option value="BcOCF">Bufed cOCF</option>
 <option value="PMS">PMS</option>
 <option value="AMS">AMS</option>
 <option value="0Y">0-Y</option>
