@@ -1995,7 +1995,7 @@ class cOCF {
                     ex = st[i][1];
                     m = this.displayform(st[i][2], true);
                     if (Array.isArray(st[i][2]) && st[i][2].length > 1)
-                        m = '(' + m + ')';
+                        m = '<span style="color: #666666; font-weight: bold;">(</span>' + m + '<span style="color: #666666; font-weight: bold;">)</span>';
                     else
                         m = this.unone(m);
                     if (ex != '')
@@ -6019,7 +6019,7 @@ const EcOCF = (() => {
                ex = st[i][1];
                m = displayform(st[i][2], true);
                if (Array.isArray(st[i][2]) && st[i][2].length > 1)
-                  m = '(' + m + ')';
+                  m = '<span style="color: #666666; font-weight: bold;">(</span>' + m + '<span style="color: #666666; font-weight: bold;">)</span>';
                else
                   m = unone(m);
                if (ex != '')
@@ -6041,7 +6041,7 @@ const EcOCF = (() => {
             s += ' + ';
             ex = st[i][0];
             if (Array.isArray(ex)) {
-               s += 'ω';
+               s += '<span style="color: #ff0000; font-weight: bold;">ω</span>';
                if (ex.length != 1 || ex[0][0] != 0 || ex[0][1] != 1)
                   s += '<sup>' + displayform(ex) + '</sup>';
                s += unone(st[i][1]);
@@ -6245,7 +6245,7 @@ const EcOCF = (() => {
          return 'ε<sub>0</sub>';
 
       if (nlevels == 1 && st == col)
-         return sugar[33] ? convertsubscript(sugar[33] ? 'ℵ' : 'ω', convertone()) : 'Ω';
+         return sugar[33] ? convertsubscript(sugar[33] ? 'ℵ' : '<span style="color: #ff0000; font-weight: bold;">ω</span>', convertone()) : '<span style="color: #001aff; font-weight: bold;">Ω</span>';
 
       if (st == col || st == bo)
          return st;
@@ -6591,18 +6591,18 @@ const EcOCF = (() => {
          }
          if (sy == 'Φ' && fx == col)
             //return (sugar[33]?'ℵ':'Ω')+(le==''?'':'<sub>'+le+'</sub>');
-            return le == '' ? (sugar[34] ? 'Ω' : 'ℵ') : convertsubscript(sugar[34] ? 'Ω' : sugar[33] ? 'ℵ' : 'ω', le);
+            return le == '' ? (sugar[34] ? '<span style="color: #001aff; font-weight: bold;">Ω</span>' : '<span style="color: #001aff; font-weight: bold;">ℵ</span>') : convertsubscript(sugar[34] ? '<span style="color: #001aff; font-weight: bold;">Ω</span>' : sugar[33] ? '<span style="color: #001aff; font-weight: bold;">ℵ</span>' : '<span style="color: #ff0000; font-weight: bold;">ω</span>', le);
          if (sy == 'I-Φ' && fx == bb(col, col))
             //return 'I'+(le==''?'':'<sub>'+le+'</sub>');
-            return le == '' ? 'I' : convertsubscript('I', le);
+            return le == '' ? '<span style="color: #8d8d8d; font-weight: bold;">I</span>' : convertsubscript('<span style="color: #8d8d8d; font-weight: bold;">I</span>', le);
          //if(sy!='φ'&&sy!='Φ'&&sy!='I-Φ')
          //   return sy+(le==''?'':'<sub>'+le+'</sub>');
          //if(sy=='M'&&fx=='c[c[c!!')
          if (sy == 'M')
             //return 'M'+(le==''?'':'<sub>'+le+'</sub>');
-            return le == '' ? 'M' : convertsubscript('M', le);
+            return le == '' ? '<span style="color: #8d8d8d; font-weight: bold;">M</span>' : convertsubscript('<span style="color: #8d8d8d; font-weight: bold;">M</span>', le);
          if (sy == 'K')
-            return le == '' ? 'K' : convertsubscript('K', le);
+            return le == '' ? '<span style="color: #8d8d8d; font-weight: bold;">K</span>' : convertsubscript('<span style="color: #8d8d8d; font-weight: bold;">K</span>', le);
 
          // old version (without @)	
          /*	   
@@ -6651,7 +6651,7 @@ const EcOCF = (() => {
 
          //return sy+'('+s.slice(2)+', '+le+')';   
          //return sy+'('+s.slice(2)+le+')';
-         return sy + '(' + s + ')';
+         return sy + '<span style="color: #666666; font-weight: bold;">(</span>' + s + '<span style="color: #666666; font-weight: bold;">)</span>';
       }
       return bb(beta == '' ? '' : (displayform(cnf(beta, ext), ext)), displayform(cnf(x, ext), ext));
    }
@@ -6737,7 +6737,7 @@ const EcOCF = (() => {
    }
 
    function convertat(p) {
-      return sugar[31] ? convertpower('@', sugar[19] ? p : arraytoposition(p), false) : '@ ' + arraytoposition(p);
+      return sugar[31] ? convertpower('<span style="color: #8d008d; font-weight: bold;">@</span>', sugar[19] ? p : arraytoposition(p), false) : '<span style="color: #8d008d; font-weight: bold;">@</span> ' + arraytoposition(p);
    }
 
    function convertarray(p, neo) {
@@ -6910,9 +6910,9 @@ const EcOCF = (() => {
 
    function convertomega() {
       if (sugar[15])
-         return 'ω';
+         return '<span style="color: #ff0000; font-weight: bold;">ω</span>';
       if (sugar[34])
-         return convertsubscript('Ω', convertzero());
+         return convertsubscript('<span style="color: #001aff; font-weight: bold;">Ω</span>', convertzero());
       if (sugar[33])
          return convertsubscript('ℵ', convertzero());
       if (sugar[28] && (sugar[30] || !sugar[41]))
@@ -6952,7 +6952,7 @@ const EcOCF = (() => {
          else if (st[e] == '!' || st[e] == ')' || st[e] == '}' || (e > 0 && st.slice(e - 1, e + 1) == '</'))
             np++;
       }
-      return e < 0 ? st : '(' + st + ')';
+      return e < 0 ? st : '<span style="color: #666666; font-weight: bold;">(</span>' + st + '<span style="color: #666666; font-weight: bold;">)</span>';
    }
 
    function arraytoposition(st) {
@@ -6980,7 +6980,7 @@ const EcOCF = (() => {
          else if (st[e] == '!' || st[e] == ')' || st[e] == '}' || (e > 0 && st.slice(e - 1, e + 1) == '</'))
             np++;
       }
-      return e < 0 ? st : '(' + st + ')';
+      return e < 0 ? st : '<span style="color: #666666; font-weight: bold;">(</span>' + st + '<span style="color: #666666; font-weight: bold;">)</span>';
    }
 
    function convertproduct(st, m) {
@@ -7016,7 +7016,7 @@ const EcOCF = (() => {
    }
 
    function displayfunction(f, sub, st, subexists = true) {
-      return (subexists ? convertsubscript(f, sub) : f) + '(' + st + ')';
+      return (subexists ? convertsubscript(f, sub) : f) + '<span style="color: #666666; font-weight: bold;">(</span>' + st + '<span style="color: #666666; font-weight: bold;">)</span>';
    }
 
    function displaypsi(sub, st, subexists = true) {
@@ -7024,7 +7024,7 @@ const EcOCF = (() => {
    }
 
    function displayphi(st) {
-      return displayfunction('φ', '', st, false);
+      return displayfunction('<span style="color: #888888; font-weight: bold;">φ</span>', '', st, false);
    }
 
    function getOmeganumber(st) {
@@ -7527,7 +7527,7 @@ const EcOCF = (() => {
       opn[1] = convertnatural(opn[1]);
       //return JSON.stringify(opn).replaceAll('"','');
       //return 'Π('+JSON.stringify(opn).replaceAll('"','').slice(1,-1)+')';
-      return s + '(' + opn[0] + ',' + opn[1] + ')';
+      return s + '<span style="color: #666666; font-weight: bold;">(</span>' + opn[0] + ',' + opn[1] + '<span style="color: #666666; font-weight: bold;">)</span>';
    }
 
    function convertepa(epa) {
@@ -8379,14 +8379,14 @@ const EcOCF = (() => {
    let subperiodpositionshift = 0;
    let leastuncountable = '[c!', leastepsilon = '[[c!!', leastepsilonbb = '[[[c!!!';
    let initlargeordinal = bo;
-   let sugar = [1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 35, 36, 37, 38, 39, 0, 0];
+   let sugar = [1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 35, 36, 37, 38, 39, 1, 0];
    let sugardefault = [[...sugar], [...sugar]];
    sugardefault[0][10] = 0;
    let sugarbuttoncolor = ['#d0e0ff', '#fff080', '#d0ffd0', '#d0ffff', '', '', '', '', '#ffff00', '#d0ffff', '#d0ffd0', '#d0ffd0', '#ffe0e0', '#fff0e0', '#d0ffd0', '#d0ffd0', '#d0ffd0', '#d0ffd0', '#d0ffd0', '#ffd0ff', '#ffd0ff', '#d0e0ff', '#d0e0ff', '#c0ffff', '#b0ffb0', '#ffe0e0', '#a0f0c0', '#fff000', '#fafa00', '#f0f040', '#f0f040', '#f0f040', '#f0f040', '#c0ffff', '#c0ffff', 35, 36, 37, 38, 39, '#ffd000', '#f0f040'];
    let sugarbuttonnumber = [1, 2, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1];
    let multiplicationsign = ['×', '·'];
    let propernames = ['Small Cantor ordinal', 'Cantor ordinal', 'Large Cantor ordinal', 'Feferman–Schütte ordinal', 'Ackermann ordinal', 'Small Veblen ordinal', 'Large Veblen ordinal', 'Second Large Veblen ordinal', 'Bachmann-Howard ordinal', 'Buchholz ordinal', 'Takeuti-Feferman-Buchholz ordinal', 'Bird ordinal', 'Extended Buchholz ordinal', 'Small Rathjen ordinal', 'Rathjen ordinal', 'Large Rathjen ordinal', 'Duchhardt ordinal'];
-   let shortpropernames = ['', '', '', '', 'AO', 'SVO', 'LVO', 'SLVO', 'BHO', 'BO', 'TFB', 'BiO', '', 'SRO', 'RO', 'LRO', 'DO'];
+   let shortpropernames = ['', '', '', '', 'AO', 'SVO', 'LVO', 'SLVO', '<span style="color: #1900ff; font-weight: bold;">BHO</span>', 'BO', 'TFB', 'BiO', '', 'SRO', 'RO', 'LRO', 'DO'];
    let propernamestring = ['[[c!!', '[[c![[c!!!', '[[c![[c!![[c!!!', '[[c![[c![[c!!!!', '[[c![[c![[c!![[c!!!!', '[[c![[c![[c![!!!!', '[[c![[c![[c![[c!!!!!', '[[c![[c![[c![[c!!!![[c![[c![[c!!!!!', '[[c![c!!', '[[c[!!!', '[[c[!![c!!', '[[c[[c!!!!', '[[c[c!!!', '[[c[c!![c!!', '[[c[c[c!!![c!!', '[[c[c[c[c!!!![c!!', '[[c[c[c[c[c!!!!![c!!'];
    let modoldc = 0;
    let modc = 0;

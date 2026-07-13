@@ -275,7 +275,7 @@ h2 {
     padding: 4px 10px;
     border: 1px solid #bbb;
     border-radius: 4px;
-    background: #519cff;
+    background: #67a9ff;
     cursor: pointer;
     white-space: nowrap;
 }
@@ -284,7 +284,16 @@ h2 {
     padding: 4px 10px;
     border: 1px solid #bbb;
     border-radius: 4px;
-    background: #00ffdd;
+    background: #00ffdd62;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#btn_search {
+    padding: 4px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #70ff7c;
     cursor: pointer;
     white-space: nowrap;
 }
@@ -293,7 +302,7 @@ h2 {
     padding: 4px 10px;
     border: 1px solid #bbb;
     border-radius: 4px;
-    background: #b4ff51;
+    background: #e9ff85;
     cursor: pointer;
     white-space: nowrap;
 }

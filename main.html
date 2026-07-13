@@ -17,9 +17,10 @@
             <div id="online"></div>
             <div class="status-buttons">
                 <button id="btn_lngi">Lngi & Analysis</button>
+                <button id="btn_milestone">Milestone</button>
                 <button id="btn_progress">Progress</button>
                 <button id="mountain_btn">Visualizer</button>
-                <button id="btn_milestone">Milestone</button>
+                <button id="btn_search">Search</button>
                 <button id="settings_btn">Settings</button>
             </div>
         </div>
@@ -177,18 +178,23 @@
             <label>Column width <input id="COLUMNWIDTH" type="range" min=1 max=200 value=45
                     oninput="renderer.requestDraw(true)"> <span id="COLUMNWIDTH_value"
                     class="optionvalue">45</span></label>
-            <label>Line Thickness <input id="LINETHICKNESS" type="range" min=1 max=15 value=1 step = 0.1
+            <label>Line Thickness <input id="LINETHICKNESS" type="range" min=1 max=15 value=1 step=0.1
                     oninput="renderer.requestDraw(true)"> <span id="LINETHICKNESS_value"
                     class="optionvalue">1</span></label>
             <label>Number Size <input id="NUMBERSIZE" type="range" min=4 max=96 value=15
                     oninput="renderer.requestDraw(true)"> <span id="NUMBERSIZE_value"
                     class="optionvalue">15</span></label>
-            <label>Number Thickness <input id="NUMBERTHICKNESS" style="width:80px" type="range" min=100 max=900 value=400
-                    step=1 oninput="renderer.requestDraw(true)"> <span id="NUMBERTHICKNESS_value"
-                    class="optionvalue">?</span></label><br>
-            <label>Max Dimensions <input id="MAXDIMENSIONS" type="number" min=0 value=10 step=1
-                    oninput="renderer.requestDraw(true)"></label><br>
+            <label>Number Thickness <input id="NUMBERTHICKNESS" style="width:80px" type="range" min=100 max=900
+                    value=400 step=1 oninput="renderer.requestDraw(true)"> <span id="NUMBERTHICKNESS_value"
+                    class="optionvalue">?</span></label>
         </div>
+
+        <div id="secondcontainer" style="display: flex">
+            <label>Max Dimensions <input id="MAXDIMENSIONS" type="number" min=0 value=10 step=1
+                    oninput="renderer.requestDraw(true)"></label>
+            <label>Max &omega;-Y Terms <input id="MaxTerms" type="number" min=0 value=0 step=1></label>
+        </div>
+        
         <div id="secondcontainer" style="display: flex">
             <label><input id="STACKMODE" type="checkbox" checked oninput="renderer.requestDraw(true)"> Stack
                 Mode</label>
@@ -270,6 +276,7 @@
 <script src="ui.js"></script>
 <script src="conv.js"></script>
 <script src="lngi.js"></script>
+<script src="search.js"></script>
 <script src="milestone.js"></script>
 <script src="visualizer.js"></script>
 
