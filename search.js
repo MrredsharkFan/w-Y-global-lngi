@@ -141,7 +141,7 @@ function enableHold(button, callback) {
     function start(e) {
         e.preventDefault();
 
-        callback(); // first press immediately
+        callback(); 
 
         timeout = setTimeout(() => {
             interval = setInterval(callback, 1);
@@ -165,17 +165,17 @@ function enableHold(button, callback) {
 function initializeMilestoneInputs() {
     const now = new Date();
 
-    // Day
+    
     mile_date.valueAsDate = now;
 
-    // Month
+    
     mile_month.value =
         `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 
-    // Year
+    
     mile_year.value = now.getFullYear();
 
-    // Calculate the results immediately
+    
     updateDay();
     updateMonth();
     updateYear();
@@ -201,7 +201,7 @@ document.querySelectorAll("[data-year]").forEach(btn => {
 
 
 
-//search time goes here right :3
+
 function search_time() {
     var t = document.getElementById("search_input").value
     var r = ""
@@ -211,7 +211,7 @@ function search_time() {
         return
     }
     else {
-        //i hate i have to do this
+        
         var l = t.split(",")
         var guess = Number(l[1])+1
         var interval = 0.5

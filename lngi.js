@@ -1,20 +1,41 @@
 var tt = 0
 const analysisContainer = document.getElementById("analysis_container");
-// convert second to day,hour,minutes
+let st = (1782316800000 + 23 * 3600000) + 864 * 1000
+var timeSpeed = 1.0;
+var timeOffset = 0;       
+var virtualElapsed = Date.now() - st; 
+var lastRealTime = Date.now();
+
+const speedInput = document.getElementById("input_timeSpeed");
+const offsetInput = document.getElementById("input_timeOffset");
+
+function resettime() {
+    virtualElapsed = Date.now() - st
+    timeOffset = 0
+    timeSpeed = 1
+    speedInput.value = "1";
+    offsetInput.value = "0";
+}
+
+if (speedInput && offsetInput) {
+    speedInput.addEventListener("input", function () {
+        let val = parseFloat(speedInput.value);
+        timeSpeed = isNaN(val) ? 0 : val;
+    });
+
+    offsetInput.addEventListener("input", function () {
+        let val = parseFloat(offsetInput.value);
+        timeOffset = isNaN(val) ? 0 : val * 1000;
+    });
+}
 function formatSeconds(totalSeconds) {
     if (totalSeconds <= 0) return "0 seconds";
-
-    // 1. Calculate the values and update the remainder using %=
     let s = totalSeconds;
     const days = Math.floor(s / 86400); s %= 86400;
     const hours = Math.floor(s / 3600); s %= 3600;
     const minutes = Math.floor(s / 60); s %= 60;
     const seconds = s;
-
-    // 2. Helper function to handle plurals and skip zeros
     const p = (val, unit) => val > 0 ? `${val} ${unit}${val > 1 ? 's' : ''}` : null;
-
-    // 3. Build the array and filter out the nulls (zeros)
     const parts = [
         p(days, 'day'),
         p(hours, 'hour'),
@@ -25,7 +46,6 @@ function formatSeconds(totalSeconds) {
     return parts.filter(Boolean).join(' ');
 }
 function scratch_bar_init() {
-    //scratch bars!!!
     for (var i = 0; i < 53; i++) {
         const p = document.createElement("div")
         p.style.height = "6.25%";
@@ -38,7 +58,7 @@ function scratch_bar_init() {
 }
 
 var lt = 0
-function update_scratch_bars(x) {
+function update_scratch_bars(x, currentSimulatedTime) {
     for (var i = 0; i < 53; i++) {
         if (i < super_list.length) {
             var u = x + super_list[i][2] / (2 ** super_list[i][1] / 2)
@@ -46,19 +66,16 @@ function update_scratch_bars(x) {
                 u = Math.ceil(x)
             }
             var t = get_time_inv(u)
+            const secondsLeft = Math.max(0, ((t + st) - currentSimulatedTime) / 1000);
 
-            // Calculate seconds remaining from now until the target time (t + st)
-            const secondsLeft = Math.max(0, ((t + st) - Date.now()) / 1000);
             if (page == 1) {
                 document.getElementById(`bar_${i}`).style.visibility = "visible"
-                if (page == 1) {
-                    document.getElementById(`bar_${i}`).innerHTML =
-                        `${convert_From_wY(super_list[i][0] + (i == super_list.length - 1 ? ",1" : ""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + Date.now()).toLocaleString()}`})</small>`
+                document.getElementById(`bar_${i}`).innerHTML =
+                    `${convert_From_wY(super_list[i][0] + (i == super_list.length - 1 ? ",1" : ""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
+                ${tt == 0 ? `${formatSeconds(secondsLeft)} left` : `in ${new Date(secondsLeft * 1000 + currentSimulatedTime).toLocaleString()}`})</small>`
 
-                    document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
-                    document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
-                }
+                document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
+                document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
             }
             if (i + 1 == super_list.length) {
                 lt = secondsLeft
@@ -109,7 +126,6 @@ function ntl(m) {
         ord = ord.split(",");
         ord.pop();
         ord = ord.join(",");
-        //probably?
     }
     return [ord, m, exp]
 }
@@ -232,20 +248,17 @@ document.getElementById("analysis_add").onclick = () => {
 
 renderAnalysisPanels();
 
-//Start time: 25/6 UTC+8 | 23:00
-const st = (1782316800000 + 23 * 3600000) + 864 * 1000
-//const st = Date.now() - get_time_inv(6)
-
 function num_time(t) {
-    var t = Math.max(0, t - st)
-    if (t == 0) {
-        return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st - Date.now()) / 1000).toFixed(3)}s</span>`
+    var t_elapsed = Math.max(0, t - st)
+    if (t_elapsed == 0) {
+        return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st - t) / 1000).toFixed(3)}s</span>`
     } else {
-        var u = get_time(t)
+        var u = get_time(t_elapsed)
         var j = num_to_lngi(u)
 
         document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
-        update_scratch_bars(u)
+        update_scratch_bars(u, t)
+
         document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
         return [`${((1 - j[1]) * 100).toFixed(3)}%`, formatSeconds(lt), j[0]]
     }
@@ -257,41 +270,47 @@ let sync_mountain = document.getElementById("_UPDATEMODE")
 let MaxYTerms = document.getElementById("MaxTerms")
 
 function update() {
-    tps = 1000 / (Date.now() - last_tick)
-    last_tick = Date.now()
-    var u = num_time(Date.now())
+    var now = Date.now();
+    tps = 1000 / (now - last_tick);
+    last_tick = now;
+    var deltaRealTime = now - lastRealTime;
+    lastRealTime = now;
+    virtualElapsed += deltaRealTime * timeSpeed;
+    var simulatedTime = st + virtualElapsed + timeOffset;
+    var u = num_time(simulatedTime);
+
     document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
     document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
     document.getElementById("tps").innerHTML = `${tps.toFixed(1)} tps`
-    if (page == 3 && sync_mountain.checked) { document.getElementById("input").value = trimStringList(u[2],MaxYTerms.valueAsNumber) }
+    if (page == 3 && sync_mountain.checked) { document.getElementById("input").value = trimStringList(u[2], MaxYTerms.valueAsNumber) }
     if (page == 0) {
         analysisPanels.forEach(panel => {
-
             let txt = "";
-
             switch (panel.notation) {
-
                 case "wY":
                     txt = "<i>" + u[2] + "</i>";
                     break;
-
                 default:
                     txt = convert_From_wY(u[2], panel.notation);
                     break;
-
             }
-
             panel.element.innerHTML = txt;
-
         })
     };
-
-    // Calculate total elapsed seconds and run it through formatSeconds
-    const elapsedSeconds = Math.max(0, (Date.now() - st) / 1000);
-    document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(elapsedSeconds)}`
+    const modifiedElapsedSeconds = Math.max(0, (virtualElapsed + timeOffset) / 1000);
+    let timeStatusText = "";
+    const trueElapsedSeconds = Math.max(0, (now - st) / 1000);
+    const diff = modifiedElapsedSeconds - trueElapsedSeconds;
+    if (Math.abs(diff) > 0.1 || Math.abs(timeSpeed - 1.0) > 0.001) {
+        if (diff > 0) {
+            timeStatusText = ` <b style="color: red;">(forwarded ${formatSeconds(Math.abs(diff))})</b>`;
+        } else if (diff < 0) {
+            timeStatusText = ` <b style="color: red;">(backwarded ${formatSeconds(Math.abs(diff))})</b>`;
+        }
+    }
+    document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(modifiedElapsedSeconds)}${timeStatusText}`;
     document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
 
-    //idk but i took inspiration from meta omega zero layers thing
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
     requestAnimationFrame(update);
 }
