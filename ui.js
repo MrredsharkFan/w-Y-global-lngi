@@ -278,25 +278,3 @@ document.addEventListener("DOMContentLoaded", () => {
     attachAutoSaveListeners();
 });
 
-const music = document.getElementById("bgMusic");
-const musicEnabled = document.getElementById("music_enabled");
-const musicVolume = document.getElementById("music_volume");
-
-music.volume = musicVolume.value / 100;
-
-// Toggle music
-musicEnabled.addEventListener("change", () => {
-    localStorage.setItem("musicEnabled", musicEnabled.checked);
-
-    if (musicEnabled.checked) {
-        music.play().catch(() => {});
-    } else {
-        music.pause();
-    }
-});
-
-// Change volume
-musicVolume.addEventListener("input", () => {
-    music.volume = musicVolume.value / 100;
-    localStorage.setItem("musicVolume", musicVolume.value);
-});
