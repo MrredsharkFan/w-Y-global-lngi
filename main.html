@@ -282,24 +282,7 @@
                 <label>Number of converted BMS terms (put zero for all terms) <input id="BMS_Terms" type="number" min=0
                         value=0 step=1></label>
             </div>
-
-            <div class="modal-header">
-                <h3>Music</h3>
-            </div>
-
-            <div class="modal-body checkbox-row">
-                <input type="checkbox" id="music_enabled">
-                <label for="music_enabled">Enable background music</label>
-            </div>
-
-            <div class="modal-body checkbox-row">
-                <label>Volume <input type="range" id="music_volume" min="0" max="100" value="30"></label>
-            </div>
         </div>
-
-        <audio id="bgMusic" loop preload="auto">
-            <source src="Sources/øneheart x reidenshi - snowfall.mp3" type="audio/mpeg">
-        </audio>
 </body>
 <script>
     window._nativeSetInterval = window.setInterval;
