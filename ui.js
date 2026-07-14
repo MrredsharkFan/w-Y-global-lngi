@@ -282,17 +282,7 @@ const music = document.getElementById("bgMusic");
 const musicEnabled = document.getElementById("music_enabled");
 const musicVolume = document.getElementById("music_volume");
 
-// Load saved settings
-musicEnabled.checked = localStorage.getItem("musicEnabled") === "true";
-musicVolume.value = localStorage.getItem("musicVolume") || 30;
-
 music.volume = musicVolume.value / 100;
-
-if (musicEnabled.checked) {
-    music.play().catch(() => {
-        // Browser blocks autoplay until user interacts.
-    });
-}
 
 // Toggle music
 musicEnabled.addEventListener("change", () => {
