@@ -120,7 +120,9 @@ h2 {
     height: 60px;
 }
 
-#main_lngi_Content {font-size : calc(var(--font-size) * 1.6);}
+#main_lngi_Content {
+    font-size: calc(var(--font-size) * 1.6);
+}
 
 /* Scratch area */
 #scratch_bars {
@@ -325,13 +327,15 @@ h2 {
     white-space: nowrap;
 }
 
-#future-milestone { background-color: rgba(0, 0, 0, 0); padding: 10px; text-align: center; border-radius: 10px; display: none; flex-direction: column; gap: 10px;    width: 100%;align-items: stretch; }
-
-.fmilestone-box,
-.fmilestone-box2,
-.time-control-panel {
+#future-milestone {
+    background-color: rgba(0, 0, 0, 0);
+    text-align: center;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
     width: 100%;
-    box-sizing: border-box;
+    align-items: stretch;
 }
 
 .extreme_step {
@@ -396,23 +400,24 @@ h2 {
     cursor: pointer;
 }
 
-.analysis-toolbar{
-    display:flex;
-    gap:10px;
-    align-items:center;
+.analysis-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-#analysis_container{
-    display:flex;
+#analysis_container {
+    display: flex;
     box-sizing: border-box;
-    flex-wrap:wrap;
-    gap:15px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .analysis-panel {
     background: #ddd;
     overflow-y: auto;
-    scrollbar-gutter: stable;   /* <- add this */
+    scrollbar-gutter: stable;
+    /* <- add this */
 
     min-height: 30px;
     height: 150px;
@@ -423,7 +428,7 @@ h2 {
 
 .analysis-header {
     display: flex;
-    flex-wrap: wrap;      
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-bottom: 10px;
@@ -434,9 +439,10 @@ h2 {
     flex: 0 1 auto;
     min-width: 0;
 }
-.analysis-content{
-    font-size : calc(var(--font-size) * 1.35);
-    margin-top:10px;
+
+.analysis-content {
+    font-size: calc(var(--font-size) * 1.35);
+    margin-top: 10px;
 }
 
 #mountain {
@@ -453,13 +459,13 @@ h2 {
 }
 
 #outputcontainer {
-    max-width: 100%; 
+    max-width: 100%;
 }
 
 #output {
     display: block;
     max-width: 100%;
-    height: auto;   
+    height: auto;
 }
 
 #actualcontainer,
@@ -467,16 +473,20 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px 24px; /* 12px vertical, 24px horizontal */
+    gap: 12px 24px;
+    /* 12px vertical, 24px horizontal */
 }
 
-#actualcontainer > label,
-#secondcontainer > label {
+#actualcontainer>label,
+#secondcontainer>label {
     display: inline-flex;
     align-items: center;
-    gap: 8px;              /* space between label and input */
-    white-space: nowrap;   /* keep label + input together */
-    flex: 0 0 auto;        /* don't stretch */
+    gap: 8px;
+    /* space between label and input */
+    white-space: nowrap;
+    /* keep label + input together */
+    flex: 0 0 auto;
+    /* don't stretch */
 }
 
 .fmilestone-box {
@@ -494,10 +504,11 @@ h2 {
 }
 
 .time-control-panel {
-    margin: 0;                 /* remove the extra spacing */
+    margin: 0;
+    /* remove the extra spacing */
     padding: 10px;
     border-radius: 10px;
-    background: rgba(0,179,0,.55);
+    background: rgba(0, 179, 0, .55);
 
     display: flex;
     gap: 15px;
