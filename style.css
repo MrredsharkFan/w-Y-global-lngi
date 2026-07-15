@@ -327,14 +327,15 @@ h2 {
 
 
 #future-milestone {
-    background-color: rgba(0, 0, 0, 0);
-    padding: 10px;
-    text-align: center;
-    border-radius: 10px;
+    width: 100%;
+    align-items: stretch;
+}
 
-    display: none;
-    flex-direction: column;
-    gap: 10px
+.fmilestone-box,
+.fmilestone-box2,
+.time-control-panel {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .extreme_step {
