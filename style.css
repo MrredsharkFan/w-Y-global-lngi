@@ -495,3 +495,17 @@ h2 {
     border-radius: 10px;
     min-height: 100px;
 }
+
+.time-control-panel {
+    margin: 0;                 /* remove the extra spacing */
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(0,179,0,.55);
+
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    width: 100%;
+    box-sizing: border-box;
+}
