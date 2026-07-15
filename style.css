@@ -325,11 +325,7 @@ h2 {
     white-space: nowrap;
 }
 
-
-#future-milestone {
-    width: 100%;
-    align-items: stretch;
-}
+#future-milestone { background-color: rgba(0, 0, 0, 0); padding: 10px; text-align: center; border-radius: 10px; display: none; flex-direction: column; gap: 10px;    width: 100%;align-items: stretch; }
 
 .fmilestone-box,
 .fmilestone-box2,
