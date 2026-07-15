@@ -33,39 +33,40 @@ scratch_bar_display_div.addEventListener("change", () => {
 let compress_BMS = document.getElementById("compress_bms")
 let format_cOCF = document.getElementById("format_cOCF")
 
-function makeResizable(panel) {
-
-    const handle = panel.querySelector(".resize-handle");
-
+function makeResizable(panelElement, panelState) {
+    const handle = panelElement.querySelector(".resize-handle");
     let startY;
     let startHeight;
+    let currentHeight;
+    let ticking = false;
 
     handle.addEventListener("pointerdown", e => {
-
         e.preventDefault();
-
         startY = e.clientY;
-        startHeight = panel.offsetHeight;
+        startHeight = panelElement.offsetHeight;
 
         function move(ev) {
+            currentHeight = Math.max(30, startHeight + ev.clientY - startY);
 
-            panel.style.height =
-                Math.max(30, startHeight + ev.clientY - startY) + "px";
-
+            // Throttle style updates with window.requestAnimationFrame
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    panelElement.style.height = currentHeight + "px";
+                    panelState.height = currentHeight + "px"; // Store immediately inside the state object
+                    ticking = false;
+                });
+                ticking = true;
+            }
         }
 
         function up() {
-
             window.removeEventListener("pointermove", move);
             window.removeEventListener("pointerup", up);
-
         }
 
         window.addEventListener("pointermove", move);
         window.addEventListener("pointerup", up);
-
     });
-
 }
 
 document.querySelectorAll(".resizable").forEach(makeResizable);
@@ -127,19 +128,9 @@ function update_page() {
     document.getElementById("mountain").hidden = (page != 3)
 }
 
-const analysisPanels = [
-    {
-        notation: "DBMS",
-        width: 100,
-        hue: 120
-    },
-
-    {
-        notation: "2-shifted OCF",
-        width: 100,
-        hue: 220
-    },
-
+let analysisPanels = [
+    { id: "panel_" + Math.random().toString(36).substr(2, 9), notation: "DBMS", width: 100, hue: 120, height: "150px" },
+    { id: "panel_" + Math.random().toString(36).substr(2, 9), notation: "2-shifted OCF", width: 100, hue: 220, height: "150px" }
 ];
 
 function updatefontsize() {
@@ -271,6 +262,47 @@ function attachAutoSaveListeners() {
         }
     });
 }
+
+document.getElementById("btn_save_layout").onclick = () => {
+    // Collect states safely before mapping to clean up circular elements (like .element nodes)
+    const serializedPanels = analysisPanels.map(panel => {
+        return {
+            notation: panel.notation,
+            width: panel.width,
+            hue: panel.hue,
+            height: panel.height || "150px"
+        };
+    });
+
+    localStorage.setItem("lngi_layout_save", JSON.stringify(serializedPanels));
+};
+
+// Manual Load Button Click Handler
+document.getElementById("btn_load_layout").onclick = () => {
+    const rawData = localStorage.getItem("lngi_layout_save");
+    if (!rawData) {
+        return;
+    }
+
+    try {
+        const parsedLayout = JSON.parse(rawData);
+        
+        // Rebuild elements mapping unique IDs so properties can be mutated smoothly
+        analysisPanels = parsedLayout.map(panel => {
+            return {
+                id: "panel_" + Math.random().toString(36).substr(2, 9),
+                notation: panel.notation,
+                width: panel.width,
+                hue: panel.hue,
+                height: panel.height
+            };
+        });
+
+        // Re-render layout completely
+        renderAnalysisPanels();
+    } catch (e) {
+    }
+};
 
 // Initialize on page setup
 document.addEventListener("DOMContentLoaded", () => {

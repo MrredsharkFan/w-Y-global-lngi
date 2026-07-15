@@ -144,107 +144,86 @@ function get_time_inv(n) {
 }
 
 function renderAnalysisPanels() {
-
     analysisContainer.innerHTML = "";
 
-    analysisPanels.forEach((panel, index) => {
-
+    analysisPanels.forEach((panel) => {
         const card = document.createElement("div");
-
         card.className = "card resizable analysis-panel";
+        card.id = panel.id; // Assign ID to prevent scraping all cards on property change
         card.style.flexBasis = `calc(${panel.width}% - ${(100 - panel.width) / 100 * 15}px)`;
         card.style.backgroundColor = `hsl(${panel.hue}, 85%, 82%)`;
+        
+        if (panel.height) {
+            card.style.height = panel.height;
+        }
 
         card.innerHTML = `
-
-<div class="analysis-header">
-
-<button class="remove">Remove</button>
-
-Width
-
-<select class="width">
-
-<option value="33.33333333333">33%</option>
-<option value="50">50%</option>
-<option value="66.66666666666">66%</option>
-<option value="100">100%</option>
-
-</select>
-
-Notation
-
-<select class="notation">
-
-<option value="wY">ω-Y</option>
-<option value="BMS">BMS</option>
-<option value="DBMS">DBMS</option>
-<option value="2-shifted OCF">2-shifted OCF</option>
-<option value="cOCF">cOCF</option>
-<option value="EcOCF">Extended cOCF</option>
-<option value="BcOCF">Bufed cOCF</option>
-<option value="PMS">PMS</option>
-<option value="AMS">AMS</option>
-<option value="0Y">0-Y</option>
-<option value="Vulcaniz">Vulcaniz</option>
-
-</select>
-
-</div>
-
-<div class="analysis-content"></div>
-
-<div class="resize-handle"></div>
-
-`;
+            <div class="analysis-header">
+                <button class="remove">Remove</button>
+                Width
+                <select class="width">
+                    <option value="33.33333333333">33%</option>
+                    <option value="50">50%</option>
+                    <option value="66.66666666666">66%</option>
+                    <option value="100">100%</option>
+                </select>
+                Notation
+                <select class="notation">
+                    <option value="wY">ω-Y</option>
+                    <option value="BMS">BMS</option>
+                    <option value="DBMS">DBMS</option>
+                    <option value="2-shifted OCF">2-shifted OCF</option>
+                    <option value="cOCF">cOCF</option>
+                    <option value="EcOCF">Extended cOCF</option>
+                    <option value="BcOCF">Bufed cOCF</option>
+                    <option value="PMS">PMS</option>
+                    <option value="AMS">AMS</option>
+                    <option value="0Y">0-Y</option>
+                    <option value="Vulcaniz">Vulcaniz</option>
+                </select>
+            </div>
+            <div class="analysis-content"></div>
+            <div class="resize-handle"></div>
+        `;
 
         card.querySelector(".width").value = panel.width;
         card.querySelector(".notation").value = panel.notation;
 
         panel.element = card.querySelector(".analysis-content");
 
+        // Action Handlers
         card.querySelector(".remove").onclick = () => {
-
-            analysisPanels.splice(index, 1);
-
-            renderAnalysisPanels();
-
+            // Safe removal: update model array, then safely purge element from the DOM
+            const index = analysisPanels.findIndex(p => p.id === panel.id);
+            if (index !== -1) {
+                analysisPanels.splice(index, 1);
+            }
+            card.remove(); // Removes node instantly without rebuilding the entire pane layout!
         };
 
         card.querySelector(".width").onchange = e => {
-
             panel.width = Number(e.target.value);
-
             card.style.flexBasis = `calc(${panel.width}% - ${(100 - panel.width) / 100 * 15}px)`;
-
         };
 
         card.querySelector(".notation").onchange = e => {
-
             panel.notation = e.target.value;
-
         };
 
         analysisContainer.appendChild(card);
-
-        makeResizable(card);
-
+        makeResizable(card, panel);
     });
-
 }
 
 document.getElementById("analysis_add").onclick = () => {
-
     analysisPanels.push({
-
+        id: "panel_" + Math.random().toString(36).substr(2, 9),
         notation: document.getElementById("analysis_add_type").value,
         width: 50,
-        hue: Math.floor(Math.random() * 360)
-
+        hue: Math.floor(Math.random() * 360),
+        height: "150px"
     });
-
     renderAnalysisPanels();
-
 };
 
 renderAnalysisPanels();
