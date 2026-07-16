@@ -263,44 +263,52 @@ function attachAutoSaveListeners() {
     });
 }
 
-document.getElementById("btn_save_layout").onclick = () => {
-    // Collect states safely before mapping to clean up circular elements (like .element nodes)
-    const serializedPanels = analysisPanels.map(panel => {
-        return {
-            notation: panel.notation,
-            width: panel.width,
-            hue: panel.hue,
-            height: panel.height || "150px"
-        };
-    });
+function flashButtonText(button, text, duration = 2000) {
+    const original = button.textContent;
+    button.textContent = text;
+    button.disabled = true;
+
+    setTimeout(() => {
+        button.textContent = original;
+        button.disabled = false;
+    }, duration);
+}
+
+const btnSave = document.getElementById("btn_save_layout");
+btnSave.onclick = () => {
+    const serializedPanels = analysisPanels.map(panel => ({
+        notation: panel.notation,
+        width: panel.width,
+        hue: panel.hue,
+        height: panel.height || "150px"
+    }));
 
     localStorage.setItem("lngi_layout_save", JSON.stringify(serializedPanels));
+
+    flashButtonText(btnSave, "Saved!");
 };
 
-// Manual Load Button Click Handler
-document.getElementById("btn_load_layout").onclick = () => {
+const btnLoad = document.getElementById("btn_load_layout");
+btnLoad.onclick = () => {
     const rawData = localStorage.getItem("lngi_layout_save");
-    if (!rawData) {
-        return;
-    }
+    if (!rawData) return;
 
     try {
         const parsedLayout = JSON.parse(rawData);
-        
-        // Rebuild elements mapping unique IDs so properties can be mutated smoothly
-        analysisPanels = parsedLayout.map(panel => {
-            return {
-                id: "panel_" + Math.random().toString(36).substr(2, 9),
-                notation: panel.notation,
-                width: panel.width,
-                hue: panel.hue,
-                height: panel.height
-            };
-        });
 
-        // Re-render layout completely
+        analysisPanels = parsedLayout.map(panel => ({
+            id: "panel_" + Math.random().toString(36).substr(2, 9),
+            notation: panel.notation,
+            width: panel.width,
+            hue: panel.hue,
+            height: panel.height
+        }));
+
         renderAnalysisPanels();
+
+        flashButtonText(btnLoad, "Loaded!");
     } catch (e) {
+        console.error(e);
     }
 };
 
