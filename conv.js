@@ -8792,7 +8792,7 @@ function convert_From_wY(ord, mode) {
         return ord;
     }
 
-    if (mode == "DBMS") {
+   if (mode == "DBMS") {
         if (Y_Sequence.cmp(ord, '1,3') == -1) {
             if (typeof ord == 'string') ord = ord.split(',')
             if (compress_BMS.checked)

@@ -237,6 +237,23 @@
         </div>
     </div>
 
+    <div id="real_milestones" style="display: none">
+        <div style="flex: 4">
+            <div class="tmilestone-box">1</div>
+            <div class="tmilestone-box">2</div>
+            <div class="tmilestone-box">3</div>
+            <div class="tmilestone-box">4</div>
+            <div class="tmilestone-box">5</div>
+        </div>
+        <div style="flex: 1">
+            Page <span id="mpage"></span><hr>
+            <div style="display: flex">
+                <button onclick="mpage--; update_milestones(mpage)">Previous</button>
+                <button onclick="mpage++; update_milestones(mpage)">Next</button>
+            </div>
+        </div>
+    </div>
+
 
     <div id="settings_modal" class="modal">
         <div class="modal-content">
@@ -279,12 +296,12 @@
 
             <div class="modal-body checkbox-row">
                 <label>Number of converted Y-sequence terms (put zero for all terms) <input id="Y_Terms" type="number"
-                        min=0 value=20 step=1></label>
+                        min=0 value=17 step=1></label>
             </div>
 
             <div class="modal-body checkbox-row">
                 <label>Number of converted BMS terms (put zero for all terms) <input id="BMS_Terms" type="number" min=0
-                        value=20 step=1></label>
+                        value=17 step=1></label>
             </div>
             <hr>
             <div class="modal-header">

@@ -6,6 +6,8 @@ var timeOffset = 0;
 var virtualElapsed = Date.now() - st; 
 var lastRealTime = Date.now();
 
+var mpage = 0;
+
 const speedInput = document.getElementById("input_timeSpeed");
 const offsetInput = document.getElementById("input_timeOffset");
 
@@ -292,6 +294,10 @@ function update() {
     document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
 
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
+
+    update_milestones(mpage)
+
+
     requestAnimationFrame(update);
 }
 

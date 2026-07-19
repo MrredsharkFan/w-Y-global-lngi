@@ -222,7 +222,7 @@ function search_time(x = document.getElementById("search_input").value) {
         }
 
         if (l.length == 2) {
-            document.getElementById("search_result").innerHTML = `Achieved on ${new Date(get_time_inv(r) + st).toLocaleString()}`
+            document.getElementById("search_result").innerHTML = `Achievement day:<br>${new Date(get_time_inv(r) + st).toLocaleString()}`
             return r
         }
         
@@ -252,7 +252,8 @@ function search_time(x = document.getElementById("search_input").value) {
                 break
             }
         }
-        document.getElementById("search_result").innerHTML = `Achieved on ${new Date(get_time_inv(r)+st).toLocaleString()}`
+        var t = get_time_inv(r) + st
+        document.getElementById("search_result").innerHTML = `Achievement day:<br>${new Date(t).toLocaleString()} <small><i>${(t%1000).toFixed(3)}ms</i></small>`
         return r
     }
 }

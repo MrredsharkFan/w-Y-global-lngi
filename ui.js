@@ -126,6 +126,8 @@ function update_page() {
     document.getElementById("future-milestone").hidden = (page != 2)
     document.getElementById("future-milestone").style.display = page == 2 ? "flex" : "none"
     document.getElementById("mountain").hidden = (page != 3)
+    document.getElementById("real_milestones").hidden = (page != 4)
+    document.getElementById("real_milestones").style.display = page == 4 ? "flex" : "none"
 }
 
 let analysisPanels = [

@@ -517,3 +517,17 @@ h2 {
     width: 100%;
     box-sizing: border-box;
 }
+
+#real_milestones {
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+
+
+.tmilestone-box {
+    background: rgba(0, 179, 0, .55);
+    padding: 10px;
+    border-radius: 3px;
+    margin-top: 3px;
+}
