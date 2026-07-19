@@ -237,7 +237,11 @@ function search_time(x = document.getElementById("search_input").value) {
             seq = seq.slice(0, check + 1)
             //now we do the thing
             console.log(Number(l[check]),Number(seq.at(-1)))
-            var d = Number(seq.at(-1)) -Number(l[check])
+            var d = Number(seq.at(-1)) - Number(l[check])
+            if (d < 0) {
+                document.getElementById("search_result").innerHTML = `Not standard.`
+                return 0
+            }
             i =  i / (2 ** (d + 1)); r += i
 
             //ready for next iteration
