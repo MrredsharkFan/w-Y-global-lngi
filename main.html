@@ -172,7 +172,7 @@
 
         </div>
 
-        <div class="time-control-panel">
+        <div class="time-control-panel" style="visibility: hidden;">
             <span bold>Time Dialation</span>
             <div>
                 <label for="input_timeSpeed"><b>Time Speed multiplier:</b> </label>
@@ -272,7 +272,7 @@
                     Format cOCF (aka [][[][[[c][[c]c]]c]] into &omega;<sup>M+1</sup>+1)
                 </label>
             </div>
-
+            <hr>
             <div class="modal-header">
                 <h3>Performance Settings</h3>
             </div>
@@ -285,6 +285,10 @@
             <div class="modal-body checkbox-row">
                 <label>Number of converted BMS terms (put zero for all terms) <input id="BMS_Terms" type="number" min=0
                         value=20 step=1></label>
+            </div>
+            <hr>
+            <div class="modal-header">
+                <button style="border-radius: 3px;" onclick="if (window.prompt('Enter dev code')==='that was NOT the wind'){document.getElementsByClassName('time-control-panel')[0].style.visibility = 'visible'}; window.alert('congrat u unlock the time warp')">Enable dev settings?</button>
             </div>
         </div>
 </body>
