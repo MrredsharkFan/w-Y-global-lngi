@@ -27,7 +27,8 @@ var milestones = [
     ["1,2,4,8,12,16", "psi(I{w}) / (0)(1,1,1)(2,1,1)(3,1,1)", "Small Inaccessible Ordinal (SIO)"],
     ["1,2,4,8,12,16,16", "psi(M{w}) / (0)(1,1,1)(2,1,1)(3,1,1)(3,1,1)", "Small Mahlo Ordinal (SMO)"],
     ["1,2,4,8,12,16,20", "psi(K{w}) / (0)(1,1,1)(2,1,1)(3,1,1)(4,1,1)", "Small Weakly Compact Ordinal (SKO)"],
-    ["1,2,4,8,13", "psi(Pi{w}) / (0)(1,1,1)(2,2)", "Small Stergert Ordinal (SSO), also the name of my Scratch username!"],
+    ["1,2,4,8,13", "psi(&Pi;{w}) / (0)(1,1,1)(2,2)", "Small Stergert Ordinal (SSO), also the name of my Scratch username!"],
+    ["1,2,4,8,13,20", "(0)(1,1,1)(2,2)(3,3,1)", "Filler."],
     ["1,2,4,8,14", "(0)(1,1,1)(2,2,1)", "Uh oh I forgor"],
     ["1,2,4,8,14,15", "(0)(1,1,1)(2,2,1)(3)", "Small Dropping Ordinal (SDO), similar to &phi;(&omega;,0) in structure, and is the limit of SAN, TON (projceted) and several more!"],
     ["1,2,4,8,15", "(0)(1,1,1)(2,2,2)", "Large Rathjen Ordinal (???) (LRO)"],
@@ -50,6 +51,7 @@ var milestones = [
 ]
 
 var milestone_time = []
+var milestone_rank = []
 
 //transform all milestones
 for (var i in milestones) {
@@ -64,7 +66,10 @@ for (var i in milestones) {
         .replaceAll("psi", "&psi;")
         .replaceAll("ep", "&epsilon;")
         .replaceAll("W", "&Omega;")
-    milestone_time[i] = search_time(milestones[i][0])
+    var p = search_time(milestones[i][0])
+    milestone_time[i] = p[0]
+    console.log(p)
+    milestone_rank[i] = p[1]
 }
 
 function update_milestones(page) {
@@ -79,8 +84,9 @@ function update_milestones(page) {
         var M = page * 5 + i
         if (M < L) {
             var T = Date.now() - get_time_inv(milestone_time[M]) - st
+            var R = milestone_rank[M]
             P[i].style.visibility = "visible"
-            P[i].style.backgroundColor = (ct >= milestone_time[M])?"#99ff99":"#ff9999"
+            P[i].style["background-image"] = `linear-gradient(45deg,${(ct >= milestone_time[M]) ? `rgba(140,255,140,${1-R * 0.03})` : `rgba(255,140,140,${1-R * 0.03})`},white)`
             P[i].innerHTML = `
             <div style="display: flex; flex-direction: row">
                 <div style="flex: 1; font-size: 150%">${milestones[M][0]}</div>

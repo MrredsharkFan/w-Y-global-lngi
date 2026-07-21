@@ -218,16 +218,16 @@ function search_time(x = document.getElementById("search_input").value) {
 
         if (l.length == 1) {
             document.getElementById("search_result").innerHTML = `This lngi starts at 1,1 :3`
-            return 0
+            return [0,0]
         }
 
         if (l.length == 2) {
             document.getElementById("search_result").innerHTML = `Achievement day:<br>${new Date(get_time_inv(r) + st).toLocaleString()}`
-            return r
+            return [r,1]
         }
         
         var check = 2
-        while (i > 1e-10) {
+        while (i > 1e-14) {
             //step one: expand
             seq = Y_Sequence.fs(seq, 2).split(",") //the result is a string, need to convert into list for .at
             //step two: cut the term to match last term
@@ -240,7 +240,7 @@ function search_time(x = document.getElementById("search_input").value) {
             var d = Number(seq.at(-1)) - Number(l[check])
             if (d < 0) {
                 document.getElementById("search_result").innerHTML = `Not standard.`
-                return 0
+                return [0,0]
             }
             i =  i / (2 ** (d + 1)); r += i
 
@@ -254,6 +254,6 @@ function search_time(x = document.getElementById("search_input").value) {
         }
         var t = get_time_inv(r) + st
         document.getElementById("search_result").innerHTML = `Achievement day:<br>${new Date(t).toLocaleString()} <small><i>${(t%1000).toFixed(3)}ms</i></small>`
-        return r
+        return [r,-Math.log2(i)]
     }
 }

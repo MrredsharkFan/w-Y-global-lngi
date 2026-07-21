@@ -300,5 +300,3 @@ function update() {
 
     requestAnimationFrame(update);
 }
-
-requestAnimationFrame(update);
