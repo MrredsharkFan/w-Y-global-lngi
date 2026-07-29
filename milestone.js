@@ -99,7 +99,8 @@ function update_milestones(page) {
                 <div style="flex: 1; font-size: 150%">${milestones[M][0]}</div>
                 <div style="flex: 1; text-align: right">
                     <span style="font-size: 120%">${milestones[M][1]}</span>
-                    ${T<0?`<br>in ${formatSeconds(-T/1000)}`:``}
+                    ${T < 0 ? `<br>in ${formatSeconds(-T / 1000)}` : `<br>${formatSeconds(T / 1000)} ago`}<br>
+                    ${new Date(get_time_inv(milestone_time[M])+st).toLocaleString()}
                 </div>
             </div><hr>
             ${milestones[M][2]}`
