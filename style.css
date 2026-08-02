@@ -519,6 +519,7 @@ h2 {
 }
 
 #real_milestones {
+    gap : 10px;
     display: flex;
     flex-direction: row;
 }
