@@ -1203,7 +1203,7 @@ const replacements = [
     [/\bz\b/g, "&zeta;"],
     [/\bG\b/g, "&Gamma;"],
     [/\bW\b/g, "&Omega;"],
-    [" / ", "<br>"
+    [" / ", "<br>"]
 ];
 
 function formatText(str) {
