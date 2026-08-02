@@ -79,6 +79,8 @@ for (var i in milestones) {
     milestone_rank[i] = p[1]
 }
 
+//rngdelak i will end you
+
 function update_milestones(page) {
     if (page < 0) {
         mpage = 0;
