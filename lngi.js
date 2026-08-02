@@ -33,12 +33,14 @@ if (speedInput && offsetInput) {
 function formatSeconds(totalSeconds) {
     if (totalSeconds <= 0) return "0 seconds";
     let s = totalSeconds;
+    const years = Math.floor(s / (86400*365)); s %= (86400*365);
     const days = Math.floor(s / 86400); s %= 86400;
     const hours = Math.floor(s / 3600); s %= 3600;
     const minutes = Math.floor(s / 60); s %= 60;
     const seconds = s;
     const p = (val, unit) => val > 0 ? `${val} ${unit}${val > 1 ? 's' : ''}` : null;
     const parts = [
+        p(years, 'year'),
         p(days, 'day'),
         p(hours, 'hour'),
         p(minutes, 'minute'),
@@ -247,7 +249,7 @@ function num_time(t) {
 }
 
 var tps = 0
-var last_tick = 0
+var last_tick = Date.now()
 let sync_mountain = document.getElementById("_UPDATEMODE")
 let MaxYTerms = document.getElementById("MaxTerms")
 
@@ -290,13 +292,20 @@ function update() {
             timeStatusText = ` <b style="color: red;">(backwarded ${formatSeconds(Math.abs(diff))})</b>`;
         }
     }
-    document.getElementById("time").innerHTML = `Time elapsed: ${formatSeconds(modifiedElapsedSeconds)}${timeStatusText}`;
+    document.getElementById("time").innerHTML =
+        `Time elapsed: ${formatSeconds(modifiedElapsedSeconds)}${timeStatusText}
+        <br><small>You spent ${formatSeconds(player_time)} on this tab (${(player_time / modifiedElapsedSeconds * 100).toFixed(5)}% of the runtime)</small>`;
     document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
 
     document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
 
     update_milestones(mpage)
 
+    player_time += 1 / tps
+    if (player_time == NaN) {
+        player_time = 0
+    }
 
+    saveMisc()
     requestAnimationFrame(update);
 }

@@ -237,21 +237,8 @@
         </div>
     </div>
 
-    <div id="real_milestones" style="display: none">
-        <div style="flex: 4">
-            <div class="tmilestone-box">1</div>
-            <div class="tmilestone-box">2</div>
-            <div class="tmilestone-box">3</div>
-            <div class="tmilestone-box">4</div>
-            <div class="tmilestone-box">5</div>
-        </div>
-        <div style="flex: 1">
-            Page <span id="mpage"></span><hr>
-            <div style="display: flex">
-                <button onclick="mpage--; update_milestones(mpage)">Previous</button>
-                <button onclick="mpage++; update_milestones(mpage)">Next</button>
-            </div>
-        </div>
+    <div id="real_milestones" class="card" style="display: none; max-height: 600px; overflow-y: auto;">
+        <div id="milestone_container" style="display: flex; flex-direction: column; gap: 8px;"></div>
     </div>
 
 
@@ -283,7 +270,7 @@
                 </label>
             </div>
 
-            <div class="modal-body checkbox-row" >
+            <div class="modal-body checkbox-row">
                 <input type="checkbox" id="format_cOCF" checked>
                 <label for="format_cOCF">
                     Format cOCF (aka [][[][[[c][[c]c]]c]] into &omega;<sup>M+1</sup>+1)
@@ -305,7 +292,9 @@
             </div>
             <hr>
             <div class="modal-header">
-                <button style="border-radius: 3px;" onclick="if (window.prompt('Enter dev code')==='that was NOT the wind'){document.getElementsByClassName('time-control-panel')[0].style.visibility = 'visible'}; window.alert('congrat u unlock the time warp')">Enable dev settings?</button>
+                <button style="border-radius: 3px;"
+                    onclick="if (window.prompt('Enter dev code')==='that was NOT the wind'){document.getElementsByClassName('time-control-panel')[0].style.visibility = 'visible'}; window.alert('congrat u unlock the time warp')">Enable
+                    dev settings?</button>
             </div>
         </div>
 </body>

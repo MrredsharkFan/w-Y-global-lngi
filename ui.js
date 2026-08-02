@@ -132,7 +132,6 @@ function update_page() {
 
 let analysisPanels = [
     { id: "panel_" + Math.random().toString(36).substr(2, 9), notation: "DBMS", width: 100, hue: 120, height: "150px" },
-    { id: "panel_" + Math.random().toString(36).substr(2, 9), notation: "2-shifted OCF", width: 100, hue: 220, height: "150px" }
 ];
 
 function updatefontsize() {
@@ -165,7 +164,10 @@ function updatefontfamily() {
 
 }
 
+player_time = 0
+
 // Function to save all settings on the page to localStorage
+//actually stores all local data (because why not, i will confuse him until he gives up the contributor rank)
 function saveAllSettings() {
     const settings = {
         // Display Settings
@@ -198,10 +200,30 @@ function saveAllSettings() {
         STACKMODE: document.getElementById("STACKMODE").checked,
         HIGHLIGHT: document.getElementById("HIGHLIGHT").checked,
         EXTRADIVIDER: document.getElementById("EXTRADIVIDER").checked,
-        _UPDATEMODE: document.getElementById("_UPDATEMODE").checked
+        _UPDATEMODE: document.getElementById("_UPDATEMODE").checked,
     };
-
     localStorage.setItem("lngi_app_settings", JSON.stringify(settings));
+}
+
+function saveMisc() {
+    const misc = {
+        //time based events
+        time: player_time
+    }
+    localStorage.setItem("lngi_app_misc", JSON.stringify(misc))
+}
+
+function loadMisc() {
+    const savedData = localStorage.getItem("lngi_app_misc");
+    if (!savedData) return;
+
+    try {
+        const settings = JSON.parse(savedData);
+        player_time = settings.time
+    }
+    catch (e) {
+        console.log("something went wrong when loading misc settings", e)
+    }
 }
 
 // Function to load all settings back from localStorage
@@ -317,6 +339,7 @@ btnLoad.onclick = () => {
 // Initialize on page setup
 document.addEventListener("DOMContentLoaded", () => {
     loadAllSettings();
+    loadMisc();
     attachAutoSaveListeners();
 });
 
