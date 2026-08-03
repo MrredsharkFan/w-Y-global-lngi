@@ -8495,7 +8495,7 @@ const EcOCF = (() => {
       return x;
    }
 
-   return{fs,cmp,isSuccessor,displayform,g,h,gInv,hInv,ZERO,Limit,f,sugar}
+   return{fs,cmp,isSuccessor,convert,g,h,gInv,hInv,ZERO,Limit,f,sugar}
 })();
 
 let Lim_EcOCF_in_BMS = [[0,0,0,0],[1,1,1,1],[2,2,2,2]] // Lim(EcOCF) is (0,0,0,0)(1,1,1,1)(2,2,2,2) in BMS
@@ -8824,7 +8824,7 @@ function convert_From_wY(ord, mode) {
     if (mode == "EcOCF") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,31') == -1) {
             if (format_cOCF.checked)
-                return EcOCF.displayform(Conv_BMS_EcOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber)));
+                return EcOCF.convert(Conv_BMS_EcOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber)));
             else
                 return Conv_BMS_EcOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber));
         }
@@ -8834,7 +8834,7 @@ function convert_From_wY(ord, mode) {
     if (mode == "BcOCF") {
         if (Y_Sequence.cmp(ord, '1,2,4,8,16,32,64,128,256,512') == -1) {
             if (format_cOCF.checked)
-                return EcOCF.displayform(Conv_BMS__ECOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber)));
+                return EcOCF.convert(Conv_BMS__ECOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber)));
             else
                 return Conv_BMS__ECOCF(trimArrayList(Conv_Y_sequence_BMS(ord), BMS_Terms.valueAsNumber));
         }
