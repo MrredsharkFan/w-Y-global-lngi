@@ -142,16 +142,13 @@ var milestones = [["1", "(0)", "First Successor Ordinal, and the start of the jo
 
 ["1,2,4,8,13,20", "psi(W{T+w}) / (0)(1,1,1)(2,2)(3,3,1)", "Filler."],
 
-["1,2,4,8,13,20,27,33,21", "ψ(I[T+1]) / (0)(1,1,1)(2,2,0)(3,3,1)(4,3,1)(5,3,0)(4,0,0)", ""],
+["1,2,4,8,13,20,27,33,21", "ψ(I{T+1}) / (0)(1,1,1)(2,2,0)(3,3,1)(4,3,1)(5,3,0)(4,0,0)", ""],
 
 ["1,2,4,8,14", "psi(T[w]) / (0)(1,1,1)(2,2,1)", ""],
-
-
 
 ["1,2,4,8,14,14", "ψ(X_ω) / (0)(1,1,1)(2,2,1)(2,2,1)", ""],
 
 ["1,2,4,8,14,15", "(0)(1,1,1)(2,2,1)(3)", "Small Dropping Ordinal (SDO), similar to phi(w,0) in structure, and is the limit of SAN, TON (projceted) and several more!"],
-
 
 ["1,2,4,8,14,19", "(0)(1,1,1)(2,2,1)(3,2,0)", "Limit of a certain exUNOCF extension. Eww."],
 
@@ -226,7 +223,7 @@ var milestones = [["1", "(0)", "First Successor Ordinal, and the start of the jo
 ["1,2,4,8,14,22,32,44", "(0)(1,1,1)(2,2,1)(3,3,1)(4,4,1)(5,5,1)", ""],
 
 
-["1,2,4,8,15", "(0)(1,1,1)(2,2,2)", "Limit of Degrees of Reflection (Optimal)."],
+    ["1,2,4,8,15", "(0)(1,1,1)(2,2,2)", "Limit of Degrees of Reflection (Optimal)."],
 
 
 ["1,2,4,8,15,22", "(0)(1,1,1)(2,2,2)(3,2,2)", ""],
@@ -327,7 +324,7 @@ var milestones = [["1", "(0)", "First Successor Ordinal, and the start of the jo
 ["1,2,4,8,16,27,16", "(0)(1,1,1,1)(2,2,1,0)(1,1,1,1)", "Extract the 2,3,4th rows and you will see ANOTHER upgrade."],
 
 
-["1,2,4,8,16,28", "(0)(1,1,1,1)(2,2,1,1)", ""],
+["1,2,4,8,16,28", "(0)(1,1,1,1)(2,2,1,1)", "No more new types of upgrades... for now."],
 
 
 ["1,2,4,8,16,28,44", "(0)(1,1,1,1)(2,2,1,1)(3,3,1,1)", ""],
@@ -1279,7 +1276,8 @@ function init_milestones() {
         var box = document.createElement("div");
         box.className = "tmilestone-box";
         box.dataset.index = i;
-        
+
+
         // Initial render so content is populated immediately
         renderMilestoneBox(box);
 
