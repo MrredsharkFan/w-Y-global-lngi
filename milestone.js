@@ -1256,6 +1256,7 @@ function renderMilestoneBox(element) {
     var R = milestone_rank[M];
 
     element.style["background-image"] = `linear-gradient(45deg,${(ct >= milestone_time[M]) ? `rgba(140,255,140,${1 - R * 0.03})` : `rgba(255,140,140,${1 - R * 0.03})`},white)`;
+    //element.style.backgroundColor = (ct >= milestone_time[M]) ? `rgba(140,255,140,${1 - R * 0.03})` : `rgba(255,140,140,${1 - R * 0.03})`;
     element.innerHTML = `
     <div style="display: flex; flex-direction: row">
         <div style="flex: 1; font-size: 150%">${valid_milestones[M][0]}</div>
