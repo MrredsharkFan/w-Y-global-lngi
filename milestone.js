@@ -51,7 +51,7 @@ function init_milestones() {
     const container = document.getElementById("milestone_container");
     if (!container) return;
 
-    container.innerHTML = `Total milestones: ${milestones.length}<br>`;
+    container.innerHTML = `Total milestones: ${valid_milestones.length}<br>`;
     for (var i = 0; i < valid_milestones.length; i++) {
         var box = document.createElement("div");
         box.className = "tmilestone-box";
