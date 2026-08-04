@@ -6,6 +6,22 @@ var timeOffset = 0;
 var virtualElapsed = Date.now() - st; 
 var lastRealTime = Date.now();
 
+function loadMisc() {
+    try {
+        const savedMisc = localStorage.getItem("lngi_app_misc");
+        if (savedMisc) {
+            const misc = JSON.parse(savedMisc);
+            if (typeof misc.time === "number" && !isNaN(misc.time)) {
+                player_time = misc.time;
+            }
+        }
+    } catch (e) {
+        console.error("Failed to load saved time:", e);
+    }
+}
+
+// Load saved state immediately on page start
+loadMisc();
 var mpage = 0;
 
 const speedInput = document.getElementById("input_timeSpeed");
