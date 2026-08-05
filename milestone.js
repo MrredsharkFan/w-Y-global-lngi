@@ -37,7 +37,7 @@ function renderMilestoneBox(element) {
     element.innerHTML = `
 <div style="display: flex; flex-direction: row">
     <div class="milestone_sub_box" style="text-align: left; font-size: 150%">
-        <span style="font-size: 70%; color: gray;">#${M}:</span>
+        <span style="font-size: 70%; color: gray;">${M+1}#:</span>
         ${valid_milestones[M][0]}
     </div>
     <div class="milestone_sub_box" style="text-align: right">
