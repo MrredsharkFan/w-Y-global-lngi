@@ -541,6 +541,5 @@ h2 {
 
 .milestone_sub_box {
     flex: 1;
-    font-size: 150%;
     overflow-wrap: anywhere;
 }
