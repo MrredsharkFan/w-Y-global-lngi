@@ -36,8 +36,8 @@ function renderMilestoneBox(element) {
     //element.style.backgroundColor = (ct >= milestone_time[M]) ? `rgba(140,255,140,${1 - R * 0.03})` : `rgba(255,140,140,${1 - R * 0.03})`;
     element.innerHTML = `
     <div style="display: flex; flex-direction: row">
-        <div style="flex: 1; font-size: 150%">${valid_milestones[M][0]}</div>
-        <div style="flex: 1; text-align: right">
+        <div class="milestone_sub_box" style="text-align: left">${valid_milestones[M][0]}</div>
+        <div class="milestone_sub_box" style="text-align: right">
             <span style="font-size: 120%">${valid_milestones[M][1]}</span>
             ${T < 0 ? `<br>in ${formatSeconds(-T / 1000)}` : `<br>${formatSeconds(T / 1000)} ago`}<br>
             ${new Date(get_time_inv(milestone_time[M]) + st).toLocaleString()}
