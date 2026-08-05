@@ -35,15 +35,18 @@ function renderMilestoneBox(element) {
     element.style["background-image"] = `linear-gradient(45deg,${(ct >= milestone_time[M]) ? `rgba(140,255,140,${1 - R * 0.03})` : `rgba(255,140,140,${1 - R * 0.03})`},white)`;
     //element.style.backgroundColor = (ct >= milestone_time[M]) ? `rgba(140,255,140,${1 - R * 0.03})` : `rgba(255,140,140,${1 - R * 0.03})`;
     element.innerHTML = `
-    <div style="display: flex; flex-direction: row">
-        <div class="milestone_sub_box" style="text-align: left; font-size: 150%">${valid_milestones[M][0]}</div>
-        <div class="milestone_sub_box" style="text-align: right">
-            <span style="font-size: 120%">${valid_milestones[M][1]}</span>
-            ${T < 0 ? `<br>in ${formatSeconds(-T / 1000)}` : `<br>${formatSeconds(T / 1000)} ago`}<br>
-            ${new Date(get_time_inv(milestone_time[M]) + st).toLocaleString()}
-        </div>
-    </div><hr>
-    ${valid_milestones[M][2]}`;
+<div style="display: flex; flex-direction: row">
+    <div class="milestone_sub_box" style="text-align: left; font-size: 150%">
+        <span style="font-size: 70%; color: gray;">#${M}:</span>
+        ${valid_milestones[M][0]}
+    </div>
+    <div class="milestone_sub_box" style="text-align: right">
+        <span style="font-size: 120%">${valid_milestones[M][1]}</span>
+        ${T < 0 ? `<br>in ${formatSeconds(-T / 1000)}` : `<br>${formatSeconds(T / 1000)} ago`}<br>
+        ${new Date(get_time_inv(milestone_time[M]) + st).toLocaleString()}
+    </div>
+</div><hr>
+${valid_milestones[M][2]}`;
 }
 
 // Immediately instantiates ALL divs on site load (no lazy loading)
