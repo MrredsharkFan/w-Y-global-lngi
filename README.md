@@ -3,4 +3,8 @@ peak
 
 
 things to add:
-news ticker wr
+news ticker 
+^
+|
+|
+nasty idea of bep
