@@ -3,4 +3,4 @@ peak
 
 
 things to add:
-news ticker
+news ticker wr
