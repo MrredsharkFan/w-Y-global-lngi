@@ -238,7 +238,14 @@
     </div>
 
     <div id="real_milestones" class="card" style="display: none; height: 600px; overflow-y: auto;">
-        <div id="milestone_container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        <div>
+            There are a total of <span id="milestone_length"></span> milestones.<br>
+            The next milestone is <span id="real_milestone_next"></span>
+        </div>
+        <div style="overflow-y: scroll;">
+            <div id="milestone_container" style="display: flex; flex-direction: column; gap: 8px;">
+            </div>
+        </div>
     </div>
 
 

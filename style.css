@@ -527,7 +527,7 @@ h2 {
     -ms-overflow-style: none; 
 }
 
-#real_milestones::-webkit-scrollbar {
+#real_milestones>div::-webkit-scrollbar {
     display: none;
 }
 

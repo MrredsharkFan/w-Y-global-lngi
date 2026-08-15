@@ -419,6 +419,7 @@ function formatText(str) {
 
 var visibleMilestones = new Set();
 
+//in fact, i still idk what's an observer
 const milestoneObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -460,7 +461,8 @@ function init_milestones() {
     const container = document.getElementById("milestone_container");
     if (!container) return;
 
-    container.innerHTML = `Total milestones: ${valid_milestones.length}<br>`;
+    document.getElementById("milestone_length").innerHTML = valid_milestones.length
+    container.innerHTML = ``;
     for (var i = 0; i < valid_milestones.length; i++) {
         var box = document.createElement("div");
         box.className = "tmilestone-box";
@@ -480,6 +482,14 @@ function update_milestones() {
     visibleMilestones.forEach(element => {
         renderMilestoneBox(element);
     });
+
+    var N = 0
+    var ct = get_time(Date.now() - st);
+    while (valid_milestones[N][4] < ct) {
+        N = N+1
+    }
+    var T = Date.now() - get_time_inv(valid_milestones[N][4]) - st;
+    document.getElementById("real_milestone_next").innerHTML = `${valid_milestones[N][0]} / ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`
 }
 
 // Initialize all elements eagerly on page load
