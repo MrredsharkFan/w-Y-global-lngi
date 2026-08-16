@@ -489,7 +489,7 @@ function update_milestones() {
         N = N+1
     }
     var T = Date.now() - get_time_inv(valid_milestones[N][4]) - st;
-    document.getElementById("real_milestone_next").innerHTML = `${valid_milestones[N][0]} / ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`
+    document.getElementById("real_milestone_next").innerHTML = `${N}# ${valid_milestones[N][0]} ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`
 }
 
 // Initialize all elements eagerly on page load
