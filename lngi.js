@@ -85,6 +85,7 @@ function update_scratch_bars(x, currentSimulatedTime) {
             if (i == 0) {
                 u = Math.ceil(x)
             }
+            
             var t = get_time_inv(u)
             const secondsLeft = Math.max(0, ((t + st) - currentSimulatedTime) / 1000);
 

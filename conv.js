@@ -239,850 +239,422 @@ class BMS {
 
 class Y_Sequence {
 
-    static fs(s, n, legBasedAscension, stringify) {
-        if (Array.isArray(s)) s = s.join(',');
-        var lineBreakRegex = /\r?\n/g;
-        var itemSeparatorRegex = /[\t ,]/g;
-        if (s == "Limit") return '1,' + String(n + 2);
-        function parseSequenceElement(s, i) {
-            var strremoved = s;
-            if (strremoved.indexOf("v") == -1 || !isFinite(Number(strremoved.substring(strremoved.indexOf("v") + 1)))) {
-                var numval = Number(strremoved);
-                return {
-                    value: numval,
-                    position: i,
-                    parentIndex: -1
-                };
-            } else {
-                return {
-                    value: Number(strremoved.substring(0, strremoved.indexOf("v"))),
-                    position: i,
-                    parentIndex: Math.max(Math.min(i - 1, Number(strremoved.substring(strremoved.indexOf("v") + 1))), -1),
-                    forcedParent: true
-                };
+    
+   static fs(s, n) {
+      var lineBreakRegex = /\r?\n/g;
+      var itemSeparatorRegex = /[\t ,]/g;
+      function dg(s) {
+         return document.getElementById(s);
+      }
+      function displayMt(m) {
+         var index = []
+         for (var i = 0; i < m.length; i++) index.push(0)
+         mt += '<p></p><table>'
+         while (true) {
+            var row = []
+            for (var i = 0; i < m.length; i++) if (m[i].length > index[i] && (row.length == 0 || compareRow(m[i][index[i]].row, row) < 0)) row = m[i][index[i]].row
+            if (row.length == 0) break
+            mt += '<tr>'
+            mt += '<td align="center" width="80" bgColor="#eee0e0">' + row + '</td>'
+            for (var i = 0; i < m.length; i++) {
+               if (m[i].length > index[i] && compareRow(m[i][index[i]].row, row) == 0) mt += '<td align="center" width="80" bgColor="#e0eee0">' + m[i][index[i]++].value + '</td>'
+               else mt += '<td align="center" width="80" bgColor="#e0eee0">' + '' + '</td>'
             }
-        }
-        function equalVector(s, t, d) {
-            if (d === undefined) d = 0;
-            for (var i = d, l = Math.max(s.length, t.length); i < l; i++) {
-                if ((s[i] || 0) != (t[i] || 0)) return false;
+            mt += '</tr>'
+         }
+         mt += '</table>'
+      }
+      function isDimensionLimited(it, d) {
+         if (proc(d).length == 1 && proc(d)[0] && getFootRow(it, d)[1] > proc(d)[0] || d.length == 2 && d[0] == 0 && d[1] > 0 && getFootRow(it, d).length > d[1]) return true
+         return false
+      }
+      function proc(d) {
+         if (d.length > 2 && d[0] == 0 && d[1] > 0 && divide(d).length > 1) return [divide(d)[0].length - 1]
+         if (d.length > 2 && d[0] == 0 && d[1] > 0 && divide(d).length == 1 && divide(d)[0].length > 2) return [divide(d)[0].length - 2]
+         return d
+      }
+      function rowGenerator(n) {
+         var row = [1]
+         for (var i = 1; i < n; i++) row.push(0)
+         return row
+      }
+      function divide(d) {
+         var dd = d.slice(1), ret = []
+         for (var i = 0; i < dd.length - 1; i++) while (dd[i]-- > 0) ret.push(rowGenerator(dd.length - i))
+         if (dd[dd.length - 1]) ret.push([dd[dd.length - 1]])
+         return ret
+      }
+      function merge(d) {
+         var ret = rowGenerator(d[0].length)
+         ret[0] -= 1
+         for (var i = 0; i < d.length - 1; i++) ret[ret.length - d[i].length]++
+         ret[ret.length - d[d.length - 1].length] += d[d.length - 1][0]
+         ret.unshift(0)
+         return ret
+      }
+      function compareRow(r1, r2) {
+         var i = 0
+         for (; i < r1.length && i < r2.length; i++) {
+            if (r1[i] > r2[i]) return 1
+            if (r1[i] < r2[i]) return -1
+         }
+         if (r1.length > i) return 1
+         if (r2.length > i) return -1
+         return 0
+      }
+      function compareDimension(r1, r2) {
+         return (r1.length <= 1 ? 1 : r1[1]) - (r2.length <= 1 ? 1 : r2[1])
+      }
+      function rowAddition(r1, r2) {
+         if (r2.length <= 1 || r2[1] == 1) return r1.concat(r2)
+         if (r1.length <= 1 || r1[1] < r2[1]) return r2
+         var i = 1
+         while (i++ < r1.length) if (r1[i] < r2[1]) break
+         return r1.slice(0, i).concat(r2.slice(1))
+      }
+      function rowDifference(r1, r2) {
+         if (compareRow(r1, r2) <= 0) return []
+         if (r1[1] == 1) return r1.slice(0, r1.length - r2.length)
+         var i = 0
+         for (; i < r1.length && i < r2.length; i++) if (r1[i] > r2[i]) break
+         if (r1[i] == 1) return r1.slice(i)
+         return [1].concat(r1.slice(i))
+      }
+      function getFootRow(it, d) {
+         var row = rowDifference(it.row, it.parent.row)
+         if (row.length == 0 || d.length == 0 || d.length == 1 && d[0] == 0 || d.length == 2 && d[0] == 0 || d.length == 3 && d[0] == 0 && d[1] == 1 && d[2] == 0) return rowAddition(it.row, [1])
+         if (row.length == 1) return rowAddition(it.row, [1, 2])
+         return rowAddition(it.row, [1, row[1] + 1])
+      }
+      function setElementRefrence(m) {
+         for (var i = 0; i < m.length; i++) {
+            for (var j = 0; j < m[i].length; j++) {
+               if (m[i][j].row.length <= 1 && m[i][j].value <= 1) continue
+               if (compareRow(m[i][j].row, m[i][j].parent.row) == 0) m[i][j].ref = m[i][j].parent
+               else if ('foot' in m[i][j].head.parent && compareRow(m[i][j].head.parent.foot.row, m[i][j].row) <= 0) {
+                  m[i][j].ref = m[i][j].head.parent.foot
+                  while (compareRow(m[i][j].ref.row, m[i][j].row) == 0) m[i][j].ref = m[i][j].ref.ref
+               }
+               else m[i][j].ref = m[i][j].head.parent
             }
-            return true;
-        }
-        function addVector(s, t) {
-            var r = [];
-            for (var i = 0, l = Math.max(s.length, t.length); i < l; i++) {
-                r.push((s[i] || 0) + (t[i] || 0));
+         }
+      }
+      function setElementNo(m, b) {
+         var id = 0
+         for (var i = 0; i < m.length; i++) {
+            for (var j = 0; j < m[i].length; j++) {
+               if (i == b.cloumn) m[i][j].no = j + 1
+               else if (i < b.cloumn || (m[i][j].value <= 1 && j == 0)) m[i][j].no = 0
+               else m[i][j].no = m[i][j].ref.no
+               if (i > b.cloumn) m[i][j].id = id++
+               if (i == b.cloumn || i == m.length - 1) m[i][j].id = m[i][j].no
             }
-            return r;
-        }
-        function stBasis(d) {
-            var r = [];
-            while (r.length < d) r.push(0);
-            r.push(1);
-            return r;
-        }
-        function basis(d, k) {
-            var r = [];
-            while (r.length < d) r.push(0);
-            r.push(k);
-            return r;
-        }
-        function incrementCoord(s, d) {
-            var r = s.slice(0);
-            for (var i = 0; i < d; i++) r[i] = 0;
-            return addVector(r, stBasis(d));
-        }
-        function addCoord(s, d, k) {
-            var r = s.slice(0);
-            for (var i = 0; i < d; i++) r[i] = 0;
-            return addVector(r, basis(d, k));
-        }
-        function sumArray(s) {
-            var r = 0;
-            for (var i = 0; i < s.length; i++) r += s[i];
-            return r;
-        }
-        function calcMountain(s, maxDim = Infinity) {
-            if (maxDim === undefined) maxDim = Infinity;
-            var coordOffset = typeof s == "object" ? s.coord : [];
-            if (typeof s == "string") {
-                s = s.split(itemSeparatorRegex).map(parseSequenceElement);
+         }
+      }
+      function getReferenceChain(it) {
+         var c = []
+         while (true) {
+            c.unshift(it)
+            if (it.value <= 1 && it.row.length == 1) break
+            it = it.ref
+         }
+         return c
+      }
+      function drawMountain(s, d) {
+         var m = []
+         s.forEach(e => { m.push([{ value: e.value, row: [1], cloumn: e.cloumn, idx: 0, parent: e.parent.cloumn < 0 ? { row: [1], cloumn: -1 } : m[e.parent.cloumn][0] }]) })
+         for (var i = 0; i < m.length; i++) {
+            var it = m[i][0]
+            while (it.value > 1) {
+               if (isDimensionLimited(it, d)) break
+               it.foot = { value: it.value - it.parent.value, row: getFootRow(it, d), cloumn: i, idx: it.idx + 1, head: it }
+               m[i].push(it.foot)
+               var p = it.parent
+               if ('foot' in p && compareRow(p.foot.row, it.foot.row) <= 0) p = p.foot
+               while (p.value >= it.foot.value) p = p.parent
+               it.foot.parent = p
+               it = it.foot
             }
-            if (s instanceof Array && s.length <= 1) {
-                return {
-                    dim: 1,
-                    arr: [{
-                        dim: 0,
-                        value: s[0].value,
-                        strexp: s[0].strexp,
-                        position: s[0].position,
-                        coord: coordOffset.slice(0),
-                        parentIndex: s[0].parentIndex,
-                        forcedParent: s[0].forcedParent,
-                        leftLegCoord: null,
-                        rightLegCoord: null
-                    }],
-                    coord: coordOffset.slice(0)
-                };
-            } else if (!(s instanceof Array) && s.arr.length <= 1) {
-                return s.arr[0];
-            } else {
-                var m;
-                if (s instanceof Array) {
-                    m = {
-                        dim: 1,
-                        arr: [],
-                        coord: coordOffset.slice(0)
-                    };
-                    for (var i = 0; i < s.length; i++) {
-                        m.arr.push({
-                            dim: 0,
-                            value: s[i].value,
-                            strexp: s[i].strexp,
-                            position: s[i].position,
-                            coord: addCoord(coordOffset, 0, i),
-                            parentIndex: s[i].parentIndex,
-                            forcedParent: s[i].forcedParent,
-                            leftLegCoord: null,
-                            rightLegCoord: null
-                        });
-                        if (!s[i].forcedParent) {
-                            for (var j = i; j >= 0; j--) {
-                                if (s[j].value < s[i].value) {
-                                    m.arr[i].parentIndex = j;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    m = s;
-                }
-                var lastPosition = sumArray(m.arr[m.arr.length - 1].coord);
-                var dimensions = 1;
-                while (dimensions <= maxDim) {
-                    var uppers = calcDifference(m);
-                    if (uppers.arr.length < 1) break;
-                    var upperm = calcMountain(uppers, dimensions);
-                    var upperdim = upperm.dim;
-                    var raisedupperm = upperm;
-                    while (raisedupperm.dim <= dimensions) {
-                        raisedupperm = {
-                            dim: raisedupperm.dim + 1,
-                            arr: [raisedupperm],
-                            coord: raisedupperm.coord.slice(0)
-                        };
-                    }
-                    raisedupperm.coord = coordOffset.slice(0);
-                    raisedupperm.arr.unshift(m);
-                    m = raisedupperm;
-                    dimensions++;
-                }
-                return m;
+         }
+         return m
+      }
+      function getOds(m) {
+         var o = []
+         m.forEach(e => { o.push({ value: e[e.length - 1].value, cloumn: e[0].cloumn, parent: e[e.length - 1].value <= 1 ? { row: [1], cloumn: -1 } : o[e[e.length - 1].parent.cloumn] }) })
+         return o
+      }
+      function getMds(m) {
+         return toSequence(getReferenceChain(m[m.length - 1][m[m.length - 1].length - 1]).map(e => { return e.row.length <= 1 ? 1 : e.row[1] }))
+      }
+      function getBootIndex(s, d) {
+         var m = drawMountain(s, d)
+         setElementRefrence(m)
+         var t = m[m.length - 1][m[m.length - 1].length - 1]
+         if (t.value == 1) t = t.head
+         var b = t.parent
+         if (t.value - b.value > 1 && proc(d).length == 1) {
+            var o = getOds(m)
+            var c = getBootIndex(o, d.length == 1 || divide(d).length == 1 ? d : merge(divide(d).slice(1)))[0]
+            return [c, m[c].length - 1]
+         }
+         if (compareDimension(b.row, t.row) < 0) {
+            var ch = getReferenceChain(t), dd = [0, 1]
+            if (d.length > 2 && d[0] == 0 && d[1] == 0) dd = d.slice(2)
+            if (d.length == 3 && d[0] == 1 && d[1] == 0 && d[2] == 1) dd = d
+            var c = ch[getBootIndex(getMds(m), dd)[0]].cloumn
+            return [c, m[c][m[c].length - 1].idx]
+         }
+         return [b.cloumn, b.idx]
+      }
+      function copyElement(m, b, t, it, op, i, d) {
+         if (it.value <= 1 && it.row.length > 1) {
+            it.parent = it.ref
+            while (it.parent.value > 1) it.parent = it.parent.ref
+         }
+         var min_row = it.row.length > 1 ? getFootRow(op[op.length - 1], d) : [1], max_row = it.row
+         if (it.no > 0) {
+            var c = it.ref.cloumn + (t.cloumn - b.cloumn) * (i + 1)
+            var r = m[c][0]
+            while ('foot' in r && r.foot.id <= it.ref.id) r = r.foot
+            if ('offset' in it) max_row = rowAddition(r.row, it.offset[i])
+            else max_row = rowAddition(r.row, rowDifference(it.row, it.ref.row))
+         }
+         if (d.length == 0 || d.length == 1 && d[0] == 0 || d.length == 2 && d[0] == 0 || d.length == 3 && d[0] == 0 && d[1] == 1 && d[2] == 0) max_row = it.row
+         if (compareRow(min_row, max_row) > 0) alert('collapsed!')
+         var row = min_row
+         while (compareRow(row, max_row) <= 0) {
+            op.push({ value: it.value, row: row, cloumn: m.length - 1, idx: op.length, no: it.no, id: it.id })
+            if (op.length > 1) {
+               op[op.length - 1].head = op[op.length - 2]
+               op[op.length - 2].foot = op[op.length - 1]
             }
-        }
-        function calcDifference(m) {
-            var coordOffset = incrementCoord(m.coord, m.dim);
-            var rightLegs = [];
-            var rightLegTree = [];
-            var rightLegPositions = [];
-            if (m.dim == 1) {
-                for (var i = 0; i < m.arr.length; i++) {
-                    rightLegs.push(m.arr[i]);
-                    rightLegTree.push(m.arr[i].parentIndex);
-                    rightLegPositions.push(sumArray(m.arr[i].coord));
-                }
-            } else {
-                for (var i = 0; i <= getLastPosition(m); i++) {
-                    var node = findHighestWithPosition(m, i);
-                    if (node) rightLegPositions.push(i);
-                }
-                for (var i = 0; i < rightLegPositions.length; i++) {
-                    var node = findHighestWithPosition(m, rightLegPositions[i]);
-                    rightLegs.push(node);
-                    var pn = node;
-                    while (pn) {
-                        var ppn = parent(m, pn);
-                        if (!ppn) ppn = leftLeg(m, pn);
-                        if (!ppn) {
-                            rightLegTree.push(-1);
-                            break;
-                        }
-                        pn = ppn;
-                        if (pn.parentIndex == -1 && rightLegPositions.indexOf(sumArray(pn.coord)) != -1) {
-                            rightLegTree.push(rightLegPositions.indexOf(sumArray(pn.coord)));
-                            break;
-                        }
-                    }
-                    if (!pn) rightLegTree.push(-1);
-                }
+            var pc = it.parent.cloumn >= b.cloumn ? m.length - 1 + it.parent.cloumn - it.cloumn : it.parent.cloumn
+            var p = pc >= 0 ? m[pc][m[pc].length - 1] : { row: [1], cloumn: -1 }
+            while (compareRow(p.row, row) > 0) p = p.head
+            op[op.length - 1].parent = p
+            row = getFootRow(op[op.length - 1], d)
+         }
+      }
+      function copyCloumn(m, b, t, c, i, ex, d) {
+         var it = m[c][0]
+         m.push([])
+         while (true) {
+            copyElement(m, b, t, it, m[m.length - 1], i, d)
+            if ('foot' in it) it = it.foot
+            else break
+         }
+         m[m.length - 1][m[m.length - 1].length - 1].value = ex.length ? ex[m.length - 1] : it.value
+         it = m[m.length - 1][m[m.length - 1].length - 1]
+         while ('head' in it) {
+            it.head.value = it.value + it.head.parent.value
+            it = it.head
+         }
+      }
+      function expandDimensionSequnece(m, b, t, n, d) {
+         if (compareDimension(b.row, t.row) >= 0) return
+         var dd = [0, 1]
+         if (d.length > 2 && d[0] == 0 && d[1] == 0) dd = d.slice(2)
+         if (d.length == 3 && d[0] == 1 && d[1] == 0 && d[2] == 1) dd = d
+         var s = getMds(m), c = getBootIndex(s, dd)[0]
+         for (var i = b.cloumn + 1; i <= t.cloumn; i++) {
+            for (var j = 0; j < m[i].length; j++) {
+               if (i == t.cloumn && j == m[t.cloumn].length - 1) return
+               var it = m[i][j], ds = s.slice(), pos = 1
+               if (it.no != b.no || compareDimension(rowDifference(it.row, it.ref.row), b.row) <= 0) continue
+               ds.splice(c + 1, 0, { value: rowDifference(it.row, it.ref.row).length < 2 ? 1 : rowDifference(it.row, it.ref.row)[1], parent: ds[c] })
+               while (it.ref.cloumn > b.cloumn) {
+                  it = it.ref
+                  if (compareDimension(rowDifference(it.row, it.ref.row), b.row) <= 0) continue
+                  ds.splice(c + 1, 0, { value: rowDifference(it.row, it.ref.row).length < 2 ? 1 : rowDifference(it.row, it.ref.row)[1], parent: ds[c] })
+                  ds[c + 2].parent = ds[c + 1]
+                  pos++
+               }
+               for (var k = 0; k < ds.length; k++) {
+                  ds[k].cloumn = k
+                  while (ds[k].value <= ds[k].parent.value) ds[k].parent = ds[k].parent.parent
+               }
+               it = m[i][j]
+               it.offset = []
+               if (d.length == 2 && d[0] == 2) {
+                  var lift = ds[ds.length - 1].value - 1 - ds[ds.length - 1].parent.value
+                  if (d[1] > 0 && lift > d[1]) lift = d[1]
+                  for (var ii = 0; ii < n; ii++) {
+                     it.offset.push([1, rowDifference(it.row, it.ref.row)[1] + (1 + ii) * lift])
+                  }
+                  continue
+               }
+               var len = ds.length - 1 - c
+               var ex = expand(ds, n, dd, inputm)
+               for (var ii = 0; ii < n; ii++) {
+                  it.offset.push([1, ex[c + len * (ii + 1) + pos]])
+               }
             }
-            var rightLegInR = [];
-            var rInRightLeg = [];
-            var rightLegParents = [];
-            var r = {
-                dim: 1,
-                arr: [],
-                coord: coordOffset
-            };
-            for (var i = 0; i < rightLegs.length; i++) {
-                var pi = i;
-                while (pi > -1 && !(rightLegs[pi].value < rightLegs[i].value && (rightLegs[pi].coord[m.dim - 1] || 0) < (rightLegs[i].coord[m.dim - 1] || 0))) pi = rightLegTree[pi];
-                rightLegParents.push(pi);
-                if (pi != -1) {
-                    rightLegInR.push(r.arr.length);
-                    rInRightLeg.push(i);
-                    r.arr.push({
-                        dim: 0,
-                        value: rightLegs[i].value - rightLegs[pi].value,
-                        position: rightLegPositions[i],
-                        coord: addCoord(coordOffset, 0, rightLegPositions[i] - sumArray(coordOffset)),
-                        parentIndex: -1,
-                        forcedParent: true,
-                        leftLegCoord: rightLegs[pi].coord.slice(0),
-                        rightLegCoord: rightLegs[i].coord.slice(0)
-                    });
-                } else {
-                    rightLegInR.push(-1);
-                }
+         }
+      }
+      function expand(s, n, d, f = true) {
+         if (s[s.length - 1].value <= 1) return s.slice(0, -1).map(e => { return e.value })
+         var idx = getBootIndex(s, d), m = drawMountain(s, d), b = m[idx[0]][idx[1]], t = m[m.length - 1][m[m.length - 1].length - 1], ex = []
+         if (t.value == 1) t = t.head
+         if (f) displayMt(m)
+         setElementRefrence(m)
+         setElementNo(m, b)
+         expandDimensionSequnece(m, b, t, n, d)
+         if (t.value - b.value > 1 && proc(d).length == 1) {
+            var o = getOds(m)
+            ex = expand(o, n, d.length == 1 || divide(d).length == 1 ? d : merge(divide(d).slice(1)), f)
+         }
+         else if ('foot' in t) {
+            m[m.length - 1].pop()
+            delete t.foot
+            t.parent = t.parent.parent
+         }
+         for (var i = 0; i < m[m.length - 1].length; i++) m[m.length - 1][i].value--
+         for (var i = b.no; i < m[b.cloumn].length; i++) {
+            var idx = t.idx
+            m[t.cloumn].push({ value: m[b.cloumn][i].value, row: m[b.cloumn][i].row, cloumn: t.cloumn, idx: idx++, no: m[b.cloumn][i].no, id: m[b.cloumn][i].no, parent: m[b.cloumn][i].parent, head: m[t.cloumn][m[t.cloumn].length - 1], ref: m[b.cloumn][i] })
+            m[t.cloumn][m[t.cloumn].length - 2].foot = m[t.cloumn][m[t.cloumn].length - 1]
+         }
+         for (var i = 0; i < n; i++) {
+            for (var j = b.cloumn + 1; j <= t.cloumn; j++) {
+               copyCloumn(m, b, t, j, i, ex, d)
             }
-            for (var i = 0; i < r.arr.length; i++) {
-                var pi = rInRightLeg[i];
-                while (true) {
-                    var ppi = rightLegParents[pi];
-                    if (ppi == -1 || rightLegInR[ppi] == -1) break;
-                    pi = ppi;
-                    if (r.arr[rightLegInR[pi]].value < r.arr[i].value) {
-                        r.arr[i].parentIndex = rightLegInR[pi];
-                        break;
-                    }
-                }
-            }
-            return r;
-        }
-        function indexFromCoord(m, coord, d) {
-            if (d === undefined) d = 0;
-            var r = [];
-            while (true) {
-                if (m.dim <= d) {
-                    if (equalVector(m.coord, coord, d)) return r;
-                    else return null;
-                }
-                if (m.dim == 1) {
-                    for (var i = 0; i < m.arr.length + 1; i++) {
-                        if (i == m.arr.length) return null;
-                        if (m.arr[i].coord[0] == coord[0]) {
-                            r.push(i);
-                            m = m.arr[i];
-                            break;
-                        }
-                    }
-                } else {
-                    var i = coord[m.dim - 1] || 0;
-                    if (i >= m.arr.length) return null;
-                    r.push(i);
-                    m = m.arr[i];
-                }
-            }
-        }
-        function findByIndex(m, index) {
-            if (!index) return null;
-            for (var i = 0; i < index.length; i++) m = m.arr[index[i] < 0 ? m.arr.length + index[i] : index[i]];
-            return m;
-        }
-        function findByCoord(m, coord, d) {
-            return findByIndex(m, indexFromCoord(m, coord, d));
-        }
-        function getLastPosition(m) {
-            while (m.dim > 1) m = m.arr[0];
-            return m.arr[m.arr.length - 1].position;
-        }
-        function findHighestWithPosition(m, position) {
-            if (m.dim == 0) {
-                if (m.position == position) return m;
-                else null;
-            } else {
-                if (m.arr.length === 0) return null;
-                if (m.dim == 1) {
-                    var min = 0;
-                    var max = m.arr.length - 1;
-                    if (m.arr[min].position > position || m.arr[max].position < position) return null;
-                    if (m.arr[min].position == position) return m.arr[min];
-                    if (m.arr[max].position == position) return m.arr[max];
-                    while (min != max) {
-                        var mid = Math.floor((min + max) / 2);
-                        if (m.arr[mid].position == position) return m.arr[mid];
-                        else if (min == mid) return null;
-                        else if (m.arr[mid].position < position) min = mid;
-                        else if (m.arr[mid].position > position) max = mid;
-                    }
-                    return null;
-                } else {
-                    for (var i = m.arr.length - 1; i >= 0; i--) {
-                        var lowestRow = m.arr[i];
-                        while (lowestRow && lowestRow.dim > 1) lowestRow = lowestRow.arr[0];
-                        if (!lowestRow) continue;
-                        var nodeInLowestRow = findHighestWithPosition(lowestRow, position);
-                        if (nodeInLowestRow) {
-                            if (m.dim == 2) return nodeInLowestRow;
-                            else return findHighestWithPosition(m.arr[i], position);
-                        }
-                    }
-                    return null;
-                }
-            }
-        }
-        function parent(m, node) {
-            if (node.dim != 0 || node.parentIndex == -1) return null;
-            var index = indexFromCoord(m, node.coord);
-            if (!index) return null;
-            index[index.length - 1] = node.parentIndex;
-            return findByIndex(m, index);
-        }
-        function leftLeg(m, node) {
-            if (node.dim != 0 || !node.leftLegCoord) return null;
-            return findByCoord(m, node.leftLegCoord);
-        }
-        function rightLeg(m, node) {
-            if (node.dim != 0 || !node.rightLegCoord) return null;
-            return findByCoord(m, node.rightLegCoord);
-        }
-        function findAbove(m, node) {
-            if (node.dim != 0) return null;
-            var index = indexFromCoord(m, node.coord);
-            if (!index) return null;
-            for (var i = index.length - 1; i > 0; i--) {
-                index[i] = 0;
-                index[i - 1]++;
-                index[index.length - 1] = node.position - sumArray(index.slice(0, -1));
-                if (!findByIndex(m, index.slice(0, i))) continue;
-                var candidate = findByIndex(m, index);
-                if (candidate) return candidate;
-            }
-            return null;
-        }
-        function flattenMountain(m) {
-            var r = {};
-            if (m.dim == 0) {
-                r[m.coord.join(",")] = m;
-            } else {
-                for (var i = 0; i < m.arr.length; i++) {
-                    Object.assign(r, flattenMountain(m.arr[i]));
-                }
-            }
-            return r;
-        }
-        function cloneMountain(mountain) {
-            var newMountain = Object.assign({}, mountain);
-            if (mountain.dim === 0) {
-                newMountain.coord = newMountain.coord.slice(0);
-                newMountain.leftLegCoord = newMountain.leftLegCoord && newMountain.leftLegCoord.slice(0);
-                newMountain.rightLegCoord = newMountain.rightLegCoord && newMountain.rightLegCoord.slice(0);
-            } else {
-                newMountain.arr = newMountain.arr.map(cloneMountain);
-                newMountain.coord = newMountain.coord.slice(0);
-            }
-            return newMountain;
-        }
-        function getBadRoot(s) {
-            var mountain;
-            if (typeof s == "string") mountain = calcMountain(s);
-            else mountain = s;
-            return leftLeg(mountain, findHighestWithPosition(mountain, getLastPosition(mountain)));
-        }
-        function filterEmpty(mountain) {
-            if (mountain.dim > 0) {
-                for (var i = mountain.arr.length - 1; i >= 0; i--) {
-                    filterEmpty(mountain.arr[i]);
-                    if (mountain.arr[i].dim > 0 && mountain.arr[i].arr.length === 0) mountain.arr.slice(i, 1);
-                }
-            }
-            return mountain;
-        }
-        function findHighestWithPositionBelow(m, sub, position) {
-            var crawlIndex = indexFromCoord(m, sub.coord, sub.dim);
-            while (true) {
-                crawlIndex[crawlIndex.length - 1]--;
-                while (crawlIndex.length > 0 && crawlIndex[crawlIndex.length - 1] < 0) {
-                    crawlIndex.pop();
-                    crawlIndex[crawlIndex.length - 1]--;
-                }
-                if (crawlIndex.length === 0) break;
-                var r = findHighestWithPosition(findByIndex(m, crawlIndex), position);
-                if (r) return r;
-            }
-            return null;
-        }
-        var mountain;
-        if (typeof s == "string") mountain = calcMountain(s);
-        else mountain = s;
-        if (stringify === undefined) stringify = true;
-        var result = cloneMountain(mountain);
-        var badRoot = getBadRoot(mountain);
-        var cutPosition = getLastPosition(mountain);
-        var topCut = findHighestWithPosition(mountain, cutPosition);
-        var cutLookup = topCut;
-        while (cutLookup) {
-            var parentRow = findByCoord(result, cutLookup.coord, 1);
-            parentRow.arr.pop();
-            cutLookup = rightLeg(result, cutLookup);
-        }
-        filterEmpty(result);
-        if (badRoot) {
-            var badRootPosition = badRoot.position;
-            var badRootRow = findByCoord(mountain, badRoot.coord, 1);
-            var bottomCut = mountain;
-            while (bottomCut.dim > 1) bottomCut = bottomCut.arr[0];
-            bottomCut = bottomCut.arr[bottomCut.arr.length - 1];
-            var belowCopyStackBase = [];
-            var aboveCopyStackBase = [];
-            var topCutIndex = indexFromCoord(mountain, topCut.coord);
-            var crawlIndex = topCutIndex.slice(0, -1);
-            while (true) {
-                crawlIndex[crawlIndex.length - 1]--;
-                while (crawlIndex.length > 0 && crawlIndex[crawlIndex.length - 1] < 0) {
-                    crawlIndex.pop();
-                    crawlIndex[crawlIndex.length - 1]--;
-                }
-                if (crawlIndex.length === 0) break;
-                var sourceSubMountain = findByIndex(mountain, crawlIndex);
-                var destSubMountain = findByIndex(result, crawlIndex);
-                belowCopyStackBase.push([sourceSubMountain, destSubMountain, null, 0, false]);
-            }
-            crawlIndex = topCutIndex.slice(0, -1);
-            if (indexFromCoord(result, findByIndex(mountain, crawlIndex).coord, 1)) {
-                while (true) {
-                    var sourceSubMountain = findByIndex(mountain, crawlIndex);
-                    var destSubMountain = findByIndex(result, crawlIndex);
-                    aboveCopyStackBase.unshift([sourceSubMountain, destSubMountain]);
-                    crawlIndex[crawlIndex.length - 1]++;
-                    while (crawlIndex.length > 0 && crawlIndex[crawlIndex.length - 1] >= findByIndex(mountain, crawlIndex.slice(0, -1)).arr.length) {
-                        crawlIndex.pop();
-                        crawlIndex[crawlIndex.length - 1]++;
-                    }
-                    if (crawlIndex.length === 0) break;
-                }
-            }
-        }
-        var subCutCache = {};
-        var subBadRootCache = {};
-        var subBadRootRowCache = {};
-        var topNodeCache = {};
-        var isAscendingCache = {};
-        for (var i = 0; i <= n && badRoot; i++) {
-            for (var x = i === 0 ? cutPosition : badRootPosition + 1; x < cutPosition + (i < n); x++) {
-                var nodeBelow = null;
-                var belowCopyStack = belowCopyStackBase.slice(0);
-                while (belowCopyStack.length) {
-                    var popItem = belowCopyStack.pop();
-                    var sourceSubMountain = popItem[0];
-                    var destSubMountain = popItem[1];
-                    var cleanCopySource = popItem[2];
-                    var cleanCopyOffset = popItem[3];
-                    var ignoreBelow = popItem[4];
-                    var sourceSubMountainID = sourceSubMountain.coord.join(",") + "," + sourceSubMountain.dim;
-                    if (subCutCache[sourceSubMountainID] === undefined) {
-                        var subCut = findHighestWithPosition(sourceSubMountain, cutPosition);
-                        var subBadRoot = findHighestWithPosition(sourceSubMountain, badRootPosition);
-                        var subBadRootRow = subBadRoot && findByCoord(sourceSubMountain, subBadRoot.coord, 1);
-                        subCutCache[sourceSubMountainID] = subCut;
-                        subBadRootCache[sourceSubMountainID] = subBadRoot;
-                        subBadRootRowCache[sourceSubMountainID] = subBadRootRow;
-                    } else {
-                        var subCut = subCutCache[sourceSubMountainID];
-                        var subBadRoot = subBadRootCache[sourceSubMountainID];
-                        var subBadRootRow = subBadRootRowCache[sourceSubMountainID];
-                    }
-                    var sourceSubMountainAndPositionID = sourceSubMountainID + "," + x;
-                    if (topNodeCache[sourceSubMountainAndPositionID] === undefined) {
-                        var topNode = findHighestWithPosition(sourceSubMountain, x);
-                        topNodeCache[sourceSubMountainAndPositionID] = topNode;
-                        if (!topNode) continue;
-                        if (legBasedAscension) {
-                            var nodeInSubBadRootRow = subBadRootRow && findHighestWithPosition(subBadRootRow, x);
-                            while (nodeInSubBadRootRow && nodeInSubBadRootRow.position > badRootPosition) {
-                                var leftLegPosition = nodeInSubBadRootRow.leftLegCoord ? sumArray(nodeInSubBadRootRow.leftLegCoord) : nodeInSubBadRootRow.position - 1;
-                                nodeInSubBadRootRow = findHighestWithPosition(subBadRootRow, leftLegPosition);
-                            }
-                            var isAscending = nodeInSubBadRootRow && nodeInSubBadRootRow.position == badRootPosition;
-                            isAscendingCache[sourceSubMountainAndPositionID] = isAscending;
-                        } else {
-                            var referenceRow = subBadRootRow && subBadRootRow.coord[1] && findByCoord(sourceSubMountain, addCoord(subBadRootRow.coord, 1, -1), 1) || subBadRootRow;
-                            var nodeInReferenceRow = referenceRow && findHighestWithPosition(referenceRow, x);
-                            while (nodeInReferenceRow && nodeInReferenceRow.position > badRootPosition) nodeInReferenceRow = parent(referenceRow, nodeInReferenceRow);
-                            var isAscending = nodeInReferenceRow && nodeInReferenceRow.position == badRootPosition;
-                            isAscendingCache[sourceSubMountainAndPositionID] = isAscending;
-                        }
-                    } else {
-                        var topNode = topNodeCache[sourceSubMountainAndPositionID];
-                        if (!topNode) continue;
-                        var isAscending = isAscendingCache[sourceSubMountainAndPositionID];
-                    }
+         }
+         if (f) displayMt(m)
+         return m.map(e => { return e[0].value })
+      }
+      function toSequence(s) {
+         var seq = []
+         for (var i = 0; i < s.length; i++) {
+            if (s[i] <= 1) { seq.push({ value: s[i], cloumn: i, parent: { row: [1], cloumn: -1 } }); continue }
+            for (var j = i - 1; j >= 0; j--) if (s[j] < s[i]) { seq.push({ value: s[i], cloumn: i, parent: seq[j] }); break }
+         }
+         return seq
+      }
+      //Limited to n<=10
+      function expandmultilimited(s, nstring, dstring,) {
+         var result = s;
+         for (var i of nstring.split(",")) result = expand(toSequence(result.split(itemSeparatorRegex).map(e => { return Number(e) })), Math.min(i, 10), dstring.split(itemSeparatorRegex).map(e => { return Number(e) })).toString();
+         return result;
+      }
+      if (input == dg("input").value && inputn == dg("inputn").value && inputd == dg("inputd").value && inputm == dg("inputm").checked) return;
+      var mt = ""
+      var inputm = false
+      return expandmultilimited(s, n.toString(), "0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+   }
+   static cmp(a, b) {
+      if (a === "Limit" && b === "Limit") return 0;
+      if (a === "Limit") return 1;
+      if (b === "Limit") return -1;
 
-                    if (sourceSubMountain.dim == 1) {
-                        if (cleanCopySource) {
-                            var position = x + (cutPosition - badRootPosition) * i;
-                            var sourceNode = findHighestWithPosition(cleanCopySource, x);
-                            var sourceLeftLegPosition = sourceNode.leftLegCoord ? sumArray(sourceNode.leftLegCoord) : x - 1;
-                            var leftLegPosition = sourceLeftLegPosition >= badRootPosition ? sourceLeftLegPosition + (cutPosition - badRootPosition) * i : sourceLeftLegPosition;
-                            var nodeLeftDown = findHighestWithPositionBelow(result, destSubMountain, leftLegPosition);
-                            var leftLegCoord = nodeLeftDown ? nodeLeftDown.coord : null;
-                            var rightLegCoord = nodeBelow ? nodeBelow.coord : null;
-                            if (nodeBelow) {
-                                if (equalVector(leftLegCoord, rightLegCoord, 1)) {
-                                    var leftLegIndex = indexFromCoord(result, leftLegCoord);
-                                    nodeBelow.parentIndex = leftLegIndex[leftLegIndex.length - 1];
-                                } else {
-                                    nodeBelow.parentIndex = -1;
-                                }
-                            }
-                            destSubMountain.arr.push(nodeBelow = {
-                                dim: 0,
-                                value: NaN,
-                                position: position,
-                                coord: addCoord(destSubMountain.coord, 0, position - sumArray(destSubMountain.coord)),
-                                parentIndex: -1,
-                                forcedParent: sourceNode.forcedParent,
-                                leftLegCoord: leftLegCoord,
-                                rightLegCoord: rightLegCoord
-                            });
-                        } else {
-                            var position = x + (cutPosition - badRootPosition) * i;
-                            var sourceNode = findHighestWithPosition(sourceSubMountain, x);
-                            var sourceLeftLegPosition = sourceNode.leftLegCoord ? sumArray(sourceNode.leftLegCoord) : -1;
-                            var leftLegPosition = sourceLeftLegPosition >= badRootPosition ? sourceLeftLegPosition + (cutPosition - badRootPosition) * i : sourceLeftLegPosition;
-                            var nodeLeftDown = findHighestWithPositionBelow(result, destSubMountain, leftLegPosition);
-                            var leftLegCoord = nodeLeftDown ? nodeLeftDown.coord : null;
-                            var rightLegCoord = nodeBelow ? nodeBelow.coord : null;
-                            if (nodeBelow) {
-                                if (equalVector(leftLegCoord, rightLegCoord, 1)) {
-                                    var leftLegIndex = indexFromCoord(result, leftLegCoord);
-                                    nodeBelow.parentIndex = leftLegIndex[leftLegIndex.length - 1];
-                                } else {
-                                    nodeBelow.parentIndex = -1;
-                                }
-                            }
-                            destSubMountain.arr.push(nodeBelow = {
-                                dim: 0,
-                                value: NaN,
-                                position: position,
-                                coord: addCoord(destSubMountain.coord, 0, position - sumArray(destSubMountain.coord)),
-                                parentIndex: -1,
-                                forcedParent: sourceNode.forcedParent,
-                                leftLegCoord: leftLegCoord,
-                                rightLegCoord: rightLegCoord
-                            });
-                        }
-                    } else {
-                        var subCutHeight = subCut && subCut.coord[sourceSubMountain.dim - 1] || 0;
-                        var subBadRootHeight = subBadRoot && subBadRoot.coord[sourceSubMountain.dim - 1] || 0;
-                        var topNodeHeight = topNode.coord[sourceSubMountain.dim - 1] || 0;
-                        if (isAscending) {
-                            if (cleanCopySource) {
-                                var generationsFromSubBadRoot = 0;
-                                var nodeInCleanCopySource = findHighestWithPosition(cleanCopySource, x);
-                                if (nodeInCleanCopySource.leftLegCoord) {
-                                    var lowAncestorNode = nodeInCleanCopySource;
-                                    while (lowAncestorNode.position > badRootPosition) {
-                                        lowAncestorNode = findHighestWithPosition(cleanCopySource, sumArray(lowAncestorNode.leftLegCoord));
-                                        generationsFromSubBadRoot++;
-                                    }
-                                } else {
-                                    generationsFromSubBadRoot = x - badRootPosition;
-                                }
-                                var lastReplacedCut = findHighestWithPosition(destSubMountain, badRootPosition + (cutPosition - badRootPosition) * i);
-                                var lastReplacedCutHeight = lastReplacedCut && lastReplacedCut.coord[sourceSubMountain.dim - 1] || 0;
-                                var targetHeight = i === 0 ? topNodeHeight : lastReplacedCutHeight + generationsFromSubBadRoot - cleanCopyOffset;
-                                if (ignoreBelow) {
-                                    while (destSubMountain.arr.length < targetHeight + 1) {
-                                        destSubMountain.arr.push({
-                                            dim: destSubMountain.dim - 1,
-                                            arr: [],
-                                            coord: addCoord(destSubMountain.coord, destSubMountain.dim - 1, destSubMountain.arr.length)
-                                        });
-                                    }
-                                    for (var j = targetHeight; j >= 0; j--) {
-                                        belowCopyStack.push([sourceSubMountain.arr[subBadRootHeight], destSubMountain.arr[j], cleanCopySource, Math.max(j - lastReplacedCutHeight + cleanCopyOffset, 0), true]);
-                                    }
-                                } else {
-                                    if (!lastReplacedCut || cleanCopyOffset) throw Error("Something went wrong");
-                                    while (destSubMountain.arr.length < targetHeight + 1) {
-                                        destSubMountain.arr.push({
-                                            dim: destSubMountain.dim - 1,
-                                            arr: [],
-                                            coord: addCoord(destSubMountain.coord, destSubMountain.dim - 1, destSubMountain.arr.length)
-                                        });
-                                    }
-                                    for (var j = targetHeight; j >= 0; j--) {
-                                        if (j < subBadRootHeight) {
-                                            belowCopyStack.push([sourceSubMountain.arr[j], destSubMountain.arr[j], null, 0, false]);
-                                        } else {
-                                            belowCopyStack.push([sourceSubMountain.arr[subBadRootHeight], destSubMountain.arr[j], cleanCopySource, Math.max(j - lastReplacedCutHeight + cleanCopyOffset, 0), j > subBadRootHeight]);
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (cleanCopyOffset) throw Error("Something went wrong");
-                                if (ignoreBelow) {
-                                    var lastReplacedCut = findHighestWithPosition(destSubMountain, badRootPosition + (cutPosition - badRootPosition) * i);
-                                    var lastReplacedCutHeight = lastReplacedCut && lastReplacedCut.coord[sourceSubMountain.dim - 1] || 0;
-                                    if (!lastReplacedCut && cleanCopyOffset) throw Error("Something went wrong");
-                                    var targetHeight = i === 0 ? topNodeHeight : lastReplacedCutHeight + topNodeHeight;
-                                    while (destSubMountain.arr.length < targetHeight - subBadRootHeight + 1) {
-                                        destSubMountain.arr.push({
-                                            dim: destSubMountain.dim - 1,
-                                            arr: [],
-                                            coord: addCoord(destSubMountain.coord, destSubMountain.dim - 1, destSubMountain.arr.length)
-                                        });
-                                    }
-                                    for (var j = targetHeight; j >= subBadRootHeight; j--) {
-                                        if (j < lastReplacedCutHeight + subBadRootHeight + (sourceSubMountain.dim == 2)) {
-                                            belowCopyStack.push([sourceSubMountain.arr[subBadRootHeight], destSubMountain.arr[j - subBadRootHeight], subBadRootRow, 0, true]);
-                                        } else {
-                                            belowCopyStack.push([sourceSubMountain.arr[j - lastReplacedCutHeight], destSubMountain.arr[j - subBadRootHeight], null, 0, j == lastReplacedCutHeight + subBadRootHeight]);
-                                        }
-                                    }
-                                } else {
-                                    while (destSubMountain.arr.length < topNodeHeight + (subCutHeight - subBadRootHeight) * i + 1) {
-                                        destSubMountain.arr.push({
-                                            dim: destSubMountain.dim - 1,
-                                            arr: [],
-                                            coord: addCoord(destSubMountain.coord, destSubMountain.dim - 1, destSubMountain.arr.length)
-                                        });
-                                    }
-                                    for (var j = topNodeHeight + (subCutHeight - subBadRootHeight) * i; j >= 0; j--) {
-                                        if (j < subBadRootHeight) {
-                                            belowCopyStack.push([sourceSubMountain.arr[j], destSubMountain.arr[j], null, 0, false]);
-                                        } else if (j < subBadRootHeight + (subCutHeight - subBadRootHeight) * i + (sourceSubMountain.dim == 2)) {
-                                            belowCopyStack.push([sourceSubMountain.arr[subBadRootHeight], destSubMountain.arr[j], subBadRootRow, 0, j > subBadRootHeight]);
-                                        } else {
-                                            belowCopyStack.push([sourceSubMountain.arr[j - (subCutHeight - subBadRootHeight) * i], destSubMountain.arr[j], null, 0, i !== 0 && j == subBadRootHeight + (subCutHeight - subBadRootHeight) * i]);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (cleanCopySource || cleanCopyOffset || ignoreBelow) throw Error("Something went wrong");
-                            while (destSubMountain.arr.length < topNodeHeight + 1) {
-                                destSubMountain.arr.push({
-                                    dim: destSubMountain.dim - 1,
-                                    arr: [],
-                                    coord: addCoord(destSubMountain.coord, destSubMountain.dim - 1, destSubMountain.arr.length)
-                                });
-                            }
-                            for (var j = topNodeHeight; j >= 0; j--) {
-                                belowCopyStack.push([sourceSubMountain.arr[j], destSubMountain.arr[j], null, 0, false]);
-                            }
-                        }
-                    }
-                }
-                var aboveCopySourceX = x == cutPosition ? badRootPosition : x;
-                var aboveCopyStack = aboveCopyStackBase.slice(0);
-                while (aboveCopyStack.length) {
-                    var popItem = aboveCopyStack.pop();
-                    var sourceSubMountain = popItem[0];
-                    var destSubMountain = popItem[1];
-                    var topNode = findHighestWithPosition(sourceSubMountain, aboveCopySourceX);
-                    if (!topNode) continue;
+      if (typeof a === "string") a = a.split(',').map(Number);
+      if (typeof b === "string") b = b.split(',').map(Number);
 
-                    if (sourceSubMountain.dim == 1) {
-                        var position = x + (cutPosition - badRootPosition) * i;
-                        var nodeInSourceSubMountain = topNode;
-                        var sourceLeftLegPosition = nodeInSourceSubMountain.leftLegCoord ? sumArray(nodeInSourceSubMountain.leftLegCoord) : -1;
-                        var leftLegPosition = sourceLeftLegPosition >= badRootPosition ? sourceLeftLegPosition + (cutPosition - badRootPosition) * i : sourceLeftLegPosition;
-                        var nodeLeftDown = findHighestWithPositionBelow(result, destSubMountain, leftLegPosition);
-                        var leftLegCoord = nodeLeftDown ? nodeLeftDown.coord : null;
-                        var rightLegCoord = nodeBelow ? nodeBelow.coord : null;
-                        if (nodeBelow) {
-                            if (equalVector(leftLegCoord, rightLegCoord, 1)) {
-                                var leftLegIndex = indexFromCoord(result, leftLegCoord);
-                                nodeBelow.parentIndex = leftLegIndex[leftLegIndex.length - 1];
-                            } else {
-                                nodeBelow.parentIndex = -1;
-                            }
-                        }
-                        destSubMountain.arr.push(nodeBelow = {
-                            dim: 0,
-                            value: NaN,
-                            position: position,
-                            coord: addCoord(destSubMountain.coord, 0, position - sumArray(destSubMountain.coord)),
-                            parentIndex: -1,
-                            forcedParent: nodeInSourceSubMountain.forcedParent,
-                            leftLegCoord: leftLegCoord,
-                            rightLegCoord: rightLegCoord
-                        });
-                    } else {
-                        var topNodeHeight = topNode && topNode.coord[sourceSubMountain.dim - 1] || 0;
-                        for (var j = topNodeHeight; j >= 0; j--) {
-                            aboveCopyStack.push([sourceSubMountain.arr[j], destSubMountain.arr[j]]);
-                        }
-                    }
-                }
-            }
-        }
-        var lastBottomNode = result;
-        while (lastBottomNode && lastBottomNode.dim > 0) {
-            if (lastBottomNode.dim == 1) {
-                lastBottomNode = lastBottomNode.arr[lastBottomNode.arr.length - 1];
-            } else {
-                lastBottomNode = lastBottomNode.arr[0];
-            }
-        }
-        var resultLength = lastBottomNode && lastBottomNode.position || 0;
-        for (var x = 0; x <= resultLength; x++) {
-            var node = findHighestWithPosition(result, x);
-            var aboveNode = null;
-            while (node) {
-                if (isNaN(node.value)) {
-                    if (aboveNode) {
-                        var pseudoParentNode = leftLeg(result, aboveNode);
-                        if (node.coord.length == pseudoParentNode.coord.length) {
-                            for (var i = node.coord.length - 1; i >= 0; i--) {
-                                if (i === 0 && !equalVector(node.coord, aboveNode.coord, 2) || node.coord[i] < pseudoParentNode.coord[i] || equalVector(node.coord, aboveNode.coord, i + 1) && node.coord[i] > pseudoParentNode.coord[i] + 1) {
-                                } else if (node.coord[i] > pseudoParentNode.coord[i]) break;
-                            }
-                        }
-                        node.value = pseudoParentNode.value + aboveNode.value;
-                    } else {
-                        node.value = 1;
-                    }
-                }
-                aboveNode = node;
-                node = rightLeg(result, node);
-            }
-        }
-        var rr;
-        if (stringify) {
-            rr = [];
-            if (result.arr.length) {
-                var bottomrow = result;
-                while (bottomrow.dim > 1) bottomrow = bottomrow.arr[0];
-                for (var i = 0; i < bottomrow.arr.length; i++) {
-                    rr.push(bottomrow.arr[i].value + (bottomrow.arr[i].forcedParent ? "v" + bottomrow.arr[i].parentIndex : ""));
-                }
-            }
-            rr = rr.join(",");
-        } else {
-            rr = result;
-        }
-        return rr;
-    }
+      const n = Math.min(a.length, b.length);
 
-    static cmp(a, b) {
-        if (a === "Limit" && b === "Limit") return 0;
-        if (a === "Limit") return 1;
-        if (b === "Limit") return -1;
+      for (let i = 0; i < n; i++) {
+         if (a[i] < b[i]) return -1;
+         if (a[i] > b[i]) return 1;
+      }
 
-        if (typeof a === "string") a = a.split(',').map(Number);
-        if (typeof b === "string") b = b.split(',').map(Number);
-
-        const n = Math.min(a.length, b.length);
-
-        for (let i = 0; i < n; i++) {
-            if (a[i] < b[i]) return -1;
-            if (a[i] > b[i]) return 1;
-        }
-
-        if (a.length < b.length) return -1;
-        if (a.length > b.length) return 1;
-        return 0;
-    }
-    static isSuccessor(array) {
-        if (array == '') return true;
-        if (array == "Limit") return false;
-        if (typeof array === "string") array = array.split(',').map(Number);
-        return array.length === 0 || array.at(-1) === 1;
-    }
+      if (a.length < b.length) return -1;
+      if (a.length > b.length) return 1;
+      return 0;
+   }
+   static isSuccessor(array) {
+      if (array == '') return true;
+      if (array == "Limit") return false;
+      if (typeof array === "string") array = array.split(',').map(Number);
+      return array.length === 0 || array.at(-1) === 1;
+   }
 
 
-    static ZERO = ''
+   static ZERO = ''
 
-    static f(alpha, beta) {
+   static f(alpha, beta) {
 
-        let n = 0;
+      let n = 0;
 
-        while (true) {
-            const x = this.fs(beta, n);
+      while (true) {
+         const x = this.fs(beta, n);
 
-            if (this.cmp(x, alpha) > 0) {
-                return x;
-            }
+         if (this.cmp(x, alpha) > 0) {
+            return x;
+         }
 
-            n++;
-        }
-    }
+         n++;
+      }
+   }
 
 
-    static g(alpha, beta, s) {
-        while (true) {
-            if (this.isSuccessor(beta)) return alpha;
+   static g(alpha, beta, s) {
+      while (true) {
+         if (this.isSuccessor(beta)) return alpha;
 
-            const split = this.f(alpha, beta);
+         const split = this.f(alpha, beta);
 
-            if (s === "") return split;
+         if (s === "") return split;
 
-            const bit = s[0];
-            s = s.slice(1);
+         const bit = s[0];
+         s = s.slice(1);
 
-            if (bit === "0") {
-                beta = split;
-            } else {
-                alpha = split;
-            }
-        }
-    }
+         if (bit === "0") {
+            beta = split;
+         } else {
+            alpha = split;
+         }
+      }
+   }
 
-    static gInv(alpha, beta, target) {
-        let result = "";
+   static gInv(alpha, beta, target) {
+      let result = "";
 
-        while (!this.isSuccessor(beta)) {
-            const split = this.f(alpha, beta);
-            const c = this.cmp(target, split);
+      while (!this.isSuccessor(beta)) {
+         const split = this.f(alpha, beta);
+         const c = this.cmp(target, split);
 
-            if (c === 0) break;
+         if (c === 0) break;
 
-            if (c < 0) {
-                result += "0";
-                beta = split;
-            } else {
-                result += "1";
-                alpha = split;
-            }
-        }
+         if (c < 0) {
+            result += "0";
+            beta = split;
+         } else {
+            result += "1";
+            alpha = split;
+         }
+      }
 
-        return result;
-    }
+      return result;
+   }
 
-    static h(x, k = 0.5, maxlen = 100, eps = 1e-10) {
-        let result = "";
+   static h(x, k = 0.5, maxlen = 100, eps = 1e-10) {
+      let result = "";
 
-        while (Math.abs(x - k) > eps && result.length < maxlen) {
-            if (x < k) {
-                result += "0";
-                x = x / k;
-            } else {
-                result += "1";
-                x = (x - k) / (1 - k);
-            }
-        }
+      while (Math.abs(x - k) > eps && result.length < maxlen) {
+         if (x < k) {
+            result += "0";
+            x = x / k;
+         } else {
+            result += "1";
+            x = (x - k) / (1 - k);
+         }
+      }
 
-        return result;
-    }
+      return result;
+   }
 
-    static hInv(s, k = 0.5) {
-        let x = k;
+   static hInv(s, k = 0.5) {
+      let x = k;
 
-        for (let i = s.length - 1; i >= 0; i--) {
-            if (s[i] === "0") {
-                x = k * x;
-            } else {
-                x = k + (1 - k) * x;
-            }
-        }
+      for (let i = s.length - 1; i >= 0; i--) {
+         if (s[i] === "0") {
+            x = k * x;
+         } else {
+            x = k + (1 - k) * x;
+         }
+      }
 
-        return x;
-    }
+      return x;
+   }
 }
 
 let Lim_BMS_in_Yseq = '1,3' // Lim(BMS) is 1,3 in y
@@ -2705,6 +2277,13 @@ function Conv_BMS_cOCF(ord) {
         return cOCF.g("[[[]c]]", "[[[][c]c]]", BMS.gInv([[0, 0, 0], [1, 1, 1]], [[0, 0, 0, 0], [1, 1, 1, 1]], ord))
 
     return cOCF.g("[[[][c]c]]", "Limit", BMS.gInv([[0, 0, 0, 0], [1, 1, 1, 1]], Lim_cOCF_in_BMS, ord))
+}
+
+function mystery() {
+   if (window.prompt('Enter dev code') == 'that was NOT the wind') {
+      document.getElementsByClassName('time-control-panel')[0].style.visibility = 'visible'
+         ; window.alert('congrat u unlock the time warp')
+   }
 }
 
 const EcOCF = (() => {
