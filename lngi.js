@@ -305,15 +305,15 @@ function update() {
         if (diff > 0) {
             timeStatusText = ` <b style="color: red;">(forwarded ${formatSeconds(Math.abs(diff))})</b>`;
         } else if (diff < 0) {
-            timeStatusText = ` <b style="color: red;">(backwarded ${formatSeconds(Math.abs(diff))})</b>`;
+            timeStatusText = ` <b style="color: blue;">(backwarded ${formatSeconds(Math.abs(diff))})</b>`;
         }
     }
     document.getElementById("time").innerHTML =
         `Time elapsed: ${formatSeconds(modifiedElapsedSeconds)}${timeStatusText}
-        <br><small>You spent ${formatSeconds(player_time)} on this tab (${(player_time / modifiedElapsedSeconds * 100).toFixed(5)}% of the runtime)</small>`;
+        <br><small>You spent ${formatSeconds(player_time)} on this tab (${(player_time / (trueElapsedSeconds) * 100).toFixed(5)}% of the actual runtime)</small>`;
     document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
 
-    document.title = `ω-Y LNGI: <${super_list.slice(0, 10).at(-1)[0]}`
+    document.title = `ω-Y LNGI: <${super_list.slice(0, 6).at(-1)[0]}`
 
     update_milestones(mpage)
 
