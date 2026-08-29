@@ -318,7 +318,7 @@ function update() {
 
     update_milestones(mpage)
 
-    player_time += 1 / tps
+    if (tps>1) player_time += 1 / tps
     if (player_time == NaN) {
         player_time = 0
     }
