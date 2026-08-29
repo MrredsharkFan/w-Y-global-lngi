@@ -24,10 +24,11 @@
         <div class="status-row">
             <div class="status-buttons">
                 <button id="btn_lngi">Lngi & Analysis</button>
-                <button id="btn_milestone">Milestone</button>
                 <button id="btn_progress">Progress</button>
-                <button id="mountain_btn">Visualizer</button>
                 <button id="btn_search">Search</button>
+                <button id="btn_milestone">Milestone</button>
+                <button id="mountain_btn">Visualizer</button>
+                <button id="btn_buddy">Buddy</button>
                 <button id="settings_btn">Settings</button>
             </div>
         </div>
@@ -238,7 +239,7 @@
             <label><input id="_UPDATEMODE" type="checkbox" checked> Sync</label>
         </div>
         <br><br>
-        <b>WhY mountain (Visualize the ω-Y sequence structure)</b>
+        <b><a href="https://naruyoko.github.io/whYmountain/">WhY mountain</a></b>
         <hr>
         <div id="outputcontainersquared">
             <div id="outputcontainer" style="background-color: white;">
@@ -257,6 +258,14 @@
             <div id="milestone_container" style="display: flex; flex-direction: column; gap: 8px;">
             </div>
         </div>
+    </div>
+
+    <div id="buddy" class="card" style="display: none; height: 600px; overflow-y: auto;">
+        <div style="flex:1">
+            Your time spent in this LNGI made a new LNGI! Its value is now:<br>
+            <span id="buddy_next"></span> to next ordinal
+        </div>
+        <div style="flex:1"><span id="buddy_lngi"></span></div>
     </div>
 
 

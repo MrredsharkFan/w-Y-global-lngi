@@ -25,5 +25,5 @@ onValue(onlineRef, (snapshot) => {
   const data = snapshot.val() || {};
   const count = Object.keys(data).length;
   const onlineDiv = document.getElementById("online");
-  if (onlineDiv) {onlineDiv.textContent = `🟢 ${count} user${count === 1 ? "" : "s"} online`;}
+  if (onlineDiv) {onlineDiv.textContent = `${count} online`;}
 });

@@ -249,18 +249,20 @@ document.getElementById("analysis_add").onclick = () => {
 
 renderAnalysisPanels();
 
-function num_time(t) {
+function num_time(t,update_main_bar=true) {
     var t_elapsed = Math.max(0, t - st)
     if (t_elapsed == 0) {
         return `Not started yet. Wait for the clock to hit.<br>Time left: <span style="font-size: 150%">${((st - t) / 1000).toFixed(3)}s</span>`
     } else {
         var u = get_time(t_elapsed)
         var j = num_to_lngi(u)
+        if (update_main_bar) {
 
-        document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
-        update_scratch_bars(u, t)
+            document.getElementById("main_lngi_bar").style.width = `${(1 - j[1]) * 100}%`
+            update_scratch_bars(u, t)
 
-        document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
+            document.getElementById("main_lngi_bar").style.backgroundColor = lt / j[1] < 1 ? `hsl(100,90%,70%)` : `hsl(${(1 - j[1]) * 100},90%,70%)`
+        }
         return [`${((1 - j[1]) * 100).toFixed(3)}%`, formatSeconds(lt), j[0]]
     }
 }
@@ -321,6 +323,12 @@ function update() {
     if (tps>1) player_time += 1 / tps
     if (player_time == NaN) {
         player_time = 0
+    }
+
+    if (page == 5) {
+        var u2 = num_time(player_time * 1000 + st, false)
+        document.getElementById("buddy_lngi").innerHTML = u2[2]
+        document.getElementById("buddy_next").innerHTML = u2[0]
     }
 
     saveMisc()

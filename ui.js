@@ -118,6 +118,13 @@ btn_milestone.addEventListener("click", () => {
     update_page()
 });
 
+const btn_buddy = document.getElementById("btn_buddy");
+
+btn_buddy.addEventListener("click", () => {
+    page = 5;
+    update_page()
+});
+
 function update_page() {
     document.getElementById("analysis_container").style.display = page == 0 ? "flex" : "none"
     document.getElementById("analysis_toolbar").style.display = page == 0 ? "flex" : "none"
@@ -128,6 +135,7 @@ function update_page() {
     document.getElementById("mountain").hidden = (page != 3)
     document.getElementById("real_milestones").hidden = (page != 4)
     document.getElementById("real_milestones").style.display = page == 4 ? "flex" : "none"
+    document.getElementById("buddy").style.display = page == 5 ? "flex" : "none"
 }
 
 let analysisPanels = [

@@ -272,59 +272,48 @@ h2 {
     border-radius: 2px;
     background: #888;
 }
+.status-buttons {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    gap: 10px
+}
 
-#btn_lngi {
+.status-buttons>button {
+    flex: 2;
     padding: 4px 10px;
     border: 1px solid #bbb;
     border-radius: 4px;
-    background: #67a9ff;
     cursor: pointer;
     white-space: nowrap;
+}
+
+#btn_lngi {
+    background: #ffaaaa;
 }
 
 #btn_progress {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #00ffdd62;
-    cursor: pointer;
-    white-space: nowrap;
+    background: #ffeeaa;
 }
 
 #btn_search {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #70ff7c;
-    cursor: pointer;
-    white-space: nowrap;
+    background: #aaffaa;
 }
 
 #btn_milestone {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #e9ff85;
-    cursor: pointer;
-    white-space: nowrap;
+    background: #aaffff;
 }
 
 #mountain_btn {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #ff8484;
-    cursor: pointer;
-    white-space: nowrap;
+    background: #aaaaff;
+}
+
+#btn_buddy {
+    background: #ffaaff;
 }
 
 #settings_btn {
-    padding: 4px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
     background: #ffffff;
-    cursor: pointer;
-    white-space: nowrap;
 }
 
 #future-milestone {
