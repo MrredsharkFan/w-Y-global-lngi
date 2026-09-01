@@ -536,10 +536,9 @@ class Y_Sequence {
          for (var i of nstring.split(",")) result = expand(toSequence(result.split(itemSeparatorRegex).map(e => { return Number(e) })), Math.min(i, 10), dstring.split(itemSeparatorRegex).map(e => { return Number(e) })).toString();
          return result;
       }
-      if (input == dg("input").value && inputn == dg("inputn").value && inputd == dg("inputd").value && inputm == dg("inputm").checked) return;
       var mt = ""
       var inputm = false
-      return expandmultilimited(s, n.toString(), "0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+      return expandmultilimited(s, n.toString(), "1,0");
    }
    static cmp(a, b) {
       if (a === "Limit" && b === "Limit") return 0;
