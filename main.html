@@ -8,12 +8,11 @@
     </link>
 </head>
 
-<body style="background-image: linear-gradient(#ffefff,#ffffff); background-repeat: no-repeat; background-size: auto;">
+<body style="background-image: linear-gradient(#ded,#fff); background-repeat: no-repeat; background-size: contain;">
     <div class="header">
         <div style="display: flex">
         <div style="flex: 1">
-        <h2>Termiunsfinity's &omega;-Y LNGI<small style="color: #999"> With contributions from <a
-                    href="https://github.com/RNGDelak" target="_blank">RNGDelak</a></small></h2>
+        <h2>Termiunsfinity's &omega;-Y LNGI</h2>
         </div>
         <div style="flex: 1; text-align: right;">
             <img src="https://hitscounter.dev/api/hit?url=https://mrredsharkfan.github.io/w-Y-global-lngi/main.html&label=Total%20Accesses%20:%20&icon=eye&color=Red"
@@ -29,6 +28,7 @@
                 <button id="btn_milestone">Milestone</button>
                 <button id="mountain_btn">Visualizer</button>
                 <button id="btn_buddy">Buddy</button>
+                <button id="btn_credits">Credits</button>
                 <button id="settings_btn">Settings</button>
             </div>
         </div>
@@ -57,16 +57,18 @@
 
         <select id="analysis_add_type">
             <option value="wY">ω-Y</option>
-            <option value="BMS">BMS</option>
             <option value="DBMS">DBMS</option>
-            <option value="2-shifted OCF">2-shifted OCF</option>
-            <option value="cOCF">cOCF</option>
-            <option value="EcOCF">Extended cOCF</option>
-            <option value="BcOCF">Bufed cOCF</option>
-            <option value="PMS">PMS</option>
-            <option value="AMS">AMS</option>
-            <option value="0Y">0-Y</option>
-            <option value="Vulcaniz">Vulcaniz</option>
+            <div class="SHO">
+                <option value="BMS">BMS</option>
+                <option value="2-shifted OCF">2-shifted OCF</option>
+                <option value="cOCF">cOCF</option>
+                <option value="EcOCF">Extended cOCF</option>
+                <option value="BcOCF">Bufed cOCF</option>
+                <option value="PMS">PMS</option>
+                <option value="AMS">AMS</option>
+                <option value="0Y">0-Y</option>
+                <option value="Vulcaniz">Vulcaniz</option>
+            </div>
         </select>
         <button id="btn_save_layout"
             style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-left: 15px;">Save
@@ -101,16 +103,18 @@
 
             <select id="scratch_bar_display_mode">
                 <option value="wY">&omega;-Y sequence</option>
-                <option value="BMS">BMS</option>
                 <option value="DBMS">DBMS</option>
-                <option value="2-shifted OCF">2-shifted OCF</option>
-                <option value="cOCF">cOCF (MAY BE LAGGY)</option>
-                <option value="EcOCF">Extended cOCF (MAY BE LAGGY)</option>
-                <option value="BcOCF">Buffed cOCF (MAY BE LAGGY)</option>
-                <option value="PMS">PMS</option>
-                <option value="AMS">AMS</option>
-                <option value="0Y">0-Y</option>
-                <option value="Vulcaniz">Vulcaniz</option>
+                <div class="SHO">
+                    <option value="BMS">BMS</option>
+                    <option value="2-shifted OCF">2-shifted OCF</option>
+                    <option value="cOCF">cOCF (MAY BE LAGGY)</option>
+                    <option value="EcOCF">Extended cOCF (MAY BE LAGGY)</option>
+                    <option value="BcOCF">Buffed cOCF (MAY BE LAGGY)</option>
+                    <option value="PMS">PMS</option>
+                    <option value="AMS">AMS</option>
+                    <option value="0Y">0-Y</option>
+                    <option value="Vulcaniz">Vulcaniz</option>
+                </div>
             </select>
         </div>
 
@@ -266,6 +270,51 @@
             <span id="buddy_next"></span> to next ordinal
         </div>
         <div style="flex:1"><span id="buddy_lngi"></span></div>
+    </div>
+
+    <div class="card" style="text-align: center; display: none" id="credits">
+        <span style="font-size: 200%">Credits</span><br>
+        <i>To the people who made this possible</i><br>
+        <div style="display: flex; flex-direction: row; gap: 10px">
+            <div style="flex: 1; text-align: left">
+                <span style="font-size: 150%">The coders</span><hr>
+                Termiunsfinity > Internal logic, Buddy, Repository Owner<br>
+                Gomen520 > Weak Magma &omega;-Y expander<br>
+                <a href="https://rngdelak.github.io/link/">RNGDelak</a> > "Conversion" process, UI design<br>
+                Various people > Notations<br>
+                Some Chinese guy > Accurate Y to BMS conversion (optimized)<br>
+                CatIsFlurry > &omega;-Y to DBMS conversion algorithm (Past 1,3)<br>
+                Solarzone > &omega;-Y to DBMS conversion algorithm (Pre-1,3), BMS to 2-shifted algorithm<br>
+                Decio > Minor Bugfixes<br>
+                <br>
+                Verity > He knows <i>everything</i>.
+            </div>
+            <div style="flex: 1; text-align: right;">
+                <div>
+                    <span style="font-size: 150%">The inspiration</span><hr>
+                    Dshamlin98 > LNGI videos<br>
+                    Myself > BMS LNGI (Please check it out! It's a very similar project, albeit with less features)<br>
+                </div><br><br>
+                <div>
+                    <span style="font-size: 150%">My afterthoughts</span><hr>
+                    This is it. The biggest project we have done.<br>
+                    Started around August 2025, I suddenly want to do an LNGI.<br>
+                    Not just <i>any</i> LNGI, a <i>global</i> LNGI.<br>
+                    Then with my (scratch) knowledge, I made BMS LNGI, as it's the strongest notation available there.<br>
+                    It was the largest scratch project that I have made. All the skills converged.<br>
+                    But then, I wished for more.<br>
+                    Over time, I transitioned into website design, and did some projects.<br>
+                    That's when I wanted another global LNGI, with a stronger notation that LNGI.<br>
+                    And with that, &omega;-Y LNGI is born.<br>
+                    With RNGDelak joining the team, we went through ups and downs<br>
+                    And bore such great fruit at the end.<br><br>
+                    But remember! This is definitely not the end of the project.<br>
+                    As googology progresses, stronger, more delicate notations will be made.<br>
+                    And when it comes, a stronger LNGI will be born again.<br>
+                    But now, just sit back, and relax!
+                </div>
+            </div>
+        </div>
     </div>
 
 

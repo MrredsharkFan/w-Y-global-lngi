@@ -125,6 +125,13 @@ btn_buddy.addEventListener("click", () => {
     update_page()
 });
 
+const btn_credits = document.getElementById("btn_credits");
+
+btn_credits.addEventListener("click", () => {
+    page = 6;
+    update_page()
+});
+
 function update_page() {
     document.getElementById("analysis_container").style.display = page == 0 ? "flex" : "none"
     document.getElementById("analysis_toolbar").style.display = page == 0 ? "flex" : "none"
@@ -136,6 +143,7 @@ function update_page() {
     document.getElementById("real_milestones").hidden = (page != 4)
     document.getElementById("real_milestones").style.display = page == 4 ? "flex" : "none"
     document.getElementById("buddy").style.display = page == 5 ? "flex" : "none"
+    document.getElementById("credits").style.display = page == 6 ? "block" : "none"
 }
 
 let analysisPanels = [
