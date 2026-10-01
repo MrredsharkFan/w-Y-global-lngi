@@ -2279,7 +2279,7 @@ function Conv_BMS_cOCF(ord) {
 }
 
 function mystery() {
-   if (window.prompt('Enter dev code') == 'that was NOT the wind') {
+   if (window.prompt('Enter dev code') == '') {
       document.getElementsByClassName('time-control-panel')[0].style.visibility = 'visible'
          ; window.alert('congrat u unlock the time warp')
    }
