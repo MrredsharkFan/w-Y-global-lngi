@@ -275,6 +275,11 @@ function search_time(x = document.getElementById("search_input").value) {
     }
 }
 
+function go_2048() {
+    document.getElementById('sex').value = '1,2,4,8,16,32,64,128,256,512,1024,2048'
+    specific_time()
+}
+
 function specific_time() {
     var n = search_time(document.getElementById('sex').value)[0]
     virtualElapsed = (Date.now() - st) / timeSpeed; 
