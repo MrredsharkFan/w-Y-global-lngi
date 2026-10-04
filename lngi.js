@@ -156,12 +156,26 @@ function num_to_lngi(m) {
     return ntl(m)
 }
 
+//1,3,4,2,5,6 => 4.007999420166016
+//1,3,4,3 => 4.008056640625
+
+const upg1 = 4.007999420166016
+const upg2 = 4.008056640625
+
 function get_time(t) {
-    return (Math.log10(1 + t / 864000) / 2 + 2)
+    var R = (Math.log10(1 + t / 864000) / 2 + 2)
+    if (R > upg1) {
+        R = (((R - upg1) / (upg2 - upg1) * 0.002) ** 3.3) * (upg2 - upg1) + upg1
+    }
+    return R
 }
 
 function get_time_inv(n) {
-    return (10 ** ((n - 2) * 2) - 1) * 864000
+    if (n > upg1) {
+        n = (((n - upg1) / (upg2 - upg1)) ** (1/3.3)) / 0.002 * (upg2 - upg1) + upg1
+    }
+    var S = (10 ** ((n - 2) * 2) - 1) * 864000
+    return S
 }
 
 function renderAnalysisPanels() {

@@ -2881,7 +2881,7 @@ var valid_milestones = [
     [
         "1,6",
         "1,&omega; (3-Y)<br>way too large",
-        "Limit of 3-Y. 200k years for this...",
+        "Limit of 3-Y.",
         1,
         7
     ],
@@ -2891,6 +2891,20 @@ var valid_milestones = [
         "4-Y is not even defined. Even though we can underinduction it via &omega;-Y",
         1,
         8
+    ],
+    [
+        "1,8",
+        "1,&omega; (5-Y)<br>way too large",
+        "Same as last one.",
+        1,
+        9
+    ],
+    [
+        "1,9",
+        "1,&omega; (6-Y)",
+        "... Doubt if I'm still working on googology anymore.",
+        1,
+        10
     ]
 ]
 
