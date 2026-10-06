@@ -2888,7 +2888,7 @@ var valid_milestones = [
     [
         "1,7",
         "1,&omega; (4-Y)<br>way too large",
-        "4-Y is not even defined. Even though we can underinduction it via &omega;-Y",
+        "Not much people really care about those exact high Y values.",
         1,
         8
     ],
@@ -2996,7 +2996,11 @@ function update_milestones() {
     var N = 0
     var ct = get_time(Date.now() - st);
     while (valid_milestones[N][4] < ct) {
-        N = N+1
+        N = N + 1
+        if (valid_milestones.length == N) {
+            document.getElementById("real_milestone_next").innerHTML = "No more milestones left!"
+            return;
+        }
     }
     var T = Date.now() - get_time_inv(valid_milestones[N][4]) - st;
     document.getElementById("real_milestone_next").innerHTML = `${N}# ${valid_milestones[N][0]} / ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`

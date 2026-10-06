@@ -181,6 +181,7 @@ function initializeMilestoneInputs() {
     updateYear();
 }
 
+//as it turns out this is problematic
 window.addEventListener("DOMContentLoaded", initializeMilestoneInputs);
 
 document.querySelectorAll("[data-day]").forEach(btn => {
