@@ -100,37 +100,84 @@ function scratch_bar_init() {
         p.id = `bar_${i}`
         p.style.textWrap = `nowrap`
         p.title = "Click to jump to this sequence"
+        // The bar is split into a notation label and a meta text
+        // (percentage / time). The label is only rewritten when the converted
+        // notation changes; the meta text is refreshed every frame.
+        p._label = document.createElement("span")
+        p._label.className = "bar-label"
+        p._meta = document.createElement("small")
+        p._meta.className = "bar-meta"
+        p.appendChild(p._label)
+        p.appendChild(document.createTextNode(" "))
+        p.appendChild(p._meta)
         p.addEventListener("click", () => jump_to_scratch_bar(i))
         document.getElementById("scratch_content").appendChild(p)
     }
 }
 
 var lt = 0
+// Last notation rendered on each bar. The notation conversion itself is
+// memoized in convert_From_wY(), and a label is only rewritten when its text
+// actually changes, so a frame only pays for labels that are genuinely new
+// instead of re-converting every bar like it used to.
+var scratch_bar_label_cache = []
+// Per-frame time budget for converting notations that are not cached yet:
+// switching the milestone-bar notation to an OCF variation now fills the
+// labels in over a few frames instead of freezing the page.
+var SCRATCH_BAR_CONVERT_BUDGET_MS = 6
+
+function scratch_bar_clock() {
+    return (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now()
+}
+
 function update_scratch_bars(x, currentSimulatedTime) {
+    const convertDeadline = scratch_bar_clock() + SCRATCH_BAR_CONVERT_BUDGET_MS
     for (var i = 0; i < 53; i++) {
+        const bar = document.getElementById(`bar_${i}`)
         if (i < super_list.length) {
             var u = x + super_list[i][2] / (2 ** super_list[i][1] / 2)
             if (i == 0) {
                 u = Math.ceil(x)
             }
-            
+
             var t = get_time_inv(u)
             const secondsLeft = Math.max(0, ((t + st) - currentSimulatedTime) / 1000);
 
             if (page == 1) {
-                document.getElementById(`bar_${i}`).style.visibility = "visible"
-                document.getElementById(`bar_${i}`).innerHTML =
-                    `${convert_From_wY(super_list[i][0] + (i == super_list.length - 1 ? ",1" : ""), scratch_bar_display)} <small>(${((1 - super_list[i][2]) * 100).toFixed(2)}% / 
-                ${tt == 0 ? `${formatSeconds(secondsLeft)} left / ${(secondsLeft*1000)}` : `in ${new Date(secondsLeft * 1000 + currentSimulatedTime).toLocaleString()}`})</small>`
+                bar.style.visibility = "visible"
 
-                document.getElementById(`bar_${i}`).style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
-                document.getElementById(`bar_${i}`).style.width = `${(1 - super_list[i][2]) * 100}%`
+                const ordText = super_list[i][0] + (i == super_list.length - 1 ? ",1" : "")
+                let label = convert_From_wY_peek(ordText, scratch_bar_display)
+                if (label === undefined) {
+                    // Not converted yet: convert only while this frame still
+                    // has budget left, otherwise keep the label that is
+                    // already on screen and retry on the next frame.
+                    if (scratch_bar_clock() < convertDeadline) {
+                        label = convert_From_wY(ordText, scratch_bar_display)
+                    } else {
+                        label = scratch_bar_label_cache[i]
+                        if (label === undefined) label = ordText
+                    }
+                }
+                if (label !== scratch_bar_label_cache[i]) {
+                    scratch_bar_label_cache[i] = label
+                    bar._label.innerHTML = label
+                }
+
+                bar._meta.textContent =
+                    `(${((1 - super_list[i][2]) * 100).toFixed(2)}% / ` +
+                    (tt == 0 ? `${formatSeconds(secondsLeft)} left / ${(secondsLeft * 1000)}` : `in ${new Date(secondsLeft * 1000 + currentSimulatedTime).toLocaleString()}`) +
+                    `)`
+
+                bar.style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
+                bar.style.width = `${(1 - super_list[i][2]) * 100}%`
             }
             if (i + 1 == super_list.length) {
                 lt = secondsLeft
             }
         } else {
-            document.getElementById(`bar_${i}`).style.visibility = "hidden"
+            bar.style.visibility = "hidden"
+            scratch_bar_label_cache[i] = undefined
         }
     }
 }
