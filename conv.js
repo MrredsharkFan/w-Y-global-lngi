@@ -663,7 +663,7 @@ THIS IS JUST AN APPROXIMATION NOT EXACT
 AFTER BH , IT SEEMS WRONG FOR ALL
 */
 
-let Lim_cOCF_in_BMS = '1,2,4,8,16,26'
+let Lim_cOCF_in_BMS = [[0,0,0,0],[1,1,1,1],[2,2,1,0]] // BMS image of the cOCF limit Y-sequence '1,2,4,8,16,26'
 
 function Conv_BMS_Y_sequence(ord) {
     return Y_Sequence.g(Y_Sequence.ZERO, Lim_BMS_in_Yseq, BMS.gInv(BMS.ZERO, "Limit", ord))
@@ -1074,7 +1074,6 @@ function Conv_BMS_OCF(matrix) {
     // FROM COCF PROGRAM
 
     function paren(x, n) {
-        console.log()
         let q = x[n] == '(' ? 1 : -1;
         let i = n;
         let t = 0;
@@ -1083,30 +1082,25 @@ function Conv_BMS_OCF(matrix) {
     }
 
     function firstTerm(x) {
-        console.log()
         let m = paren(x, 1);
         return [x.slice(0, m + 1), x.slice(m + 2) || '0'];
     }
 
     function lastTerm(x) {
-        console.log()
         let m = paren(x, x.length - 1);
         return [x.slice(0, m - 2) || '0', x.slice(m - 1)];
     }
 
     function terms(x) {
-        console.log()
         if (x == '0') { return []; }
         return [firstTerm(x)[0]].concat(terms(firstTerm(x)[1]));
     }
 
     function arg(x) {
-        console.log()
         return firstTerm(x)[0].slice(2, -1);
     }
 
     function lt(x, y) {
-        console.log()
         if (y == '0') { return false; }
         if (x == '0') { return true; }
         if (x[0] == 'p' && y[0] == 'P') { return true; }
@@ -8972,7 +8966,55 @@ Pipeline : BMS <-> PMS <-> AMS -> 0Y
 */
 let Y_Terms = document.getElementById("Y_Terms");
 let BMS_Terms = document.getElementById("BMS_Terms");
+
+// Notation conversions run for every progress bar and analysis panel on every
+// animation frame, and the OCF conversions can cost tens of milliseconds each
+// - selecting an OCF notation used to freeze the page. Results are memoized
+// per (sequence, notation, settings); convert_From_wY_peek() looks a
+// conversion up without computing it, so a render loop can spread cache misses
+// over several frames inside a small time budget.
+const convert_cache = new Map();
+const CONVERT_CACHE_LIMIT = 4096;
+
+function convert_cache_key(ord, mode) {
+    // Every setting that can change the output has to be part of the key.
+    return mode + "\u0001" + ord + "\u0001" +
+        (Y_Terms ? Y_Terms.valueAsNumber : "") + "\u0001" +
+        (BMS_Terms ? BMS_Terms.valueAsNumber : "") + "\u0001" +
+        (compress_BMS && compress_BMS.checked ? 1 : 0) + "\u0001" +
+        (format_cOCF && format_cOCF.checked ? 1 : 0);
+}
+
+function convert_cache_put(key, value) {
+    if (convert_cache.size >= CONVERT_CACHE_LIMIT) convert_cache.clear();
+    convert_cache.set(key, value);
+    return value;
+}
+
+// The cached conversion for (ord, mode), or undefined when it still has to be
+// computed.
+function convert_From_wY_peek(ord, mode) {
+    return convert_cache.get(convert_cache_key(ord, mode));
+}
+
+// Memoizing wrapper around convert_from_wY_uncached(). A failing notation
+// falls back to the raw omega-Y sequence instead of throwing: an exception
+// here would kill the whole render loop.
 function convert_From_wY(ord, mode) {
+    let key;
+    try {
+        key = convert_cache_key(ord, mode);
+        const cached = convert_cache.get(key);
+        if (cached !== undefined) return cached;
+        return convert_cache_put(key, convert_from_wY_uncached(ord, mode));
+    } catch (e) {
+        console.warn("convert_From_wY failed for " + mode + " (" + ord + "):", e);
+        if (key !== undefined) return convert_cache_put(key, ord);
+        return ord;
+    }
+}
+
+function convert_from_wY_uncached(ord, mode) {
     ord = trimStringList(ord, Y_Terms.valueAsNumber);
 
     if (mode == "wY") {
