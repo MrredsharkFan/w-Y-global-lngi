@@ -8968,11 +8968,10 @@ let Y_Terms = document.getElementById("Y_Terms");
 let BMS_Terms = document.getElementById("BMS_Terms");
 
 // Notation conversions run for every progress bar and analysis panel on every
-// animation frame, and the OCF conversions can cost tens of milliseconds each
-// - selecting an OCF notation used to freeze the page. Results are memoized
-// per (sequence, notation, settings); convert_From_wY_peek() looks a
-// conversion up without computing it, so a render loop can spread cache misses
-// over several frames inside a small time budget.
+// animation frame, and the OCF conversions can cost tens of milliseconds each.
+// Results are memoized per (sequence, notation, settings) and conversions are
+// instant: every needed conversion runs immediately in the current frame,
+// with no time budget and no waiting for the next frame.
 const convert_cache = new Map();
 const CONVERT_CACHE_LIMIT = 4096;
 
@@ -8989,12 +8988,6 @@ function convert_cache_put(key, value) {
     if (convert_cache.size >= CONVERT_CACHE_LIMIT) convert_cache.clear();
     convert_cache.set(key, value);
     return value;
-}
-
-// The cached conversion for (ord, mode), or undefined when it still has to be
-// computed.
-function convert_From_wY_peek(ord, mode) {
-    return convert_cache.get(convert_cache_key(ord, mode));
 }
 
 // Memoizing wrapper around convert_from_wY_uncached(). A failing notation

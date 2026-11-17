@@ -119,19 +119,11 @@ var lt = 0
 // Last notation rendered on each bar. The notation conversion itself is
 // memoized in convert_From_wY(), and a label is only rewritten when its text
 // actually changes, so a frame only pays for labels that are genuinely new
-// instead of re-converting every bar like it used to.
+// instead of re-converting every bar like it used to. Conversions are instant:
+// every bar is converted in the same frame it is needed, with no time budget.
 var scratch_bar_label_cache = []
-// Per-frame time budget for converting notations that are not cached yet:
-// switching the milestone-bar notation to an OCF variation now fills the
-// labels in over a few frames instead of freezing the page.
-var SCRATCH_BAR_CONVERT_BUDGET_MS = 6
-
-function scratch_bar_clock() {
-    return (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now()
-}
 
 function update_scratch_bars(x, currentSimulatedTime) {
-    const convertDeadline = scratch_bar_clock() + SCRATCH_BAR_CONVERT_BUDGET_MS
     for (var i = 0; i < 53; i++) {
         const bar = document.getElementById(`bar_${i}`)
         if (i < super_list.length) {
@@ -147,18 +139,9 @@ function update_scratch_bars(x, currentSimulatedTime) {
                 bar.style.visibility = "visible"
 
                 const ordText = super_list[i][0] + (i == super_list.length - 1 ? ",1" : "")
-                let label = convert_From_wY_peek(ordText, scratch_bar_display)
-                if (label === undefined) {
-                    // Not converted yet: convert only while this frame still
-                    // has budget left, otherwise keep the label that is
-                    // already on screen and retry on the next frame.
-                    if (scratch_bar_clock() < convertDeadline) {
-                        label = convert_From_wY(ordText, scratch_bar_display)
-                    } else {
-                        label = scratch_bar_label_cache[i]
-                        if (label === undefined) label = ordText
-                    }
-                }
+                // Convert instantly: no budget, no waiting for the next frame.
+                // convert_From_wY() is memoized, so repeat frames are cache hits.
+                const label = convert_From_wY(ordText, scratch_bar_display)
                 if (label !== scratch_bar_label_cache[i]) {
                     scratch_bar_label_cache[i] = label
                     bar._label.innerHTML = label
