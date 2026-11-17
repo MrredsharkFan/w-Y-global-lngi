@@ -2921,6 +2921,16 @@ function get_virtual_elapsed() {
 
 var visibleMilestones = new Set();
 
+// viewport check. IntersectionObserver only tells us when a box enters/leaves,
+// and it happily stays in the set while the tab it lives on is display:none, so
+// ask the layout directly (cheap: one getBoundingClientRect per visible box).
+function isElementVisible(el) {
+    if (!el || !el.getClientRects().length) return false;
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < (window.innerHeight || document.documentElement.clientHeight);
+}
+
+
 //in fact, i still idk what's an observer
 const milestoneObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -2982,8 +2992,14 @@ function init_milestones() {
 
 // Update timer values for visible elements
 function update_milestones() {
+    // Only re-render the boxes that are actually on screen. Every .tmilestone-box
+    // is still "observed", so on the Milestone tab this used to rewrite the full
+    // innerHTML of every box that had ever been scrolled into view — each frame —
+    // which is more than enough main-thread work to drop out of 60fps.
     visibleMilestones.forEach(element => {
-        renderMilestoneBox(element);
+        if (element.isConnected && isElementVisible(element)) {
+            renderMilestoneBox(element);
+        }
     });
 
     var N = 0
