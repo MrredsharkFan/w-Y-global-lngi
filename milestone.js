@@ -2993,9 +2993,18 @@ function update_milestones() {
         N = N+1
     }
     var T = vt - get_time_inv(valid_milestones[N][4]);
-    document.getElementById("real_milestone_next").innerHTML = `${N}# ${valid_milestones[N][0]} / ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`
+    // Only update the DOM if the milestone index or time changed
+    const nextHTML = `${N}# ${valid_milestones[N][0]} / ${valid_milestones[N][1]}<br>in ${formatSeconds(-T / 1000)}`
+    const el = document.getElementById("real_milestone_next")
+    if (el && el.innerHTML !== nextHTML) {
+        el.innerHTML = nextHTML
+    }
 }
 
 // Initialize all elements eagerly on page load
 init_milestones();
-setInterval(update_milestones, 10);
+// The update_milestones() function is already called every frame from lngi.js update()
+// (line 609 in the original, now line ~634). The 10ms interval is redundant and
+// causes double-rendering and lag. We remove the interval.
+// setInterval(update_milestones, 10);
+

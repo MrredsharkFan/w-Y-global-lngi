@@ -91,6 +91,31 @@ function formatSeconds(totalSeconds) {
 
     return parts.filter(Boolean).join(' ');
 }
+// Cached DOM lookups: update() runs every animation frame, so repeated
+// getElementById() calls and unconditional innerHTML/style writes dominate
+// the frame cost. These helpers only touch the DOM when the value changed.
+var _elCache = new Map()
+function $(id) {
+    let el = _elCache.get(id)
+    if (!el) {
+        el = document.getElementById(id)
+        if (el) _elCache.set(id, el)
+    }
+    return el
+}
+function setHTML(el, html) {
+    if (!el || el._lastHTML === html) return
+    el._lastHTML = html
+    el.innerHTML = html
+}
+function setText(el, text) {
+    if (!el || el._lastText === text) return
+    el._lastText = text
+    el.textContent = text
+}
+
+var scratch_bar_elements = []
+
 function scratch_bar_init() {
     for (var i = 0; i < 53; i++) {
         const p = document.createElement("div")
@@ -112,6 +137,7 @@ function scratch_bar_init() {
         p.appendChild(p._meta)
         p.addEventListener("click", () => jump_to_scratch_bar(i))
         document.getElementById("scratch_content").appendChild(p)
+        scratch_bar_elements[i] = p
     }
 }
 
@@ -125,7 +151,7 @@ var scratch_bar_label_cache = []
 
 function update_scratch_bars(x, currentSimulatedTime) {
     for (var i = 0; i < 53; i++) {
-        const bar = document.getElementById(`bar_${i}`)
+        const bar = scratch_bar_elements[i]
         if (i < super_list.length) {
             var u = x + super_list[i][2] / (2 ** super_list[i][1] / 2)
             if (i == 0) {
@@ -147,13 +173,16 @@ function update_scratch_bars(x, currentSimulatedTime) {
                     bar._label.innerHTML = label
                 }
 
-                bar._meta.textContent =
+                const metaText =
                     `(${((1 - super_list[i][2]) * 100).toFixed(2)}% / ` +
                     (tt == 0 ? `${formatSeconds(secondsLeft)} left / ${(secondsLeft * 1000)}` : `in ${new Date(secondsLeft * 1000 + currentSimulatedTime).toLocaleString()}`) +
                     `)`
+                setText(bar._meta, metaText)
 
-                bar.style.backgroundColor = `hsl(${super_list[i][1] * 10},100%,90%)`
-                bar.style.width = `${(1 - super_list[i][2]) * 100}%`
+                const bg = `hsl(${super_list[i][1] * 10},100%,90%)`
+                if (bar.style.backgroundColor !== bg) bar.style.backgroundColor = bg
+                const w = `${(1 - super_list[i][2]) * 100}%`
+                if (bar.style.width !== w) bar.style.width = w
             }
             if (i + 1 == super_list.length) {
                 lt = secondsLeft
@@ -545,17 +574,17 @@ function update() {
         }
     }
 
-    document.getElementById("main_lngi_Content").innerHTML = `<i>${u[2]}</i>`
+    setHTML($("main_lngi_Content"), `<i>${u[2]}</i>`)
     // Feed the displayed sequence to the Highest terms tracker (runs on every
     // tab, so records are kept even while the tab is closed). The rewind check
     // has to run first: it drops records from a future the player jumped back
     // out of before the current sequence is tracked again.
     highest_terms_check_rewind(virtualElapsed + timeOffset)
     track_highest_terms(Array.isArray(u) ? u[2] : null)
-    document.getElementById("main_lngi_bar").innerHTML = `${u[0]} to next ordinal (${u[1]} left)`
+    setHTML($("main_lngi_bar"), `${u[0]} to next ordinal (${u[1]} left)`)
     updatePauseIndicator();
-    document.getElementById("tps").innerHTML = isPaused() ? `⏸ Paused — click the sequence to resume` : `${tps.toFixed(1)} tps`
-    document.getElementById("milestoneMulti").innerHTML = `Time speed: ${milestoneMulti}`
+    setHTML($("tps"), isPaused() ? `⏸ Paused — click the sequence to resume` : `${tps.toFixed(1)} tps`)
+    setHTML($("milestoneMulti"), `Time speed: ${milestoneMulti}`)
     if (page == 3 && sync_mountain.checked) { document.getElementById("input").value = trimStringList(u[2], MaxYTerms.valueAsNumber) }
     if (page == 2) {
         analysisPanels.forEach(panel => {
@@ -568,18 +597,18 @@ function update() {
                     txt = convert_From_wY(u[2], panel.notation);
                     break;
             }
-            panel.element.innerHTML = txt;
-        })
+            setHTML(panel.element, txt);
+        });
     };
     const modifiedElapsedSeconds = Math.max(0, (virtualElapsed + timeOffset) / 1000);
     let timeStatusText = modifiedElapsedSeconds * 1000;
     const trueElapsedSeconds = Math.max(0, (now - st) / 1000);
     const diff = modifiedElapsedSeconds - trueElapsedSeconds;
-    document.getElementById("time").innerHTML =
+    setHTML($("time"),
         `Time elapsed: ${formatSeconds(modifiedElapsedSeconds)} Virtual Elapsed ${timeStatusText}
-        `;
-    document.getElementById("time_mode").innerHTML = `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`
-
+        `);
+    setHTML($("time_mode"), `${tt == 0 ? "Time remaining" : "Time reached"} (Press to change)`)
+    
     document.title = `ω-Y LNGI: <${super_list.slice(0, 6).at(-1)[0]}`
 
     update_milestones(mpage)
